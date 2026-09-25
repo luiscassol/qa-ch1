@@ -28,4 +28,17 @@ function assertAnyBadRequest(response) {
   expect(response.body.error, 'Response should have an error message').toBeTruthy();
 }
 
-module.exports = { assertBadRequest, assertAnyBadRequest };
+/**
+ * Asserts a 400 response whose error message contains a given substring.
+ * Useful in data-driven tests where only part of the error message is known or stable.
+ *
+ * @param {{ status: number, body: object }} response
+ * @param {string} substring
+ */
+function assertErrorContains(response, substring) {
+  expect(response.status, `Expected 400, got ${response.status}`).toBe(400);
+  expect(response.body.error, 'Response should have an error message').toBeTruthy();
+  expect(response.body.error, `Error message should contain "${substring}"`).toContain(substring);
+}
+
+module.exports = { assertBadRequest, assertAnyBadRequest, assertErrorContains };
