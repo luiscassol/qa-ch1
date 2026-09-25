@@ -13,7 +13,8 @@ const { expect } = require('@playwright/test');
  * @param {string} expectedMessage
  */
 function assertBadRequest(response, expectedMessage) {
-  expect(response.status, `Expected 400, got ${response.status}`).toBe(400);
+  const bodyStr = JSON.stringify(response.body);
+  expect(response.status, `Expected 400, got ${response.status}. Body: ${bodyStr}`).toBe(400);
   expect(response.body.error, 'Error message should match').toBe(expectedMessage);
 }
 
@@ -24,7 +25,8 @@ function assertBadRequest(response, expectedMessage) {
  * @param {{ status: number, body: object }} response
  */
 function assertAnyBadRequest(response) {
-  expect(response.status, `Expected 400, got ${response.status}`).toBe(400);
+  const bodyStr = JSON.stringify(response.body);
+  expect(response.status, `Expected 400, got ${response.status}. Body: ${bodyStr}`).toBe(400);
   expect(response.body.error, 'Response should have an error message').toBeTruthy();
 }
 

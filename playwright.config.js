@@ -33,8 +33,10 @@ module.exports = defineConfig({
       'X-Candidate-Id': CANDIDATE_ID,
       'Content-Type': 'application/json',
     },
-    // Retain traces on failure for debugging.
+    // Retain traces and stdio on failure for debugging.
     trace: 'retain-on-failure',
+    stdout: 'retain-on-failure',
+    stderr: 'retain-on-failure',
   },
   reporter: [
     ['html', { outputFolder: 'playwright-report', open: 'never' }],
