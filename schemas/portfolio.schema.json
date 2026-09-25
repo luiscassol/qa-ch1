@@ -3,14 +3,14 @@
   "title": "Portfolio",
   "description": "Schema for the portfolio object returned by GET /portfolio",
   "type": "object",
-  "required": ["cash", "positions"],
+  "required": ["cash", "holdings"],
   "properties": {
     "cash": {
       "type": "number",
       "minimum": 0,
       "description": "Available cash balance in ARS"
     },
-    "positions": {
+    "holdings": {
       "type": "array",
       "description": "List of current holdings",
       "items": {

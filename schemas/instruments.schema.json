@@ -6,7 +6,7 @@
   "minItems": 1,
   "items": {
     "type": "object",
-    "required": ["id", "ticker", "name", "last_price"],
+      "required": ["id", "ticker", "name", "last_price", "close_price", "type"],
     "properties": {
       "id": {
         "type": "integer",
@@ -22,10 +22,20 @@
         "minLength": 1,
         "description": "Full company name"
       },
+      "type": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Instrument type (e.g. ACCIONES)"
+      },
       "last_price": {
         "type": "number",
         "minimum": 0,
         "description": "Last traded price in ARS"
+      },
+      "close_price": {
+        "type": "number",
+        "minimum": 0,
+        "description": "Previous close price in ARS"
       }
     },
     "additionalProperties": true
