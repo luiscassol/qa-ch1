@@ -15,14 +15,26 @@
       "description": "List of current holdings",
       "items": {
         "type": "object",
-        "required": ["instrument_id", "quantity", "avg_cost_price"],
+        "required": ["instrument_id", "ticker", "quantity", "last_price", "close_price", "avg_cost_price"],
         "properties": {
           "instrument_id": {
             "type": "integer",
             "minimum": 1
           },
+          "ticker": {
+            "type": "string",
+            "minLength": 1
+          },
           "quantity": {
             "type": "integer",
+            "minimum": 0
+          },
+          "last_price": {
+            "type": "number",
+            "minimum": 0
+          },
+          "close_price": {
+            "type": "number",
             "minimum": 0
           },
           "avg_cost_price": {

@@ -66,28 +66,34 @@ function assertInitialPortfolio(response, expectedCash = 1_000_000) {
  * Uses the oracle from utils/calculations.js as the independent source of truth.
  *
  * BR-PRT-002: market_value and gain are calculated client-side from portfolio fields.
- * The API does not return these values directly; it returns the inputs needed to compute them.
- * We verify the inputs (quantity, avg_cost_price) and cross-reference last_price from instruments.
+ * The API does NOT return these computed values; it returns the inputs needed to compute them:
+ *   - quantity, last_price, avg_cost_price (all present in GET /portfolio holdings)
  *
- * @param {{ status: number, body: object }} portfolioResponse
+ * We verify the inputs are correct so the client-side calculation will be correct.
+ *
+ * @param {{ status: number, body: object }} response
  * @param {number} instrumentId
- * @param {number} lastPrice - last_price from GET /instruments for this instrument.
  */
-function assertPositionMetrics(portfolioResponse, instrumentId, lastPrice) {
-  expect(portfolioResponse.status, 'Portfolio request should return 200').toBe(200);
-  const holding = portfolioResponse.body.holdings.find((h) => h.instrument_id === instrumentId);
+function assertPositionMetrics(response, instrumentId) {
+  expect(response.status, 'Portfolio request should return 200').toBe(200);
+  const holding = response.body.holdings.find((h) => h.instrument_id === instrumentId);
   expect(holding, `Holding for instrument_id ${instrumentId} should exist`).toBeDefined();
 
   const expected = calcPositionMetrics({
     quantity: holding.quantity,
-    lastPrice,
+    lastPrice: holding.last_price,
     avgCostPrice: holding.avg_cost_price,
   });
 
-  // These values are calculated client-side from the API inputs.
-  // We verify the inputs are correct so the client calculation will be correct.
-  expect(holding.quantity * lastPrice, 'Expected market_value inputs').toBeCloseTo(expected.marketValue, CENT_PRECISION);
-  expect(holding.quantity * (lastPrice - holding.avg_cost_price), 'Expected gain inputs').toBeCloseTo(expected.gain, CENT_PRECISION);
+  expect(
+    holding.quantity * holding.last_price,
+    'market_value inputs: quantity * last_price should match oracle'
+  ).toBeCloseTo(expected.marketValue, CENT_PRECISION);
+
+  expect(
+    holding.quantity * (holding.last_price - holding.avg_cost_price),
+    'gain inputs: quantity * (last_price - avg_cost_price) should match oracle'
+  ).toBeCloseTo(expected.gain, CENT_PRECISION);
 }
 
 module.exports = {
