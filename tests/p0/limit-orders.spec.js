@@ -8,6 +8,7 @@ const { assertPortfolioCash, assertHolding, assertNoHolding } = require('../../a
 const { assertAnyBadRequest } = require('../../assertions/error.assertions');
 const { calcCashAfterMarketBuy, calcCashAfterLimitBuyPending } = require('../../utils/calculations');
 const { waitForStableOrderStatus } = require('../../utils/polling');
+const { attachResponse } = require('../../utils/report');
 
 /**
  * P0 — LIMIT order lifecycle
@@ -24,14 +25,6 @@ const { waitForStableOrderStatus } = require('../../utils/polling');
  *   BR-ORD-003: LIMIT BUY requires cash >= quantity * limit_price (for reservation)
  *   BR-ORD-004: LIMIT SELL requires holdings >= quantity
  */
-
-/** Attaches a JSON API response to the report for traceability. */
-async function attachResponse(label, body) {
-  await test.info().attach(label, {
-    body: JSON.stringify(body, null, 2),
-    contentType: 'application/json',
-  });
-}
 
 test.describe('P0 - LIMIT order lifecycle @p0', () => {
   let lastPrice;

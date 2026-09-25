@@ -7,6 +7,7 @@ const { assertMarketOrderFilled } = require('../../assertions/order.assertions')
 const { assertPortfolioCash, assertHolding, assertNoHolding } = require('../../assertions/portfolio.assertions');
 const { assertAnyBadRequest } = require('../../assertions/error.assertions');
 const { calcCashAfterMarketBuy, calcCashAfterMarketSell, calcSharesFromArs } = require('../../utils/calculations');
+const { attachResponse } = require('../../utils/report');
 
 /**
  * P0 — MARKET order settlement
@@ -20,14 +21,6 @@ const { calcCashAfterMarketBuy, calcCashAfterMarketSell, calcSharesFromArs } = r
  *   BR-ORD-005: MARKET orders fill immediately at last_price
  *   BR-PRT-001: Cash is debited/credited correctly after settlement
  */
-
-/** Attaches a JSON API response to the report for traceability. */
-async function attachResponse(label, body) {
-  await test.info().attach(label, {
-    body: JSON.stringify(body, null, 2),
-    contentType: 'application/json',
-  });
-}
 
 test.describe('P0 - MARKET order settlement @p0', () => {
   /** last_price of the default instrument, fetched before each test. */
