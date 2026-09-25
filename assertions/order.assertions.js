@@ -21,8 +21,9 @@ const { expect } = require('@playwright/test');
  * @param {number} expected.price - Expected execution price (last_price).
  */
 function assertMarketOrderFilled(response, expected) {
-  expect(response.status, 'MARKET order should return 201').toBe(201);
-  expect(response.body.status, 'MARKET order status should be FILLED').toBe('FILLED');
+  const bodyStr = JSON.stringify(response.body);
+  expect(response.status, `MARKET order should return 201. Body: ${bodyStr}`).toBe(201);
+  expect(response.body.status, `MARKET order status should be FILLED. Body: ${bodyStr}`).toBe('FILLED');
   expect(response.body.side, 'Order side should match').toBe(expected.side);
   expect(response.body.quantity, 'Order quantity should match').toBe(expected.quantity);
   expect(response.body.price, 'MARKET order price should equal last_price').toBeCloseTo(expected.price, 2);
@@ -40,8 +41,9 @@ function assertMarketOrderFilled(response, expected) {
  * @param {number} expected.quantity
  */
 function assertLimitOrderPending(response, expected) {
-  expect(response.status, 'LIMIT order should return 201').toBe(201);
-  expect(response.body.status, 'LIMIT order initial status should be PENDING').toBe('PENDING');
+  const bodyStr = JSON.stringify(response.body);
+  expect(response.status, `LIMIT order should return 201. Body: ${bodyStr}`).toBe(201);
+  expect(response.body.status, `LIMIT order initial status should be PENDING. Body: ${bodyStr}`).toBe('PENDING');
   expect(response.body.side, 'Order side should match').toBe(expected.side);
   expect(response.body.quantity, 'Order quantity should match').toBe(expected.quantity);
   expect(response.body.id, 'Order should have an ID').toBeDefined();

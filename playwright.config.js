@@ -2,6 +2,7 @@
 
 require('dotenv').config();
 
+const os = require('os');
 const { defineConfig } = require('@playwright/test');
 
 const BUGS_TIER = process.env.BUGS_TIER || 'off';
@@ -32,13 +33,26 @@ module.exports = defineConfig({
       'X-Candidate-Id': CANDIDATE_ID,
       'Content-Type': 'application/json',
     },
-    // Retain traces on failure for debugging.
+    // Retain traces and stdio on failure for debugging.
     trace: 'retain-on-failure',
+    stdout: 'retain-on-failure',
+    stderr: 'retain-on-failure',
   },
   reporter: [
     ['html', { outputFolder: 'playwright-report', open: 'never' }],
     ['list'],
-    ['allure-playwright', { outputFolder: 'allure-results' }],
+    ['allure-playwright', {
+      outputFolder: 'allure-results',
+      environmentInfo: {
+        NODE_VERSION: process.version,
+        OS_TYPE: os.type(),
+        OS_RELEASE: os.release(),
+        OS_ARCH: os.arch(),
+        API_URL: process.env.API_BASE_URL || 'https://dummy-api-topaz.vercel.app',
+        BUGS_TIER: BUGS_TIER,
+        CANDIDATE_ID: CANDIDATE_ID,
+      },
+    }],
   ],
   // Annotate every test run with the active tier and candidate for traceability.
   metadata: {

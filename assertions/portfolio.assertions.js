@@ -62,10 +62,14 @@ function assertInitialPortfolio(response, expectedCash = 1_000_000) {
 }
 
 /**
- * Asserts that the calculated portfolio metrics for a holding match expected values.
+ * Asserts that the portfolio holding inputs are internally consistent.
  * Uses the oracle from utils/calculations.js as the independent source of truth.
  *
- * BR-PRT-002: Validates market_value, gain, and return_ratio calculations.
+ * BR-PRT-002: market_value and gain are calculated client-side from portfolio fields.
+ * The API does NOT return these computed values; it returns the inputs needed to compute them:
+ *   - quantity, last_price, avg_cost_price (all present in GET /portfolio holdings)
+ *
+ * We verify the inputs are correct so the client-side calculation will be correct.
  *
  * @param {{ status: number, body: object }} response
  * @param {number} instrumentId
@@ -81,10 +85,15 @@ function assertPositionMetrics(response, instrumentId) {
     avgCostPrice: holding.avg_cost_price,
   });
 
-  // These values are not returned by the API but are calculated client-side.
-  // We verify the inputs are correct so the client calculation will be correct.
-  expect(holding.quantity * holding.last_price, 'Expected market_value calculation').toBeCloseTo(expected.marketValue, CENT_PRECISION);
-  expect(holding.quantity * (holding.last_price - holding.avg_cost_price), 'Expected gain calculation').toBeCloseTo(expected.gain, CENT_PRECISION);
+  expect(
+    holding.quantity * holding.last_price,
+    'market_value inputs: quantity * last_price should match oracle'
+  ).toBeCloseTo(expected.marketValue, CENT_PRECISION);
+
+  expect(
+    holding.quantity * (holding.last_price - holding.avg_cost_price),
+    'gain inputs: quantity * (last_price - avg_cost_price) should match oracle'
+  ).toBeCloseTo(expected.gain, CENT_PRECISION);
 }
 
 module.exports = {
