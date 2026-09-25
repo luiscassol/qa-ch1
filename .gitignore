@@ -1,0 +1,14 @@
+node_modules/
+.env
+
+# Playwright
+playwright-report/
+test-results/
+allure-results/
+allure-report/
+
+# Personal interview preparation notes (not part of the submission)
+NOTES.md
+
+# OS
+.DS_Store
