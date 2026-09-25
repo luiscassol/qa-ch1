@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Instruments",
+  "description": "Schema for the instruments array returned by GET /instruments",
+  "type": "array",
+  "minItems": 1,
+  "items": {
+    "type": "object",
+    "required": ["id", "ticker", "name", "last_price"],
+    "properties": {
+      "id": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "ticker": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Short stock symbol"
+      },
+      "name": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Full company name"
+      },
+      "last_price": {
+        "type": "number",
+        "minimum": 0,
+        "description": "Last traded price in ARS"
+      }
+    },
+    "additionalProperties": true
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Portfolio",
+  "description": "Schema for the portfolio object returned by GET /portfolio",
+  "type": "object",
+  "required": ["cash", "positions"],
+  "properties": {
+    "cash": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Available cash balance in ARS"
+    },
+    "positions": {
+      "type": "array",
+      "description": "List of current holdings",
+      "items": {
+        "type": "object",
+        "required": ["instrument_id", "quantity", "avg_cost_price"],
+        "properties": {
+          "instrument_id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "quantity": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "avg_cost_price": {
+            "type": "number",
+            "minimum": 0
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

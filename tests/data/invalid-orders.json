@@ -1,0 +1,137 @@
+{
+  "_comment": "Decision table for order input validation (EP + BVA). Each scenario describes an invalid payload and the expected HTTP 400 outcome. 'overrides' are merged into a valid base payload. 'omit' lists fields to remove from the base payload.",
+
+  "invalidQuantity": [
+    {
+      "description": "quantity is zero (BVA: just below minimum)",
+      "overrides": { "quantity": 0 }
+    },
+    {
+      "description": "quantity is -1 (BVA: one below zero)",
+      "overrides": { "quantity": -1 }
+    },
+    {
+      "description": "quantity is deeply negative",
+      "overrides": { "quantity": -9999 }
+    },
+    {
+      "description": "quantity is null",
+      "overrides": { "quantity": null }
+    },
+    {
+      "description": "quantity is a string",
+      "overrides": { "quantity": "ten" }
+    },
+    {
+      "description": "quantity is a float",
+      "overrides": { "quantity": 1.5 }
+    },
+    {
+      "description": "quantity field is missing",
+      "omit": ["quantity"]
+    }
+  ],
+
+  "invalidSide": [
+    {
+      "description": "side is an unknown string",
+      "overrides": { "side": "HOLD" }
+    },
+    {
+      "description": "side is empty string",
+      "overrides": { "side": "" }
+    },
+    {
+      "description": "side is lowercase (case-sensitive check)",
+      "overrides": { "side": "buy" }
+    },
+    {
+      "description": "side field is missing",
+      "omit": ["side"]
+    }
+  ],
+
+  "invalidType": [
+    {
+      "description": "type is an unknown string",
+      "overrides": { "type": "STOP_LOSS" }
+    },
+    {
+      "description": "type is empty string",
+      "overrides": { "type": "" }
+    },
+    {
+      "description": "type is lowercase (case-sensitive check)",
+      "overrides": { "type": "market" }
+    },
+    {
+      "description": "type field is missing",
+      "omit": ["type"]
+    }
+  ],
+
+  "invalidInstrumentId": [
+    {
+      "description": "instrument_id is zero (BVA: boundary below valid range)",
+      "overrides": { "instrument_id": 0 }
+    },
+    {
+      "description": "instrument_id is negative",
+      "overrides": { "instrument_id": -1 }
+    },
+    {
+      "description": "instrument_id is null",
+      "overrides": { "instrument_id": null }
+    },
+    {
+      "description": "instrument_id is a ticker string instead of integer",
+      "overrides": { "instrument_id": "DYCA" }
+    },
+    {
+      "description": "instrument_id does not exist in catalog",
+      "overrides": { "instrument_id": 99999 }
+    },
+    {
+      "description": "instrument_id field is missing",
+      "omit": ["instrument_id"]
+    }
+  ],
+
+  "limitWithoutPrice": [
+    {
+      "description": "LIMIT BUY order with price field missing",
+      "base": "limitBuy",
+      "omit": ["price"]
+    },
+    {
+      "description": "LIMIT SELL order with price field missing",
+      "base": "limitSell",
+      "omit": ["price"]
+    },
+    {
+      "description": "LIMIT BUY with price = null",
+      "base": "limitBuy",
+      "overrides": { "price": null }
+    }
+  ],
+
+  "limitWithInvalidPrice": [
+    {
+      "description": "LIMIT BUY with price = 0 (F-01: accepted in off tier, should be rejected)",
+      "base": "limitBuy",
+      "overrides": { "price": 0 },
+      "_defect": "F-01"
+    },
+    {
+      "description": "LIMIT BUY with price = -1 (negative price)",
+      "base": "limitBuy",
+      "overrides": { "price": -1 }
+    },
+    {
+      "description": "LIMIT SELL with price = 0",
+      "base": "limitSell",
+      "overrides": { "price": 0 },
+      "_defect": "F-01"
+    }
+  ]
+}

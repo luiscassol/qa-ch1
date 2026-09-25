@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Order",
+  "description": "Schema for a single order object returned by POST /orders or GET /orders[]",
+  "type": "object",
+  "required": ["id", "instrument_id", "side", "type", "quantity", "price", "status"],
+  "properties": {
+    "id": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Unique order identifier"
+    },
+    "instrument_id": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Reference to the traded instrument"
+    },
+    "side": {
+      "type": "string",
+      "enum": ["BUY", "SELL"],
+      "description": "Order direction"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["MARKET", "LIMIT"],
+      "description": "Order execution type"
+    },
+    "quantity": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Number of shares"
+    },
+    "price": {
+      "type": "number",
+      "description": "Execution price (MARKET) or limit price (LIMIT)"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["FILLED", "PENDING", "CANCELLED", "REJECTED"],
+      "description": "Current order status"
+    }
+  },
+  "additionalProperties": true
+}
