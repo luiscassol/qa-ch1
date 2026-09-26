@@ -2,10 +2,10 @@
 
 const { test, expect } = require('../../fixtures/api.fixture');
 const { allure } = require('allure-playwright');
-const { buildMarketBuyOrder, buildLimitBuyOrder, buildLimitSellOrder, DEFAULT_INSTRUMENT_ID } = require('../../factories/order.factory');
+const { buildMarketBuyOrder, buildMarketSellOrder, buildLimitBuyOrder, buildLimitSellOrder, DEFAULT_INSTRUMENT_ID } = require('../../factories/order.factory');
 const { assertLimitOrderPending } = require('../../assertions/order.assertions');
 const { assertPortfolioCash, assertHolding, assertNoHolding } = require('../../assertions/portfolio.assertions');
-const { assertAnyBadRequest } = require('../../assertions/error.assertions');
+const { assertAnyBadRequest, assertErrorContains } = require('../../assertions/error.assertions');
 const { calcCashAfterMarketBuy, calcCashAfterLimitBuyPending } = require('../../utils/calculations');
 const { waitForStableOrderStatus } = require('../../utils/polling');
 const { attachResponse } = require('../../utils/report');
@@ -215,5 +215,48 @@ test.describe('P0 - LIMIT order lifecycle @p0', () => {
     const order = await ordersApi.create(buildLimitSellOrder({ quantity: 1 }));
     await attachResponse('rejection-response', order.body);
     assertAnyBadRequest(order);
+  });
+
+  // ─── Reservations interacting with a second order (BR-RSV-001) ───────────────
+
+  test('PENDING LIMIT BUY reservation blocks a subsequent MARKET BUY that exceeds remaining cash @p0', async ({ ordersApi }) => {
+    await allure.story('BUY reservation — second order cannot spend reserved cash');
+    test.info().annotations.push(
+      { type: 'businessRule', description: 'BR-RSV-001: PENDING BUY reserves quantity × limit_price from available cash' },
+      { type: 'technique', description: 'State transition: LIMIT PENDING reservation → MARKET BUY must see reduced available cash' },
+    );
+
+    // Reserve almost all cash. Do not GET /orders in between — a read can resolve the LIMIT.
+    const reservationPrice = 999_000;
+    const limitOrder = await ordersApi.create(buildLimitBuyOrder({ quantity: 1, price: reservationPrice }));
+    await attachResponse('limit-reservation', limitOrder.body);
+    assertLimitOrderPending(limitOrder, { side: 'BUY', quantity: 1 });
+
+    const marketOrder = await ordersApi.create(buildMarketBuyOrder({ quantity: 1 }));
+    await attachResponse('market-after-reservation', marketOrder.body);
+    assertErrorContains(marketOrder, 'Insufficient cash');
+  });
+
+  test('PENDING LIMIT SELL reservation blocks a subsequent MARKET SELL of the same shares @p0', async ({ ordersApi }) => {
+    await allure.story('SELL reservation — reserved shares are not available to sell again');
+    test.info().annotations.push(
+      { type: 'businessRule', description: 'BR-RSV-001: PENDING SELL reserves shares | BR-FND-002: oversell is Insufficient shares' },
+      { type: 'technique', description: 'State transition: BUY → LIMIT SELL PENDING → MARKET SELL same qty must be rejected' },
+    );
+
+    await test.step('Setup: buy 1 share', async () => {
+      const buyOrder = await ordersApi.create(buildMarketBuyOrder({ quantity: 1 }));
+      await attachResponse('setup-buy-order', buyOrder.body);
+    });
+
+    await test.step('Create LIMIT SELL and immediately attempt a second SELL', async () => {
+      const limitSell = await ordersApi.create(buildLimitSellOrder({ quantity: 1, price: 50 }));
+      await attachResponse('limit-sell-reservation', limitSell.body);
+      assertLimitOrderPending(limitSell, { side: 'SELL', quantity: 1 });
+
+      const marketSell = await ordersApi.create(buildMarketSellOrder({ quantity: 1 }));
+      await attachResponse('market-sell-after-reservation', marketSell.body);
+      assertErrorContains(marketSell, 'Insufficient shares');
+    });
   });
 });

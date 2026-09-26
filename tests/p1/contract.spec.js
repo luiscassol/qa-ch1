@@ -25,9 +25,9 @@ const errorSchema = require('../../schemas/error.schema.json');
  *   POST /orders (MARKET BUY)  → order.schema.json
  *   POST /orders (LIMIT BUY)   → order.schema.json
  *   GET  /orders               → array, each item matches order.schema.json
- *   GET  /portfolio            → portfolio.schema.json
+ *   GET  /portfolio            → portfolio.schema.json (empty and with holdings)
  *   POST /orders (invalid)     → error.schema.json
- *   POST /reset                → 200 status
+ *   POST /reset                → 200 + { ok: true }
  */
 
 test.describe('P1 - API contract (schema validation) @p1', () => {
@@ -136,6 +136,25 @@ test.describe('P1 - API contract (schema validation) @p1', () => {
     assertMatchesSchema(portfolioSchema, response.body, 'GET /portfolio body');
   });
 
+  test('GET /portfolio with holdings matches portfolio schema including holding fields @p1', async ({ ordersApi, portfolioApi }) => {
+    await allure.story('Portfolio contract — holdings item schema');
+    test.info().annotations.push(
+      { type: 'endpoint', description: 'GET /portfolio (after MARKET BUY)' },
+      { type: 'schema', description: 'schemas/portfolio.schema.json — holdings.items required fields' },
+      { type: 'technique', description: 'Contract testing — AJV evaluates holding items only when the array is non-empty' },
+    );
+
+    // Empty holdings never exercise items.required (avg_cost_price, ticker, …).
+    await ordersApi.create(buildMarketBuyOrder({ quantity: 1 }));
+
+    const response = await portfolioApi.get();
+    await attachResponse('portfolio-with-holdings', response.body);
+
+    expect(response.status, 'GET /portfolio should return 200').toBe(200);
+    expect(response.body.holdings.length, 'Setup buy should create a holding').toBeGreaterThan(0);
+    assertMatchesSchema(portfolioSchema, response.body, 'GET /portfolio body with holdings');
+  });
+
   // ─── Error responses ──────────────────────────────────────────────────────────
 
   test('POST /orders with invalid payload returns 400 and matches error schema @p1', async ({ ordersApi }) => {
@@ -169,5 +188,6 @@ test.describe('P1 - API contract (schema validation) @p1', () => {
     await attachResponse('reset-response', response.body);
 
     expect(response.status, 'POST /reset should return 200').toBe(200);
+    expect(response.body.ok, 'POST /reset body should be { ok: true }').toBe(true);
   });
 });

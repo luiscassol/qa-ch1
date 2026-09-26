@@ -4,6 +4,7 @@ const { test, expect } = require('../../fixtures/api.fixture');
 const { allure } = require('allure-playwright');
 const { buildMarketBuyOrder } = require('../../factories/order.factory');
 const { assertInitialPortfolio } = require('../../assertions/portfolio.assertions');
+const { assertOrderAccepted } = require('../../assertions/order.assertions');
 const { attachResponse } = require('../../utils/report');
 
 /**
@@ -78,7 +79,7 @@ test.describe('P1 - State isolation and reset idempotence @p1', () => {
     await test.step('Trade: buy shares to modify state', async () => {
       const order = await ordersApi.create(buildMarketBuyOrder({ quantity: 5 }));
       await attachResponse('buy-order', order.body);
-      expect(order.status, 'Setup buy should succeed').toBe(201);
+      assertOrderAccepted(order);
     });
 
     await test.step('Confirm state is modified after trade', async () => {
