@@ -1,0 +1,902 @@
+
+Running 70 tests using 1 worker
+
+  ✘   1 tests/p0/limit-orders.spec.js:55:3 › P0 - LIMIT order lifecycle @p0 › LIMIT BUY immediate response is PENDING (BR-ORD-006) @p0 (994ms)
+  ✘   2 tests/p0/limit-orders.spec.js:72:3 › P0 - LIMIT order lifecycle @p0 › LIMIT SELL creates PENDING order and satisfies its invariant (oracle) @p0 (3.3s)
+  ✘   3 tests/p0/limit-orders.spec.js:139:3 › P0 - LIMIT order lifecycle @p0 › LIMIT BUY reaches a consistent state and satisfies its invariant (oracle) @p0 (767ms)
+  ✓   4 tests/p0/limit-orders.spec.js:195:3 › P0 - LIMIT order lifecycle @p0 › LIMIT BUY is rejected when reservation cost exceeds available cash @p0 (752ms)
+  ✘   5 tests/p0/limit-orders.spec.js:208:3 › P0 - LIMIT order lifecycle @p0 › LIMIT SELL is rejected with no holdings @p0 (4.3s)
+  ✘   6 tests/p0/market-orders.spec.js:54:3 › P0 - MARKET order settlement @p0 › MARKET BUY fills at last_price and debits cash @p0 (801ms)
+  ✘   7 tests/p0/market-orders.spec.js:88:3 › P0 - MARKET order settlement @p0 › MARKET SELL fills at last_price and credits cash @p0 (1.0s)
+  ✘   8 tests/p0/market-orders.spec.js:130:3 › P0 - MARKET order settlement @p0 › MARKET BUY at maximum affordable quantity succeeds (BVA: upper boundary) @p0 (4.0s)
+  ✓   9 tests/p0/market-orders.spec.js:159:3 › P0 - MARKET order settlement @p0 › MARKET BUY one share over budget is rejected (BVA: just above maximum) @p0 (3.9s)
+  ✘  10 tests/p0/market-orders.spec.js:176:3 › P0 - MARKET order settlement @p0 › MARKET SELL with no holdings is rejected @p0 (3.1s)
+  ✘  11 tests/p0/market-orders.spec.js:188:3 › P0 - MARKET order settlement @p0 › MARKET SELL more shares than owned is rejected (BVA: oversell) @p0 (970ms)
+  ✓  12 tests/p0/portfolio-consistency.spec.js:52:3 › P0 - Portfolio consistency @p0 › Portfolio is at initial state after reset @p0 (835ms)
+  ✘  13 tests/p0/portfolio-consistency.spec.js:64:3 › P0 - Portfolio consistency @p0 › Reset restores initial state after trades @p0 (888ms)
+  ✘  14 tests/p0/portfolio-consistency.spec.js:96:3 › P0 - Portfolio consistency @p0 › Portfolio holding contains correct inputs for client-side metric calculation @p0 (946ms)
+  ✘  15 tests/p0/portfolio-consistency.spec.js:133:3 › P0 - Portfolio consistency @p0 › Portfolio cash decreases correctly after multiple sequential BUY orders @p0 (3.3s)
+  ✘  16 tests/p0/portfolio-consistency.spec.js:169:3 › P0 - Portfolio consistency @p0 › F-01: LIMIT BUY with price=0 should be rejected but is accepted @p0 (753ms)
+  ✓  17 tests/p1/contract.spec.js:47:3 › P1 - API contract (schema validation) @p1 › GET /instruments returns 200 and matches instruments schema @p1 (570ms)
+  ✘  18 tests/p1/contract.spec.js:65:3 › P1 - API contract (schema validation) @p1 › POST /orders (MARKET BUY) returns 201 and matches order schema @p1 (3.2s)
+  ✘  19 tests/p1/contract.spec.js:80:3 › P1 - API contract (schema validation) @p1 › POST /orders (LIMIT BUY) returns 201 and matches order schema @p1 (569ms)
+  ✓  20 tests/p1/contract.spec.js:97:3 › P1 - API contract (schema validation) @p1 › GET /orders returns 200 and each item matches order schema @p1 (801ms)
+  ✓  21 tests/p1/contract.spec.js:124:3 › P1 - API contract (schema validation) @p1 › GET /portfolio returns 200 and matches portfolio schema @p1 (505ms)
+  ✓  22 tests/p1/contract.spec.js:141:3 › P1 - API contract (schema validation) @p1 › POST /orders with invalid payload returns 400 and matches error schema @p1 (507ms)
+  ✓  23 tests/p1/contract.spec.js:159:3 › P1 - API contract (schema validation) @p1 › POST /reset returns 200 @p1 (495ms)
+  ✓  24 tests/p1/isolation.spec.js:38:3 › P1 - State isolation and reset idempotence @p1 › POST /reset is idempotent — two consecutive resets yield the same initial state @p1 (693ms)
+  ✘  25 tests/p1/isolation.spec.js:65:3 › P1 - State isolation and reset idempotence @p1 › POST /reset after trades restores portfolio to initial state @p1 (499ms)
+  ✓  26 tests/p1/isolation.spec.js:105:3 › P1 - State isolation and reset idempotence @p1 › GET /orders returns empty list after reset @p1 (1.3s)
+  ✓  27 tests/p1/order-validation.spec.js:72:7 › P1 - Order input validation @p1 › Invalid quantity (EP + BVA) › rejects order: quantity is zero (BVA: just below minimum) @p1 (3.2s)
+  ✓  28 tests/p1/order-validation.spec.js:72:7 › P1 - Order input validation @p1 › Invalid quantity (EP + BVA) › rejects order: quantity is -1 (BVA: one below zero) @p1 (4.1s)
+  ✓  29 tests/p1/order-validation.spec.js:72:7 › P1 - Order input validation @p1 › Invalid quantity (EP + BVA) › rejects order: quantity is deeply negative @p1 (499ms)
+  ✓  30 tests/p1/order-validation.spec.js:72:7 › P1 - Order input validation @p1 › Invalid quantity (EP + BVA) › rejects order: quantity is null @p1 (502ms)
+  ✓  31 tests/p1/order-validation.spec.js:72:7 › P1 - Order input validation @p1 › Invalid quantity (EP + BVA) › rejects order: quantity is a string @p1 (6.4s)
+  ✘  32 tests/p1/order-validation.spec.js:72:7 › P1 - Order input validation @p1 › Invalid quantity (EP + BVA) › rejects order: quantity is a float @p1 (555ms)
+  ✓  33 tests/p1/order-validation.spec.js:72:7 › P1 - Order input validation @p1 › Invalid quantity (EP + BVA) › rejects order: quantity field is missing @p1 (4.0s)
+  ✓  34 tests/p1/order-validation.spec.js:92:7 › P1 - Order input validation @p1 › Invalid side (EP) › rejects order: side is an unknown string @p1 (499ms)
+  ✓  35 tests/p1/order-validation.spec.js:92:7 › P1 - Order input validation @p1 › Invalid side (EP) › rejects order: side is empty string @p1 (7.0s)
+  ✓  36 tests/p1/order-validation.spec.js:92:7 › P1 - Order input validation @p1 › Invalid side (EP) › rejects order: side is null @p1 (501ms)
+  ✘  37 tests/p1/order-validation.spec.js:92:7 › P1 - Order input validation @p1 › Invalid side (EP) › rejects order: side is lowercase (case-sensitive check) @p1 (617ms)
+  ✓  38 tests/p1/order-validation.spec.js:92:7 › P1 - Order input validation @p1 › Invalid side (EP) › rejects order: side field is missing @p1 (3.9s)
+  ✓  39 tests/p1/order-validation.spec.js:112:7 › P1 - Order input validation @p1 › Invalid type (EP) › rejects order: type is an unknown string @p1 (492ms)
+  ✓  40 tests/p1/order-validation.spec.js:112:7 › P1 - Order input validation @p1 › Invalid type (EP) › rejects order: type is empty string @p1 (3.6s)
+  ✓  41 tests/p1/order-validation.spec.js:112:7 › P1 - Order input validation @p1 › Invalid type (EP) › rejects order: type is null @p1 (2.9s)
+  ✘  42 tests/p1/order-validation.spec.js:112:7 › P1 - Order input validation @p1 › Invalid type (EP) › rejects order: type is lowercase (case-sensitive check) @p1 (523ms)
+  ✓  43 tests/p1/order-validation.spec.js:112:7 › P1 - Order input validation @p1 › Invalid type (EP) › rejects order: type field is missing @p1 (3.1s)
+  ✓  44 tests/p1/order-validation.spec.js:132:7 › P1 - Order input validation @p1 › Invalid instrument_id (EP + BVA) › rejects order: instrument_id is zero (BVA: boundary below valid range) @p1 (498ms)
+  ✓  45 tests/p1/order-validation.spec.js:132:7 › P1 - Order input validation @p1 › Invalid instrument_id (EP + BVA) › rejects order: instrument_id is negative (BVA: one below zero) @p1 (2.9s)
+  ✓  46 tests/p1/order-validation.spec.js:132:7 › P1 - Order input validation @p1 › Invalid instrument_id (EP + BVA) › rejects order: instrument_id is null @p1 (481ms)
+  ✓  47 tests/p1/order-validation.spec.js:132:7 › P1 - Order input validation @p1 › Invalid instrument_id (EP + BVA) › rejects order: instrument_id is a ticker string instead of integer @p1 (559ms)
+  ✓  48 tests/p1/order-validation.spec.js:132:7 › P1 - Order input validation @p1 › Invalid instrument_id (EP + BVA) › rejects order: instrument_id does not exist in catalog @p1 (487ms)
+  ✓  49 tests/p1/order-validation.spec.js:132:7 › P1 - Order input validation @p1 › Invalid instrument_id (EP + BVA) › rejects order: instrument_id field is missing @p1 (476ms)
+  ✓  50 tests/p1/order-validation.spec.js:152:7 › P1 - Order input validation @p1 › LIMIT order without price (EP) › rejects order: LIMIT BUY order with price field missing @p1 (2.5s)
+  ✓  51 tests/p1/order-validation.spec.js:152:7 › P1 - Order input validation @p1 › LIMIT order without price (EP) › rejects order: LIMIT SELL order with price field missing @p1 (535ms)
+  ✘  52 tests/p1/order-validation.spec.js:172:7 › P1 - Order input validation @p1 › LIMIT order with invalid price (BVA + F-01) › rejects order: LIMIT BUY with price = 0 (F-01: accepted in off tier, should be rejected) @p1 (531ms)
+  ✘  53 tests/p1/order-validation.spec.js:172:7 › P1 - Order input validation @p1 › LIMIT order with invalid price (BVA + F-01) › rejects order: LIMIT BUY with price = -1 (negative price) @p1 (4.0s)
+  ✘  54 tests/p1/order-validation.spec.js:172:7 › P1 - Order input validation @p1 › LIMIT order with invalid price (BVA + F-01) › rejects order: LIMIT BUY with price = null @p1 (591ms)
+  ✘  55 tests/p1/order-validation.spec.js:172:7 › P1 - Order input validation @p1 › LIMIT order with invalid price (BVA + F-01) › rejects order: LIMIT SELL with price = 0 @p1 (3.7s)
+  ✘  56 tests/p1/order-validation.spec.js:172:7 › P1 - Order input validation @p1 › LIMIT order with invalid price (BVA + F-01) › rejects order: LIMIT SELL with price = -1 (negative price) @p1 (550ms)
+  ✓  57 tests/p2/catalog.spec.js:51:3 › P2 - Instrument catalog @p2 › GET /instruments returns 200 with a non-empty list @p2 (572ms)
+  ✓  58 tests/p2/catalog.spec.js:67:3 › P2 - Instrument catalog @p2 › Catalog matches instruments schema @p2 (493ms)
+  ✓  59 tests/p2/catalog.spec.js:78:3 › P2 - Instrument catalog @p2 › Default test instrument (id=1, DYCA) exists in catalog @p2 (489ms)
+  ✘  60 tests/p2/catalog.spec.js:102:3 › P2 - Instrument catalog @p2 › All instruments have a positive last_price @p2 (487ms)
+  ✓  61 tests/p2/catalog.spec.js:118:3 › P2 - Instrument catalog @p2 › All instruments have a non-negative close_price @p2 (541ms)
+  ✓  62 tests/p2/catalog.spec.js:134:3 › P2 - Instrument catalog @p2 › All instruments have a non-empty ticker and name @p2 (492ms)
+  ✓  63 tests/p3/search.spec.js:44:3 › P3 - Instrument search @p3 › Search by exact ticker (DYCA) returns matching result @p3 (498ms)
+  ✘  64 tests/p3/search.spec.js:64:3 › P3 - Instrument search @p3 › Search is case-insensitive — lowercase ticker returns same result @p3 (491ms)
+  ✓  65 tests/p3/search.spec.js:82:3 › P3 - Instrument search @p3 › Search by partial ticker returns relevant results @p3 (3.7s)
+  ✓  66 tests/p3/search.spec.js:110:3 › P3 - Instrument search @p3 › Search with no match returns empty list @p3 (490ms)
+  ✓  67 tests/p3/search.spec.js:127:3 › P3 - Instrument search @p3 › Search results match instruments schema @p3 (4.5s)
+  ✓  68 tests/smoke/api-health.spec.js:29:3 › API smoke @smoke › GET /instruments returns the instrument catalog (523ms)
+  ✓  69 tests/smoke/api-health.spec.js:59:3 › API smoke @smoke › GET /portfolio returns initial state for candidate (549ms)
+  ✓  70 tests/smoke/api-health.spec.js:83:3 › API smoke @smoke › GET /orders returns empty list after reset (3.8s)
+
+
+  1) tests/p0/limit-orders.spec.js:55:3 › P0 - LIMIT order lifecycle @p0 › LIMIT BUY immediate response is PENDING (BR-ORD-006) @p0 
+
+    Error: LIMIT order should return 201. Body: {"id":19742,"candidate_id":"lc-qa-1","instrument_id":1,"side":"BUY","type":"LIMIT","quantity":1,"price":40,"status":"PENDING","created_at":"2026-09-26T22:43:29.102Z"}
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 200
+
+       at ../assertions/order.assertions.js:45
+
+      43 | function assertLimitOrderPending(response, expected) {
+      44 |   const bodyStr = JSON.stringify(response.body);
+    > 45 |   expect(response.status, `LIMIT order should return 201. Body: ${bodyStr}`).toBe(201);
+         |                                                                              ^
+      46 |   expect(response.body.status, `LIMIT order initial status should be PENDING. Body: ${bodyStr}`).toBe('PENDING');
+      47 |   expect(response.body.side, 'Order side should match').toBe(expected.side);
+      48 |   expect(response.body.quantity, 'Order quantity should match').toBe(expected.quantity);
+        at assertLimitOrderPending (/Users/lucho/Documents/Luis/Ch1/assertions/order.assertions.js:45:78)
+        at /Users/lucho/Documents/Luis/Ch1/tests/p0/limit-orders.spec.js:68:5
+
+    Error Context: test-results/p0-limit-orders-P0---LIMIT-4b010-se-is-PENDING-BR-ORD-006-p0/error-context.md
+
+    attachment #10: trace (application/zip) ────────────────────────────────────────────────────────
+    test-results/p0-limit-orders-P0---LIMIT-4b010-se-is-PENDING-BR-ORD-006-p0/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/p0-limit-orders-P0---LIMIT-4b010-se-is-PENDING-BR-ORD-006-p0/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) tests/p0/limit-orders.spec.js:72:3 › P0 - LIMIT order lifecycle @p0 › LIMIT SELL creates PENDING order and satisfies its invariant (oracle) @p0 › Create LIMIT SELL — verify immediate PENDING response 
+
+    Error: LIMIT order should return 201. Body: {"id":5313,"candidate_id":"lc-qa-1","instrument_id":1,"side":"SELL","type":"LIMIT","quantity":1,"price":50,"status":"PENDING","created_at":"2026-09-26T22:43:32.820Z"}
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 200
+
+       at ../assertions/order.assertions.js:45
+
+      43 | function assertLimitOrderPending(response, expected) {
+      44 |   const bodyStr = JSON.stringify(response.body);
+    > 45 |   expect(response.status, `LIMIT order should return 201. Body: ${bodyStr}`).toBe(201);
+         |                                                                              ^
+      46 |   expect(response.body.status, `LIMIT order initial status should be PENDING. Body: ${bodyStr}`).toBe('PENDING');
+      47 |   expect(response.body.side, 'Order side should match').toBe(expected.side);
+      48 |   expect(response.body.quantity, 'Order quantity should match').toBe(expected.quantity);
+        at assertLimitOrderPending (/Users/lucho/Documents/Luis/Ch1/assertions/order.assertions.js:45:78)
+        at /Users/lucho/Documents/Luis/Ch1/tests/p0/limit-orders.spec.js:94:7
+        at /Users/lucho/Documents/Luis/Ch1/tests/p0/limit-orders.spec.js:89:5
+
+    Error Context: test-results/p0-limit-orders-P0---LIMIT-a9d1f-ies-its-invariant-oracle-p0/error-context.md
+
+    attachment #11: trace (application/zip) ────────────────────────────────────────────────────────
+    test-results/p0-limit-orders-P0---LIMIT-a9d1f-ies-its-invariant-oracle-p0/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/p0-limit-orders-P0---LIMIT-a9d1f-ies-its-invariant-oracle-p0/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) tests/p0/limit-orders.spec.js:139:3 › P0 - LIMIT order lifecycle @p0 › LIMIT BUY reaches a consistent state and satisfies its invariant (oracle) @p0 › Create LIMIT BUY order at last_price 
+
+    Error: LIMIT order should return 201. Body: {"id":600529,"candidate_id":"lc-qa-1","instrument_id":1,"side":"BUY","type":"LIMIT","quantity":1,"price":45.72,"status":"PENDING","created_at":"2026-09-26T22:43:33.980Z"}
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 200
+
+       at ../assertions/order.assertions.js:45
+
+      43 | function assertLimitOrderPending(response, expected) {
+      44 |   const bodyStr = JSON.stringify(response.body);
+    > 45 |   expect(response.status, `LIMIT order should return 201. Body: ${bodyStr}`).toBe(201);
+         |                                                                              ^
+      46 |   expect(response.body.status, `LIMIT order initial status should be PENDING. Body: ${bodyStr}`).toBe('PENDING');
+      47 |   expect(response.body.side, 'Order side should match').toBe(expected.side);
+      48 |   expect(response.body.quantity, 'Order quantity should match').toBe(expected.quantity);
+        at assertLimitOrderPending (/Users/lucho/Documents/Luis/Ch1/assertions/order.assertions.js:45:78)
+        at /Users/lucho/Documents/Luis/Ch1/tests/p0/limit-orders.spec.js:155:7
+        at /Users/lucho/Documents/Luis/Ch1/tests/p0/limit-orders.spec.js:152:5
+
+    Error Context: test-results/p0-limit-orders-P0---LIMIT-9024f-ies-its-invariant-oracle-p0/error-context.md
+
+    attachment #10: trace (application/zip) ────────────────────────────────────────────────────────
+    test-results/p0-limit-orders-P0---LIMIT-9024f-ies-its-invariant-oracle-p0/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/p0-limit-orders-P0---LIMIT-9024f-ies-its-invariant-oracle-p0/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) tests/p0/limit-orders.spec.js:208:3 › P0 - LIMIT order lifecycle @p0 › LIMIT SELL is rejected with no holdings @p0 
+
+    Error: Expected 400, got 200. Body: {"id":85556,"candidate_id":"lc-qa-1","instrument_id":1,"side":"SELL","type":"LIMIT","quantity":1,"price":50,"status":"PENDING","created_at":"2026-09-26T22:43:39.414Z"}
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: 200
+
+       at ../assertions/error.assertions.js:29
+
+      27 | function assertAnyBadRequest(response) {
+      28 |   const bodyStr = JSON.stringify(response.body);
+    > 29 |   expect(response.status, `Expected 400, got ${response.status}. Body: ${bodyStr}`).toBe(400);
+         |                                                                                     ^
+      30 |   expect(response.body.error, 'Response should have an error message').toBeTruthy();
+      31 | }
+      32 |
+        at assertAnyBadRequest (/Users/lucho/Documents/Luis/Ch1/assertions/error.assertions.js:29:85)
+        at /Users/lucho/Documents/Luis/Ch1/tests/p0/limit-orders.spec.js:217:5
+
+    Error Context: test-results/p0-limit-orders-P0---LIMIT-eadc4-ejected-with-no-holdings-p0/error-context.md
+
+    attachment #10: trace (application/zip) ────────────────────────────────────────────────────────
+    test-results/p0-limit-orders-P0---LIMIT-eadc4-ejected-with-no-holdings-p0/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/p0-limit-orders-P0---LIMIT-eadc4-ejected-with-no-holdings-p0/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) tests/p0/market-orders.spec.js:54:3 › P0 - MARKET order settlement @p0 › MARKET BUY fills at last_price and debits cash @p0 › Create MARKET BUY order 
+
+    Error: MARKET order should return 201. Body: {"id":655777,"candidate_id":"lc-qa-1","instrument_id":1,"side":"BUY","type":"MARKET","quantity":1,"price":50.07,"status":"FILLED","created_at":"2026-09-26T22:43:40.531Z"}
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 200
+
+       at ../assertions/order.assertions.js:25
+
+      23 | function assertMarketOrderFilled(response, expected) {
+      24 |   const bodyStr = JSON.stringify(response.body);
+    > 25 |   expect(response.status, `MARKET order should return 201. Body: ${bodyStr}`).toBe(201);
+         |                                                                               ^
+      26 |   expect(response.body.status, `MARKET order status should be FILLED. Body: ${bodyStr}`).toBe('FILLED');
+      27 |   expect(response.body.side, 'Order side should match').toBe(expected.side);
+      28 |   expect(response.body.quantity, 'Order quantity should match').toBe(expected.quantity);
+        at assertMarketOrderFilled (/Users/lucho/Documents/Luis/Ch1/assertions/order.assertions.js:25:79)
+        at /Users/lucho/Documents/Luis/Ch1/tests/p0/market-orders.spec.js:67:7
+        at /Users/lucho/Documents/Luis/Ch1/tests/p0/market-orders.spec.js:64:5
+
+    Error Context: test-results/p0-market-orders-P0---MARK-89193-st-price-and-debits-cash-p0/error-context.md
+
+    attachment #10: trace (application/zip) ────────────────────────────────────────────────────────
+    test-results/p0-market-orders-P0---MARK-89193-st-price-and-debits-cash-p0/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/p0-market-orders-P0---MARK-89193-st-price-and-debits-cash-p0/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6) tests/p0/market-orders.spec.js:88:3 › P0 - MARKET order settlement @p0 › MARKET SELL fills at last_price and credits cash @p0 › Create MARKET SELL order 
+
+    Error: MARKET order should return 201. Body: {"id":496651,"candidate_id":"lc-qa-1","instrument_id":1,"side":"SELL","type":"MARKET","quantity":2,"price":50.07,"status":"FILLED","created_at":"2026-09-26T22:43:41.857Z"}
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 200
+
+       at ../assertions/order.assertions.js:25
+
+      23 | function assertMarketOrderFilled(response, expected) {
+      24 |   const bodyStr = JSON.stringify(response.body);
+    > 25 |   expect(response.status, `MARKET order should return 201. Body: ${bodyStr}`).toBe(201);
+         |                                                                               ^
+      26 |   expect(response.body.status, `MARKET order status should be FILLED. Body: ${bodyStr}`).toBe('FILLED');
+      27 |   expect(response.body.side, 'Order side should match').toBe(expected.side);
+      28 |   expect(response.body.quantity, 'Order quantity should match').toBe(expected.quantity);
+        at assertMarketOrderFilled (/Users/lucho/Documents/Luis/Ch1/assertions/order.assertions.js:25:79)
+        at /Users/lucho/Documents/Luis/Ch1/tests/p0/market-orders.spec.js:107:7
+        at /Users/lucho/Documents/Luis/Ch1/tests/p0/market-orders.spec.js:104:5
+
+    Error Context: test-results/p0-market-orders-P0---MARK-31668-t-price-and-credits-cash-p0/error-context.md
+
+    attachment #11: trace (application/zip) ────────────────────────────────────────────────────────
+    test-results/p0-market-orders-P0---MARK-31668-t-price-and-credits-cash-p0/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/p0-market-orders-P0---MARK-31668-t-price-and-credits-cash-p0/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  7) tests/p0/market-orders.spec.js:130:3 › P0 - MARKET order settlement @p0 › MARKET BUY at maximum affordable quantity succeeds (BVA: upper boundary) @p0 › Buy maximum 21872 shares 
+
+    Error: MARKET order should return 201. Body: {"error":"Insufficient cash"}
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 400
+
+       at ../assertions/order.assertions.js:25
+
+      23 | function assertMarketOrderFilled(response, expected) {
+      24 |   const bodyStr = JSON.stringify(response.body);
+    > 25 |   expect(response.status, `MARKET order should return 201. Body: ${bodyStr}`).toBe(201);
+         |                                                                               ^
+      26 |   expect(response.body.status, `MARKET order status should be FILLED. Body: ${bodyStr}`).toBe('FILLED');
+      27 |   expect(response.body.side, 'Order side should match').toBe(expected.side);
+      28 |   expect(response.body.quantity, 'Order quantity should match').toBe(expected.quantity);
+        at assertMarketOrderFilled (/Users/lucho/Documents/Luis/Ch1/assertions/order.assertions.js:25:79)
+        at /Users/lucho/Documents/Luis/Ch1/tests/p0/market-orders.spec.js:143:7
+        at /Users/lucho/Documents/Luis/Ch1/tests/p0/market-orders.spec.js:140:5
+
+    Error Context: test-results/p0-market-orders-P0---MARK-78c3f-ceeds-BVA-upper-boundary-p0/error-context.md
+
+    attachment #10: trace (application/zip) ────────────────────────────────────────────────────────
+    test-results/p0-market-orders-P0---MARK-78c3f-ceeds-BVA-upper-boundary-p0/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/p0-market-orders-P0---MARK-78c3f-ceeds-BVA-upper-boundary-p0/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  8) tests/p0/market-orders.spec.js:176:3 › P0 - MARKET order settlement @p0 › MARKET SELL with no holdings is rejected @p0 
+
+    Error: Expected 400, got 200. Body: {"id":697458,"candidate_id":"lc-qa-1","instrument_id":1,"side":"SELL","type":"MARKET","quantity":1,"price":50.07,"status":"FILLED","created_at":"2026-09-26T22:43:53.612Z"}
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: 200
+
+       at ../assertions/error.assertions.js:29
+
+      27 | function assertAnyBadRequest(response) {
+      28 |   const bodyStr = JSON.stringify(response.body);
+    > 29 |   expect(response.status, `Expected 400, got ${response.status}. Body: ${bodyStr}`).toBe(400);
+         |                                                                                     ^
+      30 |   expect(response.body.error, 'Response should have an error message').toBeTruthy();
+      31 | }
+      32 |
+        at assertAnyBadRequest (/Users/lucho/Documents/Luis/Ch1/assertions/error.assertions.js:29:85)
+        at /Users/lucho/Documents/Luis/Ch1/tests/p0/market-orders.spec.js:185:5
+
+    Error Context: test-results/p0-market-orders-P0---MARK-feeef--no-holdings-is-rejected-p0/error-context.md
+
+    attachment #10: trace (application/zip) ────────────────────────────────────────────────────────
+    test-results/p0-market-orders-P0---MARK-feeef--no-holdings-is-rejected-p0/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/p0-market-orders-P0---MARK-feeef--no-holdings-is-rejected-p0/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  9) tests/p0/market-orders.spec.js:188:3 › P0 - MARKET order settlement @p0 › MARKET SELL more shares than owned is rejected (BVA: oversell) @p0 › Attempt to sell owned + 1 shares 
+
+    Error: Expected 400, got 200. Body: {"id":768450,"candidate_id":"lc-qa-1","instrument_id":1,"side":"SELL","type":"MARKET","quantity":2,"price":50.07,"status":"FILLED","created_at":"2026-09-26T22:43:54.910Z"}
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: 200
+
+       at ../assertions/error.assertions.js:29
+
+      27 | function assertAnyBadRequest(response) {
+      28 |   const bodyStr = JSON.stringify(response.body);
+    > 29 |   expect(response.status, `Expected 400, got ${response.status}. Body: ${bodyStr}`).toBe(400);
+         |                                                                                     ^
+      30 |   expect(response.body.error, 'Response should have an error message').toBeTruthy();
+      31 | }
+      32 |
+        at assertAnyBadRequest (/Users/lucho/Documents/Luis/Ch1/assertions/error.assertions.js:29:85)
+        at /Users/lucho/Documents/Luis/Ch1/tests/p0/market-orders.spec.js:205:7
+        at /Users/lucho/Documents/Luis/Ch1/tests/p0/market-orders.spec.js:202:5
+
+    Error Context: test-results/p0-market-orders-P0---MARK-fbf8c-is-rejected-BVA-oversell-p0/error-context.md
+
+    attachment #11: trace (application/zip) ────────────────────────────────────────────────────────
+    test-results/p0-market-orders-P0---MARK-fbf8c-is-rejected-BVA-oversell-p0/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/p0-market-orders-P0---MARK-fbf8c-is-rejected-BVA-oversell-p0/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  10) tests/p0/portfolio-consistency.spec.js:64:3 › P0 - Portfolio consistency @p0 › Reset restores initial state after trades @p0 › Verify state is modified 
+
+    Error: Cash should be less than initial after trade
+
+    expect(received).toBeLessThan(expected)
+
+    Expected: < 1000000
+    Received:   1000000
+
+      76 |     await test.step('Verify state is modified', async () => {
+      77 |       const portfolio = await portfolioApi.get();
+    > 78 |       expect(portfolio.body.cash, 'Cash should be less than initial after trade').toBeLessThan(1_000_000);
+         |                                                                                   ^
+      79 |       expect(portfolio.body.holdings.length, 'Holdings should not be empty').toBeGreaterThan(0);
+      80 |     });
+      81 |
+        at /Users/lucho/Documents/Luis/Ch1/tests/p0/portfolio-consistency.spec.js:78:83
+        at /Users/lucho/Documents/Luis/Ch1/tests/p0/portfolio-consistency.spec.js:76:5
+
+    Error Context: test-results/p0-portfolio-consistency-P-64255-itial-state-after-trades-p0/error-context.md
+
+    attachment #10: trace (application/zip) ────────────────────────────────────────────────────────
+    test-results/p0-portfolio-consistency-P-64255-itial-state-after-trades-p0/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/p0-portfolio-consistency-P-64255-itial-state-after-trades-p0/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  11) tests/p0/portfolio-consistency.spec.js:96:3 › P0 - Portfolio consistency @p0 › Portfolio holding contains correct inputs for client-side metric calculation @p0 › Verify holding inputs are correct for client-side calculation 
+
+    Error: expect(received).toBeGreaterThan(expected)
+
+    Matcher error: received value must be a number or bigint
+
+    Received has value: undefined
+
+       at ../assertions/portfolio.assertions.js:92
+
+      90 |   // All calculation inputs must be present and positive (BR-PRT-002 field presence).
+      91 |   expect(holding.last_price, 'last_price must exist and be > 0').toBeGreaterThan(0);
+    > 92 |   expect(holding.avg_cost_price, 'avg_cost_price must exist and be > 0').toBeGreaterThan(0);
+         |                                                                          ^
+      93 |   expect(holding.quantity, 'quantity must exist and be > 0').toBeGreaterThan(0);
+      94 |
+      95 |   // Non-tautological cross-check: avg_cost_price should equal the MARKET execution price.
+        at assertPositionMetrics (/Users/lucho/Documents/Luis/Ch1/assertions/portfolio.assertions.js:92:74)
+        at /Users/lucho/Documents/Luis/Ch1/tests/p0/portfolio-consistency.spec.js:120:7
+        at /Users/lucho/Documents/Luis/Ch1/tests/p0/portfolio-consistency.spec.js:110:5
+
+    Error Context: test-results/p0-portfolio-consistency-P-b3ced--side-metric-calculation-p0/error-context.md
+
+    attachment #11: trace (application/zip) ────────────────────────────────────────────────────────
+    test-results/p0-portfolio-consistency-P-b3ced--side-metric-calculation-p0/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/p0-portfolio-consistency-P-b3ced--side-metric-calculation-p0/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  12) tests/p0/portfolio-consistency.spec.js:133:3 › P0 - Portfolio consistency @p0 › Portfolio cash decreases correctly after multiple sequential BUY orders @p0 › Cash reflects both purchases 
+
+    Error: Portfolio cash should match expected value
+
+    expect(received).toBeCloseTo(expected, precision)
+
+    Expected: 999862.8400000001
+    Received: 999849.79
+
+    Expected precision:    2
+    Expected difference: < 0.005
+    Received difference:   13.050000000046566
+
+       at ../assertions/portfolio.assertions.js:22
+
+      20 | function assertPortfolioCash(response, expectedCash) {
+      21 |   expect(response.status, 'Portfolio request should return 200').toBe(200);
+    > 22 |   expect(response.body.cash, 'Portfolio cash should match expected value').toBeCloseTo(expectedCash, CENT_PRECISION);
+         |                                                                            ^
+      23 | }
+      24 |
+      25 | /**
+        at assertPortfolioCash (/Users/lucho/Documents/Luis/Ch1/assertions/portfolio.assertions.js:22:76)
+        at /Users/lucho/Documents/Luis/Ch1/tests/p0/portfolio-consistency.spec.js:162:7
+        at /Users/lucho/Documents/Luis/Ch1/tests/p0/portfolio-consistency.spec.js:153:5
+
+    Error Context: test-results/p0-portfolio-consistency-P-42423-le-sequential-BUY-orders-p0/error-context.md
+
+    attachment #12: trace (application/zip) ────────────────────────────────────────────────────────
+    test-results/p0-portfolio-consistency-P-42423-le-sequential-BUY-orders-p0/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/p0-portfolio-consistency-P-42423-le-sequential-BUY-orders-p0/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  13) tests/p0/portfolio-consistency.spec.js:169:3 › P0 - Portfolio consistency @p0 › F-01: LIMIT BUY with price=0 should be rejected but is accepted @p0 
+
+    Error: F-01: price=0 should return 400 but returns 201
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: 200
+
+      183 |     await attachResponse('order-response', order.body);
+      184 |
+    > 185 |     expect(order.status, 'F-01: price=0 should return 400 but returns 201').toBe(400);
+          |                                                                             ^
+      186 |   });
+      187 | });
+      188 |
+        at /Users/lucho/Documents/Luis/Ch1/tests/p0/portfolio-consistency.spec.js:185:77
+
+    Error Context: test-results/p0-portfolio-consistency-P-b786a-rejected-but-is-accepted-p0/error-context.md
+
+    attachment #10: trace (application/zip) ────────────────────────────────────────────────────────
+    test-results/p0-portfolio-consistency-P-b786a-rejected-but-is-accepted-p0/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/p0-portfolio-consistency-P-b786a-rejected-but-is-accepted-p0/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  14) tests/p1/contract.spec.js:65:3 › P1 - API contract (schema validation) @p1 › POST /orders (MARKET BUY) returns 201 and matches order schema @p1 
+
+    Error: POST /orders (MARKET BUY) should return 201
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 200
+
+      74 |     await attachResponse('order-response', response.body);
+      75 |
+    > 76 |     expect(response.status, 'POST /orders (MARKET BUY) should return 201').toBe(201);
+         |                                                                            ^
+      77 |     assertMatchesSchema(orderSchema, response.body, 'POST /orders body');
+      78 |   });
+      79 |
+        at /Users/lucho/Documents/Luis/Ch1/tests/p1/contract.spec.js:76:76
+
+    Error Context: test-results/p1-contract-P1---API-contr-49096-and-matches-order-schema-p1/error-context.md
+
+    attachment #10: trace (application/zip) ────────────────────────────────────────────────────────
+    test-results/p1-contract-P1---API-contr-49096-and-matches-order-schema-p1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/p1-contract-P1---API-contr-49096-and-matches-order-schema-p1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  15) tests/p1/contract.spec.js:80:3 › P1 - API contract (schema validation) @p1 › POST /orders (LIMIT BUY) returns 201 and matches order schema @p1 
+
+    Error: POST /orders (LIMIT BUY) should return 201
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 200
+
+      89 |     await attachResponse('order-response', response.body);
+      90 |
+    > 91 |     expect(response.status, 'POST /orders (LIMIT BUY) should return 201').toBe(201);
+         |                                                                           ^
+      92 |     assertMatchesSchema(orderSchema, response.body, 'POST /orders body');
+      93 |   });
+      94 |
+        at /Users/lucho/Documents/Luis/Ch1/tests/p1/contract.spec.js:91:75
+
+    Error Context: test-results/p1-contract-P1---API-contr-8ce6d-and-matches-order-schema-p1/error-context.md
+
+    attachment #10: trace (application/zip) ────────────────────────────────────────────────────────
+    test-results/p1-contract-P1---API-contr-8ce6d-and-matches-order-schema-p1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/p1-contract-P1---API-contr-8ce6d-and-matches-order-schema-p1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  16) tests/p1/isolation.spec.js:65:3 › P1 - State isolation and reset idempotence @p1 › POST /reset after trades restores portfolio to initial state @p1 › Trade: buy shares to modify state 
+
+    Error: Setup buy should succeed
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 200
+
+      79 |       const order = await ordersApi.create(buildMarketBuyOrder({ quantity: 5 }));
+      80 |       await attachResponse('buy-order', order.body);
+    > 81 |       expect(order.status, 'Setup buy should succeed').toBe(201);
+         |                                                        ^
+      82 |     });
+      83 |
+      84 |     await test.step('Confirm state is modified after trade', async () => {
+        at /Users/lucho/Documents/Luis/Ch1/tests/p1/isolation.spec.js:81:56
+        at /Users/lucho/Documents/Luis/Ch1/tests/p1/isolation.spec.js:78:5
+
+    Error Context: test-results/p1-isolation-P1---State-is-f3568-rtfolio-to-initial-state-p1/error-context.md
+
+    attachment #10: trace (application/zip) ────────────────────────────────────────────────────────
+    test-results/p1-isolation-P1---State-is-f3568-rtfolio-to-initial-state-p1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/p1-isolation-P1---State-is-f3568-rtfolio-to-initial-state-p1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  17) tests/p1/order-validation.spec.js:72:7 › P1 - Order input validation @p1 › Invalid quantity (EP + BVA) › rejects order: quantity is a float @p1 
+
+    Error: Expected 400, got 200. Body: {"id":268259,"candidate_id":"lc-qa-1","instrument_id":1,"side":"BUY","type":"MARKET","quantity":1,"price":50.07,"status":"FILLED","created_at":"2026-09-26T22:44:28.812Z"}
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: 200
+
+       at ../assertions/error.assertions.js:29
+
+      27 | function assertAnyBadRequest(response) {
+      28 |   const bodyStr = JSON.stringify(response.body);
+    > 29 |   expect(response.status, `Expected 400, got ${response.status}. Body: ${bodyStr}`).toBe(400);
+         |                                                                                     ^
+      30 |   expect(response.body.error, 'Response should have an error message').toBeTruthy();
+      31 | }
+      32 |
+        at assertAnyBadRequest (/Users/lucho/Documents/Luis/Ch1/assertions/error.assertions.js:29:85)
+        at /Users/lucho/Documents/Luis/Ch1/tests/p1/order-validation.spec.js:83:9
+
+    Error Context: test-results/p1-order-validation-P1---O-548db-rder-quantity-is-a-float-p1/error-context.md
+
+    attachment #10: trace (application/zip) ────────────────────────────────────────────────────────
+    test-results/p1-order-validation-P1---O-548db-rder-quantity-is-a-float-p1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/p1-order-validation-P1---O-548db-rder-quantity-is-a-float-p1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  18) tests/p1/order-validation.spec.js:92:7 › P1 - Order input validation @p1 › Invalid side (EP) › rejects order: side is lowercase (case-sensitive check) @p1 
+
+    Error: Expected 400, got 200. Body: {"id":708233,"candidate_id":"lc-qa-1","instrument_id":1,"side":"BUY","type":"MARKET","quantity":1,"price":50.07,"status":"PENDING","created_at":"2026-09-26T22:44:41.811Z"}
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: 200
+
+       at ../assertions/error.assertions.js:29
+
+      27 | function assertAnyBadRequest(response) {
+      28 |   const bodyStr = JSON.stringify(response.body);
+    > 29 |   expect(response.status, `Expected 400, got ${response.status}. Body: ${bodyStr}`).toBe(400);
+         |                                                                                     ^
+      30 |   expect(response.body.error, 'Response should have an error message').toBeTruthy();
+      31 | }
+      32 |
+        at assertAnyBadRequest (/Users/lucho/Documents/Luis/Ch1/assertions/error.assertions.js:29:85)
+        at /Users/lucho/Documents/Luis/Ch1/tests/p1/order-validation.spec.js:103:9
+
+    Error Context: test-results/p1-order-validation-P1---O-c103b-ase-case-sensitive-check-p1/error-context.md
+
+    attachment #10: trace (application/zip) ────────────────────────────────────────────────────────
+    test-results/p1-order-validation-P1---O-c103b-ase-case-sensitive-check-p1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/p1-order-validation-P1---O-c103b-ase-case-sensitive-check-p1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  19) tests/p1/order-validation.spec.js:112:7 › P1 - Order input validation @p1 › Invalid type (EP) › rejects order: type is lowercase (case-sensitive check) @p1 
+
+    Error: Expected 400, got 200. Body: {"id":558542,"candidate_id":"lc-qa-1","instrument_id":1,"side":"BUY","type":"MARKET","quantity":1,"price":50.07,"status":"FILLED","created_at":"2026-09-26T22:44:53.936Z"}
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: 200
+
+       at ../assertions/error.assertions.js:29
+
+      27 | function assertAnyBadRequest(response) {
+      28 |   const bodyStr = JSON.stringify(response.body);
+    > 29 |   expect(response.status, `Expected 400, got ${response.status}. Body: ${bodyStr}`).toBe(400);
+         |                                                                                     ^
+      30 |   expect(response.body.error, 'Response should have an error message').toBeTruthy();
+      31 | }
+      32 |
+        at assertAnyBadRequest (/Users/lucho/Documents/Luis/Ch1/assertions/error.assertions.js:29:85)
+        at /Users/lucho/Documents/Luis/Ch1/tests/p1/order-validation.spec.js:123:9
+
+    Error Context: test-results/p1-order-validation-P1---O-347d2-ase-case-sensitive-check-p1/error-context.md
+
+    attachment #10: trace (application/zip) ────────────────────────────────────────────────────────
+    test-results/p1-order-validation-P1---O-347d2-ase-case-sensitive-check-p1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/p1-order-validation-P1---O-347d2-ase-case-sensitive-check-p1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  20) tests/p1/order-validation.spec.js:172:7 › P1 - Order input validation @p1 › LIMIT order with invalid price (BVA + F-01) › rejects order: LIMIT BUY with price = 0 (F-01: accepted in off tier, should be rejected) @p1 
+
+    Error: Expected 400, got 200. Body: {"id":871754,"candidate_id":"lc-qa-1","instrument_id":1,"side":"BUY","type":"LIMIT","quantity":1,"price":0,"status":"PENDING","created_at":"2026-09-26T22:45:06.436Z"}
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: 200
+
+       at ../assertions/error.assertions.js:29
+
+      27 | function assertAnyBadRequest(response) {
+      28 |   const bodyStr = JSON.stringify(response.body);
+    > 29 |   expect(response.status, `Expected 400, got ${response.status}. Body: ${bodyStr}`).toBe(400);
+         |                                                                                     ^
+      30 |   expect(response.body.error, 'Response should have an error message').toBeTruthy();
+      31 | }
+      32 |
+        at assertAnyBadRequest (/Users/lucho/Documents/Luis/Ch1/assertions/error.assertions.js:29:85)
+        at /Users/lucho/Documents/Luis/Ch1/tests/p1/order-validation.spec.js:183:9
+
+    Error Context: test-results/p1-order-validation-P1---O-b4a31--tier-should-be-rejected-p1/error-context.md
+
+    attachment #10: trace (application/zip) ────────────────────────────────────────────────────────
+    test-results/p1-order-validation-P1---O-b4a31--tier-should-be-rejected-p1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/p1-order-validation-P1---O-b4a31--tier-should-be-rejected-p1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  21) tests/p1/order-validation.spec.js:172:7 › P1 - Order input validation @p1 › LIMIT order with invalid price (BVA + F-01) › rejects order: LIMIT BUY with price = -1 (negative price) @p1 
+
+    Error: Expected 400, got 200. Body: {"id":948683,"candidate_id":"lc-qa-1","instrument_id":1,"side":"BUY","type":"LIMIT","quantity":1,"price":-1,"status":"PENDING","created_at":"2026-09-26T22:45:10.722Z"}
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: 200
+
+       at ../assertions/error.assertions.js:29
+
+      27 | function assertAnyBadRequest(response) {
+      28 |   const bodyStr = JSON.stringify(response.body);
+    > 29 |   expect(response.status, `Expected 400, got ${response.status}. Body: ${bodyStr}`).toBe(400);
+         |                                                                                     ^
+      30 |   expect(response.body.error, 'Response should have an error message').toBeTruthy();
+      31 | }
+      32 |
+        at assertAnyBadRequest (/Users/lucho/Documents/Luis/Ch1/assertions/error.assertions.js:29:85)
+        at /Users/lucho/Documents/Luis/Ch1/tests/p1/order-validation.spec.js:183:9
+
+    Error Context: test-results/p1-order-validation-P1---O-15f09--price--1-negative-price-p1/error-context.md
+
+    attachment #10: trace (application/zip) ────────────────────────────────────────────────────────
+    test-results/p1-order-validation-P1---O-15f09--price--1-negative-price-p1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/p1-order-validation-P1---O-15f09--price--1-negative-price-p1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  22) tests/p1/order-validation.spec.js:172:7 › P1 - Order input validation @p1 › LIMIT order with invalid price (BVA + F-01) › rejects order: LIMIT BUY with price = null @p1 
+
+    Error: Expected 400, got 200. Body: {"id":873316,"candidate_id":"lc-qa-1","instrument_id":1,"side":"BUY","type":"LIMIT","quantity":1,"price":0,"status":"PENDING","created_at":"2026-09-26T22:45:11.612Z"}
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: 200
+
+       at ../assertions/error.assertions.js:29
+
+      27 | function assertAnyBadRequest(response) {
+      28 |   const bodyStr = JSON.stringify(response.body);
+    > 29 |   expect(response.status, `Expected 400, got ${response.status}. Body: ${bodyStr}`).toBe(400);
+         |                                                                                     ^
+      30 |   expect(response.body.error, 'Response should have an error message').toBeTruthy();
+      31 | }
+      32 |
+        at assertAnyBadRequest (/Users/lucho/Documents/Luis/Ch1/assertions/error.assertions.js:29:85)
+        at /Users/lucho/Documents/Luis/Ch1/tests/p1/order-validation.spec.js:183:9
+
+    Error Context: test-results/p1-order-validation-P1---O-8eb71-IMIT-BUY-with-price-null-p1/error-context.md
+
+    attachment #10: trace (application/zip) ────────────────────────────────────────────────────────
+    test-results/p1-order-validation-P1---O-8eb71-IMIT-BUY-with-price-null-p1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/p1-order-validation-P1---O-8eb71-IMIT-BUY-with-price-null-p1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  23) tests/p1/order-validation.spec.js:172:7 › P1 - Order input validation @p1 › LIMIT order with invalid price (BVA + F-01) › rejects order: LIMIT SELL with price = 0 @p1 
+
+    Error: Expected 400, got 200. Body: {"id":848448,"candidate_id":"lc-qa-1","instrument_id":1,"side":"SELL","type":"LIMIT","quantity":1,"price":0,"status":"PENDING","created_at":"2026-09-26T22:45:15.648Z"}
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: 200
+
+       at ../assertions/error.assertions.js:29
+
+      27 | function assertAnyBadRequest(response) {
+      28 |   const bodyStr = JSON.stringify(response.body);
+    > 29 |   expect(response.status, `Expected 400, got ${response.status}. Body: ${bodyStr}`).toBe(400);
+         |                                                                                     ^
+      30 |   expect(response.body.error, 'Response should have an error message').toBeTruthy();
+      31 | }
+      32 |
+        at assertAnyBadRequest (/Users/lucho/Documents/Luis/Ch1/assertions/error.assertions.js:29:85)
+        at /Users/lucho/Documents/Luis/Ch1/tests/p1/order-validation.spec.js:183:9
+
+    Error Context: test-results/p1-order-validation-P1---O-8bf82--LIMIT-SELL-with-price-0-p1/error-context.md
+
+    attachment #10: trace (application/zip) ────────────────────────────────────────────────────────
+    test-results/p1-order-validation-P1---O-8bf82--LIMIT-SELL-with-price-0-p1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/p1-order-validation-P1---O-8bf82--LIMIT-SELL-with-price-0-p1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  24) tests/p1/order-validation.spec.js:172:7 › P1 - Order input validation @p1 › LIMIT order with invalid price (BVA + F-01) › rejects order: LIMIT SELL with price = -1 (negative price) @p1 
+
+    Error: Expected 400, got 200. Body: {"id":737123,"candidate_id":"lc-qa-1","instrument_id":1,"side":"SELL","type":"LIMIT","quantity":1,"price":-1,"status":"PENDING","created_at":"2026-09-26T22:45:16.555Z"}
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: 200
+
+       at ../assertions/error.assertions.js:29
+
+      27 | function assertAnyBadRequest(response) {
+      28 |   const bodyStr = JSON.stringify(response.body);
+    > 29 |   expect(response.status, `Expected 400, got ${response.status}. Body: ${bodyStr}`).toBe(400);
+         |                                                                                     ^
+      30 |   expect(response.body.error, 'Response should have an error message').toBeTruthy();
+      31 | }
+      32 |
+        at assertAnyBadRequest (/Users/lucho/Documents/Luis/Ch1/assertions/error.assertions.js:29:85)
+        at /Users/lucho/Documents/Luis/Ch1/tests/p1/order-validation.spec.js:183:9
+
+    Error Context: test-results/p1-order-validation-P1---O-6e737--price--1-negative-price-p1/error-context.md
+
+    attachment #10: trace (application/zip) ────────────────────────────────────────────────────────
+    test-results/p1-order-validation-P1---O-6e737--price--1-negative-price-p1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/p1-order-validation-P1---O-6e737--price--1-negative-price-p1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  25) tests/p2/catalog.spec.js:102:3 › P2 - Instrument catalog @p2 › All instruments have a positive last_price @p2 
+
+    Error: Found 1 instrument(s) with last_price <= 0: ["MIRG"]
+
+    expect(received).toHaveLength(expected)
+
+    Expected length: 0
+    Received length: 1
+    Received array:  [{"close_price": 37.74, "id": 5, "last_price": 0, "name": "Mirgor", "ticker": "MIRG", "type": "ACCIONES"}]
+
+      113 |       invalid,
+      114 |       `Found ${invalid.length} instrument(s) with last_price <= 0: ${JSON.stringify(invalid.map((i) => i.ticker))}`
+    > 115 |     ).toHaveLength(0);
+          |       ^
+      116 |   });
+      117 |
+      118 |   test('All instruments have a non-negative close_price @p2', async () => {
+        at /Users/lucho/Documents/Luis/Ch1/tests/p2/catalog.spec.js:115:7
+
+    Error Context: test-results/p2-catalog-P2---Instrument-abb37-ve-a-positive-last-price-p2/error-context.md
+
+    attachment #9: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/p2-catalog-P2---Instrument-abb37-ve-a-positive-last-price-p2/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/p2-catalog-P2---Instrument-abb37-ve-a-positive-last-price-p2/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  26) tests/p3/search.spec.js:64:3 › P3 - Instrument search @p3 › Search is case-insensitive — lowercase ticker returns same result @p3 
+
+    Error: Case-insensitive search should return at least one result
+
+    expect(received).toBeGreaterThan(expected)
+
+    Expected: > 0
+    Received:   0
+
+      74 |     expect(response.status, 'GET /search with lowercase query should return 200').toBe(200);
+      75 |     expect(Array.isArray(response.body), 'Search result should be an array').toBe(true);
+    > 76 |     expect(response.body.length, 'Case-insensitive search should return at least one result').toBeGreaterThan(0);
+         |                                                                                               ^
+      77 |
+      78 |     const match = response.body.find((i) => i.ticker === 'DYCA');
+      79 |     expect(match, 'Lowercase query should find DYCA instrument').toBeDefined();
+        at /Users/lucho/Documents/Luis/Ch1/tests/p3/search.spec.js:76:95
+
+    Error Context: test-results/p3-search-P3---Instrument--e789a-cker-returns-same-result-p3/error-context.md
+
+    attachment #10: trace (application/zip) ────────────────────────────────────────────────────────
+    test-results/p3-search-P3---Instrument--e789a-cker-returns-same-result-p3/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/p3-search-P3---Instrument--e789a-cker-returns-same-result-p3/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  26 failed
+    tests/p0/limit-orders.spec.js:55:3 › P0 - LIMIT order lifecycle @p0 › LIMIT BUY immediate response is PENDING (BR-ORD-006) @p0 
+    tests/p0/limit-orders.spec.js:72:3 › P0 - LIMIT order lifecycle @p0 › LIMIT SELL creates PENDING order and satisfies its invariant (oracle) @p0 
+    tests/p0/limit-orders.spec.js:139:3 › P0 - LIMIT order lifecycle @p0 › LIMIT BUY reaches a consistent state and satisfies its invariant (oracle) @p0 
+    tests/p0/limit-orders.spec.js:208:3 › P0 - LIMIT order lifecycle @p0 › LIMIT SELL is rejected with no holdings @p0 
+    tests/p0/market-orders.spec.js:54:3 › P0 - MARKET order settlement @p0 › MARKET BUY fills at last_price and debits cash @p0 
+    tests/p0/market-orders.spec.js:88:3 › P0 - MARKET order settlement @p0 › MARKET SELL fills at last_price and credits cash @p0 
+    tests/p0/market-orders.spec.js:130:3 › P0 - MARKET order settlement @p0 › MARKET BUY at maximum affordable quantity succeeds (BVA: upper boundary) @p0 
+    tests/p0/market-orders.spec.js:176:3 › P0 - MARKET order settlement @p0 › MARKET SELL with no holdings is rejected @p0 
+    tests/p0/market-orders.spec.js:188:3 › P0 - MARKET order settlement @p0 › MARKET SELL more shares than owned is rejected (BVA: oversell) @p0 
+    tests/p0/portfolio-consistency.spec.js:64:3 › P0 - Portfolio consistency @p0 › Reset restores initial state after trades @p0 
+    tests/p0/portfolio-consistency.spec.js:96:3 › P0 - Portfolio consistency @p0 › Portfolio holding contains correct inputs for client-side metric calculation @p0 
+    tests/p0/portfolio-consistency.spec.js:133:3 › P0 - Portfolio consistency @p0 › Portfolio cash decreases correctly after multiple sequential BUY orders @p0 
+    tests/p0/portfolio-consistency.spec.js:169:3 › P0 - Portfolio consistency @p0 › F-01: LIMIT BUY with price=0 should be rejected but is accepted @p0 
+    tests/p1/contract.spec.js:65:3 › P1 - API contract (schema validation) @p1 › POST /orders (MARKET BUY) returns 201 and matches order schema @p1 
+    tests/p1/contract.spec.js:80:3 › P1 - API contract (schema validation) @p1 › POST /orders (LIMIT BUY) returns 201 and matches order schema @p1 
+    tests/p1/isolation.spec.js:65:3 › P1 - State isolation and reset idempotence @p1 › POST /reset after trades restores portfolio to initial state @p1 
+    tests/p1/order-validation.spec.js:72:7 › P1 - Order input validation @p1 › Invalid quantity (EP + BVA) › rejects order: quantity is a float @p1 
+    tests/p1/order-validation.spec.js:92:7 › P1 - Order input validation @p1 › Invalid side (EP) › rejects order: side is lowercase (case-sensitive check) @p1 
+    tests/p1/order-validation.spec.js:112:7 › P1 - Order input validation @p1 › Invalid type (EP) › rejects order: type is lowercase (case-sensitive check) @p1 
+    tests/p1/order-validation.spec.js:172:7 › P1 - Order input validation @p1 › LIMIT order with invalid price (BVA + F-01) › rejects order: LIMIT BUY with price = 0 (F-01: accepted in off tier, should be rejected) @p1 
+    tests/p1/order-validation.spec.js:172:7 › P1 - Order input validation @p1 › LIMIT order with invalid price (BVA + F-01) › rejects order: LIMIT BUY with price = -1 (negative price) @p1 
+    tests/p1/order-validation.spec.js:172:7 › P1 - Order input validation @p1 › LIMIT order with invalid price (BVA + F-01) › rejects order: LIMIT BUY with price = null @p1 
+    tests/p1/order-validation.spec.js:172:7 › P1 - Order input validation @p1 › LIMIT order with invalid price (BVA + F-01) › rejects order: LIMIT SELL with price = 0 @p1 
+    tests/p1/order-validation.spec.js:172:7 › P1 - Order input validation @p1 › LIMIT order with invalid price (BVA + F-01) › rejects order: LIMIT SELL with price = -1 (negative price) @p1 
+    tests/p2/catalog.spec.js:102:3 › P2 - Instrument catalog @p2 › All instruments have a positive last_price @p2 
+    tests/p3/search.spec.js:64:3 › P3 - Instrument search @p3 › Search is case-insensitive — lowercase ticker returns same result @p3 
+  44 passed (2.1m)
