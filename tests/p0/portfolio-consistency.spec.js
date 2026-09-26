@@ -5,6 +5,7 @@ const { allure } = require('allure-playwright');
 const { buildMarketBuyOrder, buildMarketSellOrder, buildLimitBuyOrder, DEFAULT_INSTRUMENT_ID } = require('../../factories/order.factory');
 const { assertInitialPortfolio, assertPortfolioCash, assertHolding, assertNoHolding, assertPositionMetrics } = require('../../assertions/portfolio.assertions');
 const { calcCashAfterMarketBuy } = require('../../utils/calculations');
+const { attachResponse } = require('../../utils/report');
 
 /**
  * P0 — Portfolio consistency
@@ -21,14 +22,6 @@ const { calcCashAfterMarketBuy } = require('../../utils/calculations');
  * F-01 baseline defect: LIMIT BUY with price=0 is accepted in tier 'off'
  *   (documented here as a failing test to establish the defect baseline)
  */
-
-/** Attaches a JSON API response to the report for traceability. */
-async function attachResponse(label, body) {
-  await test.info().attach(label, {
-    body: JSON.stringify(body, null, 2),
-    contentType: 'application/json',
-  });
-}
 
 test.describe('P0 - Portfolio consistency @p0', () => {
   let lastPrice;
@@ -120,9 +113,14 @@ test.describe('P0 - Portfolio consistency @p0', () => {
 
       assertHolding(portfolio, DEFAULT_INSTRUMENT_ID, qty);
 
-      // assertPositionMetrics uses the independent oracle (calculations.js) to verify
-      // that quantity, last_price, and avg_cost_price produce correct market_value and gain.
-      assertPositionMetrics(portfolio, DEFAULT_INSTRUMENT_ID);
+      // assertPositionMetrics verifies that:
+      //   - all required fields (last_price, avg_cost_price, quantity) exist and are positive
+      //   - avg_cost_price ≈ lastPrice (MARKET execution price captured from beforeEach)
+      //   - quantity matches what was ordered
+      assertPositionMetrics(portfolio, DEFAULT_INSTRUMENT_ID, {
+        executionPrice: lastPrice,
+        orderedQuantity: qty,
+      });
 
       const holding = portfolio.body.holdings.find((h) => h.instrument_id === DEFAULT_INSTRUMENT_ID);
       test.info().annotations.push({

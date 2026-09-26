@@ -43,6 +43,10 @@ module.exports = defineConfig({
     ['list'],
     ['allure-playwright', {
       outputFolder: 'allure-results',
+      // Clean allure-results before each run so the report always reflects
+      // exactly the current run — no stale results from previous executions.
+      resultsDir: 'allure-results',
+      cleanResultsDir: true,
       environmentInfo: {
         NODE_VERSION: process.version,
         OS_TYPE: os.type(),

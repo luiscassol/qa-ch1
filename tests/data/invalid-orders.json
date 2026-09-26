@@ -1,99 +1,132 @@
 {
-  "_comment": "Decision table for order input validation (EP + BVA). Each scenario describes an invalid payload and the expected HTTP 400 outcome. 'overrides' are merged into a valid base payload. 'omit' lists fields to remove from the base payload.",
+  "_comment": "Decision table for order input validation (EP + BVA). Each scenario describes an invalid payload and the expected HTTP 400 outcome. 'overrides' are merged into a valid base payload. 'omit' lists fields to remove. 'technique' is EP or BVA. '_defect' marks a known API bug.",
 
   "invalidQuantity": [
     {
       "description": "quantity is zero (BVA: just below minimum)",
-      "overrides": { "quantity": 0 }
+      "overrides": { "quantity": 0 },
+      "technique": "BVA"
     },
     {
       "description": "quantity is -1 (BVA: one below zero)",
-      "overrides": { "quantity": -1 }
+      "overrides": { "quantity": -1 },
+      "technique": "BVA"
     },
     {
       "description": "quantity is deeply negative",
-      "overrides": { "quantity": -9999 }
+      "overrides": { "quantity": -9999 },
+      "technique": "EP"
     },
     {
       "description": "quantity is null",
-      "overrides": { "quantity": null }
+      "overrides": { "quantity": null },
+      "technique": "EP"
     },
     {
       "description": "quantity is a string",
-      "overrides": { "quantity": "ten" }
+      "overrides": { "quantity": "ten" },
+      "technique": "EP"
     },
     {
       "description": "quantity is a float",
-      "overrides": { "quantity": 1.5 }
+      "overrides": { "quantity": 1.5 },
+      "technique": "EP"
     },
     {
       "description": "quantity field is missing",
-      "omit": ["quantity"]
+      "omit": ["quantity"],
+      "technique": "EP"
     }
   ],
 
   "invalidSide": [
     {
       "description": "side is an unknown string",
-      "overrides": { "side": "HOLD" }
+      "overrides": { "side": "HOLD" },
+      "technique": "EP"
     },
     {
       "description": "side is empty string",
-      "overrides": { "side": "" }
+      "overrides": { "side": "" },
+      "technique": "EP"
+    },
+    {
+      "description": "side is null",
+      "overrides": { "side": null },
+      "technique": "EP"
     },
     {
       "description": "side is lowercase (case-sensitive check)",
-      "overrides": { "side": "buy" }
+      "overrides": { "side": "buy" },
+      "technique": "EP",
+      "_defect": "F-02: API accepts lowercase side, normalizes to BUY instead of rejecting"
     },
     {
       "description": "side field is missing",
-      "omit": ["side"]
+      "omit": ["side"],
+      "technique": "EP"
     }
   ],
 
   "invalidType": [
     {
       "description": "type is an unknown string",
-      "overrides": { "type": "STOP_LOSS" }
+      "overrides": { "type": "STOP_LOSS" },
+      "technique": "EP"
     },
     {
       "description": "type is empty string",
-      "overrides": { "type": "" }
+      "overrides": { "type": "" },
+      "technique": "EP"
+    },
+    {
+      "description": "type is null",
+      "overrides": { "type": null },
+      "technique": "EP"
     },
     {
       "description": "type is lowercase (case-sensitive check)",
-      "overrides": { "type": "market" }
+      "overrides": { "type": "market" },
+      "technique": "EP",
+      "_defect": "F-03: API accepts lowercase type, normalizes to MARKET instead of rejecting"
     },
     {
       "description": "type field is missing",
-      "omit": ["type"]
+      "omit": ["type"],
+      "technique": "EP"
     }
   ],
 
   "invalidInstrumentId": [
     {
       "description": "instrument_id is zero (BVA: boundary below valid range)",
-      "overrides": { "instrument_id": 0 }
+      "overrides": { "instrument_id": 0 },
+      "technique": "BVA"
     },
     {
-      "description": "instrument_id is negative",
-      "overrides": { "instrument_id": -1 }
+      "description": "instrument_id is negative (BVA: one below zero)",
+      "overrides": { "instrument_id": -1 },
+      "technique": "BVA"
     },
     {
       "description": "instrument_id is null",
-      "overrides": { "instrument_id": null }
+      "overrides": { "instrument_id": null },
+      "technique": "EP"
     },
     {
       "description": "instrument_id is a ticker string instead of integer",
-      "overrides": { "instrument_id": "DYCA" }
+      "overrides": { "instrument_id": "DYCA" },
+      "technique": "EP"
     },
     {
       "description": "instrument_id does not exist in catalog",
-      "overrides": { "instrument_id": 99999 }
+      "overrides": { "instrument_id": 99999 },
+      "technique": "EP"
     },
     {
       "description": "instrument_id field is missing",
-      "omit": ["instrument_id"]
+      "omit": ["instrument_id"],
+      "technique": "EP"
     }
   ],
 
@@ -101,17 +134,14 @@
     {
       "description": "LIMIT BUY order with price field missing",
       "base": "limitBuy",
-      "omit": ["price"]
+      "omit": ["price"],
+      "technique": "EP"
     },
     {
       "description": "LIMIT SELL order with price field missing",
       "base": "limitSell",
-      "omit": ["price"]
-    },
-    {
-      "description": "LIMIT BUY with price = null",
-      "base": "limitBuy",
-      "overrides": { "price": null }
+      "omit": ["price"],
+      "technique": "EP"
     }
   ],
 
@@ -120,18 +150,35 @@
       "description": "LIMIT BUY with price = 0 (F-01: accepted in off tier, should be rejected)",
       "base": "limitBuy",
       "overrides": { "price": 0 },
-      "_defect": "F-01"
+      "technique": "BVA",
+      "_defect": "F-01: price=0 accepted instead of rejected"
     },
     {
       "description": "LIMIT BUY with price = -1 (negative price)",
       "base": "limitBuy",
-      "overrides": { "price": -1 }
+      "overrides": { "price": -1 },
+      "technique": "BVA",
+      "_defect": "F-01: negative price accepted instead of rejected"
+    },
+    {
+      "description": "LIMIT BUY with price = null",
+      "base": "limitBuy",
+      "overrides": { "price": null },
+      "technique": "EP",
+      "_defect": "F-01: price=null treated as 0 and accepted instead of rejected"
     },
     {
       "description": "LIMIT SELL with price = 0",
       "base": "limitSell",
       "overrides": { "price": 0 },
-      "_defect": "F-01"
+      "technique": "BVA",
+      "_note": "LIMIT SELL correctly rejects price=0 (400). F-01 only affects LIMIT BUY."
+    },
+    {
+      "description": "LIMIT SELL with price = -1 (negative price)",
+      "base": "limitSell",
+      "overrides": { "price": -1 },
+      "technique": "BVA"
     }
   ]
 }
