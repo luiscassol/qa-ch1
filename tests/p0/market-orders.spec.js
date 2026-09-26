@@ -23,17 +23,19 @@ const { attachResponse } = require('../../utils/report');
  */
 
 test.describe('P0 - MARKET order settlement @p0', () => {
-  /** last_price of the default instrument, fetched before each test. */
+  /** last_price / close_price of the default instrument, fetched before each test. */
   let lastPrice;
+  let closePrice;
 
   test.beforeEach(async ({ resetApi, instrumentsApi }) => {
     await resetApi.reset();
 
-    // Fetch last_price here so each test works with the current market price.
+    // Fetch prices here so each test works with the current market snapshot.
     const instruments = await instrumentsApi.getAll();
     const instrument = instruments.body.find((i) => i.id === DEFAULT_INSTRUMENT_ID);
     expect(instrument, `Instrument id=${DEFAULT_INSTRUMENT_ID} must exist in catalog`).toBeDefined();
     lastPrice = instrument.last_price;
+    closePrice = instrument.close_price;
 
     // Allure taxonomy — common to all tests in this describe block.
     await allure.severity('blocker');
@@ -44,7 +46,7 @@ test.describe('P0 - MARKET order settlement @p0', () => {
     await allure.feature('MARKET order settlement');
 
     test.info().annotations.push(
-      { type: 'instrument', description: `id=${DEFAULT_INSTRUMENT_ID} ticker=${instrument.ticker} last_price=${lastPrice}` },
+      { type: 'instrument', description: `id=${DEFAULT_INSTRUMENT_ID} ticker=${instrument.ticker} last_price=${lastPrice} close_price=${closePrice}` },
       { type: 'endpoint', description: 'POST /orders, GET /portfolio' },
     );
   });
@@ -68,6 +70,7 @@ test.describe('P0 - MARKET order settlement @p0', () => {
         side: 'BUY',
         quantity: qty,
         price: lastPrice,
+        closePrice,
         instrumentId: DEFAULT_INSTRUMENT_ID,
       });
       test.info().annotations.push({ type: 'orderId', description: String(order.body.id) });
@@ -108,6 +111,7 @@ test.describe('P0 - MARKET order settlement @p0', () => {
         side: 'SELL',
         quantity: qty,
         price: lastPrice,
+        closePrice,
         instrumentId: DEFAULT_INSTRUMENT_ID,
       });
       test.info().annotations.push({ type: 'orderId', description: String(order.body.id) });
@@ -144,6 +148,7 @@ test.describe('P0 - MARKET order settlement @p0', () => {
         side: 'BUY',
         quantity: maxQty,
         price: lastPrice,
+        closePrice,
         instrumentId: DEFAULT_INSTRUMENT_ID,
       });
       test.info().annotations.push({ type: 'orderId', description: String(order.body.id) });

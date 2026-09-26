@@ -19,8 +19,8 @@ const { attachResponse } = require('../../utils/report');
  *   BR-PRT-002: Holdings contain quantity, last_price, avg_cost_price
  *               so market_value and gain can be computed client-side
  *
- * F-01 baseline defect: LIMIT BUY with price=0 is accepted in tier 'off'
- *   (documented here as a failing test to establish the defect baseline)
+ * F-01 baseline defect: LIMIT BUY with price ≤ 0 is accepted in tier 'off'
+ *   and a negative price can inflate available cash via a negative reservation.
  */
 
 test.describe('P0 - Portfolio consistency @p0', () => {
@@ -166,22 +166,27 @@ test.describe('P0 - Portfolio consistency @p0', () => {
 
   // ─── F-01 baseline defect ─────────────────────────────────────────────────────
 
-  test('F-01: LIMIT BUY with price=0 should be rejected but is accepted @p0', async ({ ordersApi }) => {
-    await allure.story('F-01 baseline — zero price accepted');
+  test('F-01: LIMIT BUY with price<=0 should be rejected and must not inflate cash @p0', async ({ ordersApi, portfolioApi }) => {
+    await allure.story('F-01 baseline — non-positive price accepted and can inflate cash');
     test.info().annotations.push(
-      { type: 'businessRule', description: 'LIMIT price must be > 0 (no explicit BR, implied by financial logic)' },
-      { type: 'technique', description: 'Error guessing — boundary: price = 0' },
-      { type: 'defect', description: 'F-01: LIMIT BUY with price=0 returns 201 in tier off. Expected: 400.' },
-      { type: 'severity', description: 'High — a zero-price reservation corrupts cash accounting' },
+      { type: 'businessRule', description: 'LIMIT price must be > 0 (confirmed by the team; client form requires the same)' },
+      { type: 'technique', description: 'Error guessing — boundary: price = -1 plus cash-side effect' },
+      { type: 'defect', description: 'F-01: LIMIT BUY with price<=0 is accepted in tier off. Expected: 400. Negative price can raise cash above 1,000,000.' },
+      { type: 'severity', description: 'High — a negative reservation corrupts cash accounting' },
     );
 
-    // This test is expected to FAIL in tier 'off' (no bugs enabled).
-    // It documents the baseline defect: the API accepts price=0 when it should reject it.
-    // Do NOT use test.fail() — that would normalize the failure.
-    // The test fails honestly; the defect is tracked via the annotation above.
-    const order = await ordersApi.create(buildLimitBuyOrder({ price: 0 }));
+    // Expected to FAIL in tier 'off'. Do NOT use test.fail() — the failure is the defect.
+    // Cash is checked first so the financial impact is reported even when status is wrong.
+    const order = await ordersApi.create(buildLimitBuyOrder({ price: -1 }));
     await attachResponse('order-response', order.body);
 
-    expect(order.status, 'F-01: price=0 should return 400 but returns 201').toBe(400);
+    const portfolio = await portfolioApi.get();
+    await attachResponse('portfolio-after-negative-limit', portfolio.body);
+    expect(
+      portfolio.body.cash,
+      'F-01: a non-positive LIMIT price must not inflate available cash above the initial 1,000,000'
+    ).toBeLessThanOrEqual(1_000_000);
+
+    expect(order.status, 'F-01: price<=0 should return 400').toBe(400);
   });
 });
