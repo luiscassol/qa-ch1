@@ -1,0 +1,224 @@
+{
+  "info": {
+    "name": "Cocos QA Challenge — Dummy API",
+    "description": "Minimal collection for exploration and manual finding reproduction.\n\nSet environment variables: `baseUrl`, `candidateId`, `bugsTier` (`off` | `easy` | `medium` | `hard`).\n\nRun `POST /reset` before any mutating finding. Automated coverage lives in Playwright, not here.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "noauth"
+  },
+  "item": [
+    {
+      "name": "Endpoints",
+      "item": [
+        {
+          "name": "GET /instruments",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "X-Enable-Bugs", "value": "{{bugsTier}}" },
+              { "key": "X-Candidate-Id", "value": "{{candidateId}}" }
+            ],
+            "url": "{{baseUrl}}/instruments"
+          }
+        },
+        {
+          "name": "GET /search?query=DYCA",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "X-Enable-Bugs", "value": "{{bugsTier}}" },
+              { "key": "X-Candidate-Id", "value": "{{candidateId}}" }
+            ],
+            "url": "{{baseUrl}}/search?query=DYCA"
+          }
+        },
+        {
+          "name": "GET /portfolio",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "X-Enable-Bugs", "value": "{{bugsTier}}" },
+              { "key": "X-Candidate-Id", "value": "{{candidateId}}" }
+            ],
+            "url": "{{baseUrl}}/portfolio"
+          }
+        },
+        {
+          "name": "GET /orders",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "X-Enable-Bugs", "value": "{{bugsTier}}" },
+              { "key": "X-Candidate-Id", "value": "{{candidateId}}" }
+            ],
+            "url": "{{baseUrl}}/orders"
+          }
+        },
+        {
+          "name": "POST /orders — MARKET BUY",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "X-Enable-Bugs", "value": "{{bugsTier}}" },
+              { "key": "X-Candidate-Id", "value": "{{candidateId}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"instrument_id\": 1,\n  \"side\": \"BUY\",\n  \"type\": \"MARKET\",\n  \"quantity\": 1\n}"
+            },
+            "url": "{{baseUrl}}/orders"
+          }
+        },
+        {
+          "name": "POST /orders — LIMIT BUY",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "X-Enable-Bugs", "value": "{{bugsTier}}" },
+              { "key": "X-Candidate-Id", "value": "{{candidateId}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"instrument_id\": 1,\n  \"side\": \"BUY\",\n  \"type\": \"LIMIT\",\n  \"quantity\": 1,\n  \"price\": 40\n}"
+            },
+            "url": "{{baseUrl}}/orders"
+          }
+        },
+        {
+          "name": "POST /reset",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "X-Enable-Bugs", "value": "{{bugsTier}}" },
+              { "key": "X-Candidate-Id", "value": "{{candidateId}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": "{{baseUrl}}/reset"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Findings",
+      "item": [
+        {
+          "name": "F-01 — LIMIT BUY price=-1 (tier off)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "X-Enable-Bugs", "value": "off" },
+              { "key": "X-Candidate-Id", "value": "{{candidateId}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"instrument_id\": 1,\n  \"side\": \"BUY\",\n  \"type\": \"LIMIT\",\n  \"quantity\": 1,\n  \"price\": -1\n}"
+            },
+            "url": "{{baseUrl}}/orders",
+            "description": "Expected: 400. Actual in off: 201 PENDING. Then GET /portfolio — cash must not exceed 1,000,000."
+          }
+        },
+        {
+          "name": "F-02 — side lowercase (tier off)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "X-Enable-Bugs", "value": "off" },
+              { "key": "X-Candidate-Id", "value": "{{candidateId}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"instrument_id\": 1,\n  \"side\": \"buy\",\n  \"type\": \"MARKET\",\n  \"quantity\": 1\n}"
+            },
+            "url": "{{baseUrl}}/orders",
+            "description": "Expected: 400. Actual: order accepted, side stored as BUY."
+          }
+        },
+        {
+          "name": "F-03 — type lowercase (tier off)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "X-Enable-Bugs", "value": "off" },
+              { "key": "X-Candidate-Id", "value": "{{candidateId}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"instrument_id\": 1,\n  \"side\": \"BUY\",\n  \"type\": \"market\",\n  \"quantity\": 1\n}"
+            },
+            "url": "{{baseUrl}}/orders",
+            "description": "Expected: 400. Actual: order accepted, type stored as MARKET."
+          }
+        },
+        {
+          "name": "F-04 — MARKET SELL no holdings (tier easy)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "X-Enable-Bugs", "value": "easy" },
+              { "key": "X-Candidate-Id", "value": "{{candidateId}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"instrument_id\": 1,\n  \"side\": \"SELL\",\n  \"type\": \"MARKET\",\n  \"quantity\": 1\n}"
+            },
+            "url": "{{baseUrl}}/orders",
+            "description": "POST /reset first. Expected: 400 Insufficient shares. Actual in easy+: FILLED."
+          }
+        },
+        {
+          "name": "F-06 — GET /search?query=dyca (tier easy)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "X-Enable-Bugs", "value": "easy" },
+              { "key": "X-Candidate-Id", "value": "{{candidateId}}" }
+            ],
+            "url": "{{baseUrl}}/search?query=dyca",
+            "description": "Expected: DYCA in the list. Actual in easy+: empty array."
+          }
+        },
+        {
+          "name": "F-07 — POST MARKET (tier medium) — check status 201 vs 200",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "X-Enable-Bugs", "value": "medium" },
+              { "key": "X-Candidate-Id", "value": "{{candidateId}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"instrument_id\": 1,\n  \"side\": \"BUY\",\n  \"type\": \"MARKET\",\n  \"quantity\": 1\n}"
+            },
+            "url": "{{baseUrl}}/orders",
+            "description": "Expected: 201 Created. Actual in medium+: 200 OK."
+          }
+        },
+        {
+          "name": "F-08 — quantity 1.5 (tier medium)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "X-Enable-Bugs", "value": "medium" },
+              { "key": "X-Candidate-Id", "value": "{{candidateId}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"instrument_id\": 1,\n  \"side\": \"BUY\",\n  \"type\": \"MARKET\",\n  \"quantity\": 1.5\n}"
+            },
+            "url": "{{baseUrl}}/orders",
+            "description": "Expected: 400. Actual in medium+: accepted, quantity stored as 1, FILLED."
+          }
+        }
+      ]
+    }
+  ]
+}

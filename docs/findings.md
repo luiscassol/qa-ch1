@@ -341,7 +341,7 @@ BUGS_TIER=medium npx playwright test --reporter=list
 BUGS_TIER=hard   npx playwright test --reporter=list
 ```
 
-Repro manual: el JSON de cada finding (o `curl`) alcanza. Una colección Postman irá en `postman/` cuando esté en el repo.
+Repro manual: el JSON de cada finding, `curl`, o la carpeta **Findings** de [`postman/cocos-api.postman_collection.json`](../postman/cocos-api.postman_collection.json) (environment en `postman/cocos-api.postman_environment.json`).
 
 ---
 
@@ -350,5 +350,6 @@ Repro manual: el JSON de cada finding (o `curl`) alcanza. Una colección Postman
 | Pregunta | Dónde |
 |----------|--------|
 | ¿Qué tests fallaron por tier? | `docs/test-results.md` + `docs/tier-results/` |
-| ¿Qué es el bug y cómo lo reproduzco? | Este archivo |
+| ¿Qué es el bug y cómo lo reproduzco? | Este archivo + Postman (`postman/`) |
+| ¿Cuál es el contrato (conocido vs inferido)? | `docs/api-contract.md` |
 | ¿Pasó esta corrida? | Allure (`npx allure serve allure-results`) o `npm run test:report` — locales, no commiteados |

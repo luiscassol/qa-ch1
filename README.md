@@ -82,6 +82,14 @@ La API soporta defectos intencionales vía `X-Enable-Bugs`:
 
 Ver [`docs/findings.md`](docs/findings.md) para el reporte completo de defectos.
 
+## Postman
+
+Exploración y repro manual (no reemplaza Playwright):
+
+1. Importar [`postman/cocos-api.postman_collection.json`](postman/cocos-api.postman_collection.json)
+2. Importar [`postman/cocos-api.postman_environment.json`](postman/cocos-api.postman_environment.json) y completar `candidateId`
+3. Contrato conocido vs inferido: [`docs/api-contract.md`](docs/api-contract.md)
+
 ## Aislamiento
 
 Cada corrida usa `CANDIDATE_ID` para aislar el estado. Los tests que mutan estado
