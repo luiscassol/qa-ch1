@@ -1,51 +1,57 @@
-# Test Results — Multi-Tier Execution Matrix
+# Resultados de tests — matriz multi-tier
 
 **Suite:** 70 tests · 1 worker (sequential) · API: `https://dummy-api-topaz.vercel.app`  
 **Candidate:** `lc-qa-1`  
-**Header:** `X-Enable-Bugs: <tier>` — controls bug injection level  
+**Header:** `X-Enable-Bugs: <tier>` — controla el nivel de inyección de bugs  
 **Framework:** Playwright Test (CommonJS) + Allure reporter
 
----
-
-## 1. Executive Summary
-
-| Tier | X-Enable-Bugs | Passed | Failed | New failures vs previous | Pass rate |
-|------|---------------|--------|--------|--------------------------|-----------|
-| off  | `off`         | 64     | 6      | — (baseline)             | 91.4%     |
-| easy | `easy`        | 57     | 13     | +7                       | 81.4%     |
-| medium | `medium`    | 47     | 23     | +10                      | 67.1%     |
-| hard | `hard`        | 44     | 26     | +3                       | 62.9%     |
-
-> **Note:** The `off` tier run was captured in a prior session; raw output not preserved.
-> Results for `easy`, `medium`, and `hard` are saved in `docs/tier-results/`.
+Los **títulos de tests** se dejan en inglés: son el texto del reporter `list` de Playwright. Campos, status HTTP y comandos también quedan como en la API / la corrida.
 
 ---
 
-## 2. Bugs Detected per Tier
+## 1. Resumen ejecutivo
 
-Each bug ID is first introduced by the tier that exposes it.
-A `✗` means the bug is present (test fails); `✓` means the behavior is correct.
+| Tier | X-Enable-Bugs | Passed | Failed | Fallos nuevos vs el tier anterior | Pass rate |
+|------|---------------|--------|--------|-----------------------------------|-----------|
+| off  | `off`         | 64     | 6      | — (baseline)                      | 91.4%     |
+| easy | `easy`        | 57     | 13     | +7                                | 81.4%     |
+| medium | `medium`    | 47     | 23     | +10                               | 67.1%     |
+| hard | `hard`        | 44     | 26     | +3                                | 62.9%     |
 
-| Bug ID | Description | off | easy | medium | hard | Severity |
+> **Nota:** la corrida `off` se capturó en una sesión anterior; no quedó el output crudo.
+> `easy`, `medium` y `hard` están en `docs/tier-results/`.
+
+Esta matriz es de la suite de **70 tests** (antes de los gaps de `feat/suite-gaps`). Los IDs F-01…F-10 no cambian.
+
+---
+
+## 2. Bugs detectados por tier
+
+Cada ID aparece primero en el tier que lo expone.  
+`✗` = el bug está presente (el test falla). `✓` = el comportamiento es el esperado.
+
+| Bug ID | Descripción | off | easy | medium | hard | Severity |
 |--------|-------------|-----|------|--------|------|----------|
-| F-01 | LIMIT order with `price ≤ 0` or `price = null` accepted (BUY and SELL) | ✗ | ✗ | ✗ | ✗ | Critical |
-| F-02 | Lowercase `side` (e.g. `"buy"`) normalized and accepted — not rejected | ✗ | ✗ | ✗ | ✗ | Critical |
-| F-03 | Lowercase `type` (e.g. `"market"`) normalized and accepted — not rejected | ✗ | ✗ | ✗ | ✗ | Critical |
-| F-04 | SELL orders accepted without any holdings (both MARKET and LIMIT) | ✓ | ✗ | ✗ | ✗ | Critical |
-| F-05 | `MIRG` (id=5) has `last_price = 0` in the catalog | ✓ | ✗ | ✗ | ✗ | Normal |
-| F-06 | `GET /search` becomes case-sensitive — lowercase ticker returns empty result | ✓ | ✗ | ✗ | ✗ | Normal |
-| F-07 | `POST /orders` returns HTTP 200 instead of 201 for all order creation | ✓ | ✓ | ✗ | ✗ | Blocker |
-| F-08 | Float quantity (e.g. `1.5`) accepted — truncated silently to `1` and FILLED | ✓ | ✓ | ✗ | ✗ | Normal |
-| F-09 | Portfolio holding missing `avg_cost_price` field — schema regression | ✓ | ✓ | ✓ | ✗ | Critical |
-| F-10 | MARKET order executes at price ≠ `last_price` — cash debited at different (higher) price | ✓ | ✓ | ✓ | ✗ | Blocker |
+| F-01 | Orden LIMIT con `price ≤ 0` o `price = null` aceptada (BUY y SELL) | ✗ | ✗ | ✗ | ✗ | Critical |
+| F-02 | `side` en minúsculas (p. ej. `"buy"`) normalizado y aceptado | ✗ | ✗ | ✗ | ✗ | Critical |
+| F-03 | `type` en minúsculas (p. ej. `"market"`) normalizado y aceptado | ✗ | ✗ | ✗ | ✗ | Critical |
+| F-04 | SELL aceptado sin holdings (MARKET y LIMIT) | ✓ | ✗ | ✗ | ✗ | Critical |
+| F-05 | `MIRG` (id=5) tiene `last_price = 0` en el catálogo | ✓ | ✗ | ✗ | ✗ | Normal |
+| F-06 | `GET /search` pasa a ser case-sensitive — ticker en minúsculas → lista vacía | ✓ | ✗ | ✗ | ✗ | Normal |
+| F-07 | `POST /orders` devuelve HTTP 200 en lugar de 201 al crear la orden | ✓ | ✓ | ✗ | ✗ | Blocker |
+| F-08 | `quantity` decimal (p. ej. `1.5`) aceptada — se trunca a `1` y queda FILLED | ✓ | ✓ | ✗ | ✗ | Normal |
+| F-09 | El holding no trae `avg_cost_price` — regresión de schema | ✓ | ✓ | ✓ | ✗ | Critical |
+| F-10 | MARKET se ejecuta a un precio ≠ `last_price` — el cash se debita a otro precio | ✓ | ✓ | ✓ | ✗ | Blocker |
 
 ---
 
-## 3. Failing Tests per Tier
+## 3. Tests que fallan por tier
+
+Títulos = nombre del test en Playwright.
 
 ### 3.1 Tier: off (baseline, `X-Enable-Bugs: off`)
 
-**Result: 64 passed / 6 failed**
+**Resultado: 64 passed / 6 failed**
 
 | # | Test | File | Bug |
 |---|------|------|-----|
@@ -58,11 +64,11 @@ A `✗` means the bug is present (test fails); `✓` means the behavior is corre
 
 ### 3.2 Tier: easy (`X-Enable-Bugs: easy`)
 
-**Result: 57 passed / 13 failed** (+7 vs off)
+**Resultado: 57 passed / 13 failed** (+7 vs off)
 
 | # | Test | File | Bug |
 |---|------|------|-----|
-| 1–6 | (all 6 from off) | — | F-01, F-02, F-03 |
+| 1–6 | (los 6 de off) | — | F-01, F-02, F-03 |
 | 7 | LIMIT SELL is rejected with no holdings | p0/limit-orders | F-04 |
 | 8 | MARKET SELL with no holdings is rejected | p0/market-orders | F-04 |
 | 9 | MARKET SELL more shares than owned is rejected (BVA: oversell) | p0/market-orders | F-04 |
@@ -73,12 +79,12 @@ A `✗` means the bug is present (test fails); `✓` means the behavior is corre
 
 ### 3.3 Tier: medium (`X-Enable-Bugs: medium`)
 
-**Result: 47 passed / 23 failed** (+10 vs easy)
+**Resultado: 47 passed / 23 failed** (+10 vs easy)
 
-All 13 from easy, plus:
+Los 13 de easy, más:
 
-| # | Test | File | Bug / Root cause |
-|---|------|------|-----------------|
+| # | Test | File | Bug / causa |
+|---|------|------|-------------|
 | 14 | LIMIT BUY immediate response is PENDING (BR-ORD-006) | p0/limit-orders | F-07 |
 | 15 | LIMIT SELL creates PENDING order and satisfies its invariant | p0/limit-orders | F-07 |
 | 16 | LIMIT BUY reaches a consistent state and satisfies its invariant | p0/limit-orders | F-07 |
@@ -87,27 +93,29 @@ All 13 from easy, plus:
 | 19 | MARKET BUY at maximum affordable quantity (BVA: upper boundary) | p0/market-orders | F-07 |
 | 20 | POST /orders (MARKET BUY) returns 201 and matches order schema | p1/contract | F-07 |
 | 21 | POST /orders (LIMIT BUY) returns 201 and matches order schema | p1/contract | F-07 |
-| 22 | POST /reset after trades restores portfolio to initial state | p1/isolation | F-07 cascade |
+| 22 | POST /reset after trades restores portfolio to initial state | p1/isolation | F-07 (cascada) |
 | 23 | rejects order: quantity is a float | p1/order-validation | F-08 |
 
 ### 3.4 Tier: hard (`X-Enable-Bugs: hard`)
 
-**Result: 44 passed / 26 failed** (+3 vs medium)
+**Resultado: 44 passed / 26 failed** (+3 vs medium)
 
-All 23 from medium, plus:
+Los 23 de medium, más:
 
-| # | Test | File | Bug / Root cause |
-|---|------|------|-----------------|
-| 24 | Reset restores initial state after trades | p0/portfolio-consistency | F-10 (BUY silently rejected, cash = 1M) |
+| # | Test | File | Bug / causa |
+|---|------|------|-------------|
+| 24 | Reset restores initial state after trades | p0/portfolio-consistency | F-10 (BUY rechazado en silencio, cash = 1M) |
 | 25 | Portfolio holding contains correct inputs for client-side metric calculation | p0/portfolio-consistency | F-09 (`avg_cost_price` undefined) |
-| 26 | Portfolio cash decreases correctly after multiple sequential BUY orders | p0/portfolio-consistency | F-10 (executed at price ≠ last_price) |
+| 26 | Portfolio cash decreases correctly after multiple sequential BUY orders | p0/portfolio-consistency | F-10 (ejecutado a precio ≠ `last_price`) |
 
 ---
 
-## 4. Failure Distribution by Risk Area
+## 4. Distribución de fallos por área de riesgo
 
-| Risk area | off | easy | medium | hard |
-|-----------|-----|------|--------|------|
+Este eje es **P0/P1/…** (prioridad del test). Las columnas son el **tier** (inyección). No son lo mismo: un P0 puede estar verde en `off` y rojo en `easy`.
+
+| Área de riesgo | off | easy | medium | hard |
+|----------------|-----|------|--------|------|
 | P0 — LIMIT lifecycle | 0 | 1 | 4 | 4 |
 | P0 — MARKET settlement | 0 | 2 | 3 | 3 |
 | P0 — Portfolio consistency | 1 | 1 | 1 | 4 |
@@ -118,83 +126,82 @@ All 23 from medium, plus:
 | P3 — Search | 0 | 1 | 1 | 1 |
 | Smoke | 0 | 0 | 0 | 0 |
 
-**Smoke tests pass across all tiers** — entry criteria always met.
+Los **smoke tests** pasan en todos los tiers — el criterio de entrada se cumple.
 
 ---
 
-## 5. Bug Analysis
+## 5. Análisis de bugs
 
-### F-01 — LIMIT price ≤ 0 accepted (present in ALL tiers)
-- **Expected:** `400 Bad Request` when `price = 0`, `price < 0`, or `price = null`
-- **Actual:** `200 OK`, order created with `status: PENDING`
-- In easy+ tier: also affects SELL side (not just BUY)
-- **Tests affected:** 6 (5 validation + 1 P0 sentinel)
+### F-01 — LIMIT acepta `price ≤ 0` (todos los tiers)
+- **Esperado:** `400 Bad Request` si `price = 0`, `price < 0` o `price = null`
+- **Actual:** `200`/`201`, orden creada con `status: PENDING`
+- En easy+: también afecta SELL (no solo BUY)
+- **Tests afectados:** 6 (5 de validación + 1 sentinel P0)
 
-### F-02 — Lowercase `side` normalized (present in ALL tiers)
-- **Expected:** `400 Bad Request` for `"buy"` or `"sell"`
-- **Actual:** `200 OK`, API normalizes to `"BUY"`/`"SELL"` internally
+### F-02 — `side` en minúsculas normalizado (todos los tiers)
+- **Esperado:** `400 Bad Request` para `"buy"` o `"sell"`
+- **Actual:** orden aceptada; la API persiste `"BUY"` / `"SELL"`
 
-### F-03 — Lowercase `type` normalized (present in ALL tiers)
-- **Expected:** `400 Bad Request` for `"market"` or `"limit"`
-- **Actual:** `200 OK`, API normalizes to `"MARKET"`/`"LIMIT"` internally
+### F-03 — `type` en minúsculas normalizado (todos los tiers)
+- **Esperado:** `400 Bad Request` para `"market"` o `"limit"`
+- **Actual:** orden aceptada; la API persiste `"MARKET"` / `"LIMIT"`
 
-### F-04 — SELL without holdings accepted (easy+)
-- **Expected:** `400 Bad Request`
-- **Actual:** `200 OK`, order created/FILLED with no holdings — inventory goes negative implicitly
+### F-04 — SELL sin holdings aceptado (easy+)
+- **Esperado:** `400 Bad Request`
+- **Actual:** orden creada / FILLED sin tenencia
 
-### F-05 — MIRG catalog `last_price = 0` (easy+)
-- **Expected:** all instruments have `last_price > 0`
-- **Actual:** `MIRG` (id=5) returns `last_price: 0`
+### F-05 — MIRG con `last_price = 0` (easy+)
+- **Esperado:** todos los instrumentos con `last_price > 0`
+- **Actual:** `MIRG` (id=5) devuelve `last_price: 0`
 
-### F-06 — Search becomes case-sensitive (easy+)
-- **Expected:** `GET /search?q=dyca` returns DYCA
-- **Actual:** empty array — search requires exact uppercase match
+### F-06 — Search case-sensitive (easy+)
+- **Esperado:** `GET /search?query=dyca` devuelve DYCA
+- **Actual:** array vacío — exige match en mayúsculas
 
-### F-07 — `POST /orders` returns 200 instead of 201 (medium+)
-- **Expected:** HTTP 201 Created on order creation (REST standard)
-- **Actual:** HTTP 200 OK — breaks contract for all clients relying on status codes
-- **Cascades:** 9 tests fail because setup assertions also check for 201
+### F-07 — `POST /orders` devuelve 200 en lugar de 201 (medium+)
+- **Esperado:** HTTP `201 Created` al crear la orden
+- **Actual:** HTTP `200 OK`
+- **Cascada (en esta corrida de 70 tests):** 9 tests fallaron porque el setup exigía `201`
 
-### F-08 — Float quantity silently truncated (medium+)
-- **Expected:** `400 Bad Request` for `quantity: 1.5`
-- **Actual:** `200 OK`, `quantity` stored as `1`, order FILLED
-- **Risk:** client submits 1.5 shares, gets confirmation, but only 1 was traded
+### F-08 — `quantity` decimal truncada en silencio (medium+)
+- **Esperado:** `400 Bad Request` para `quantity: 1.5`
+- **Actual:** aceptada, `quantity` queda en `1`, orden FILLED
+- **Riesgo:** el cliente pide 1.5 y se confirma 1
 
-### F-09 — `avg_cost_price` absent from portfolio holding (hard+)
-- **Expected:** `holding.avg_cost_price` is a positive number (field always present)
-- **Actual:** `undefined` — field removed from response schema
-- **Risk:** any client computing market value or gain using this field will crash
+### F-09 — falta `avg_cost_price` en el holding (hard+)
+- **Esperado:** `holding.avg_cost_price` es un number positivo
+- **Actual:** `undefined`
+- **Riesgo:** el cliente que calcula market value / gain con ese campo falla
 
-### F-10 — MARKET order execution price ≠ `last_price` (hard+)
-- **Expected:** MARKET order executes at the current `last_price`
-- **Actual:** execution occurs at a higher price (injected slippage or stale price)
-- **Symptoms:**
-  - BVA upper-boundary BUY rejected with `{"error":"Insufficient cash"}` even though `floor(cash / last_price)` shares should fit
-  - Multi-BUY cash debit exceeds expected (`expected: 999862.84`, `received: 999849.79` — more was debited)
-  - BUY qty=5 silently rejected → cash remains at 1,000,000
+### F-10 — MARKET a un precio ≠ `last_price` (hard+)
+- **Esperado:** MARKET ejecuta a `last_price`
+- **Actual:** ejecución a un precio mayor (en la práctica, `close_price`)
+- **Síntomas:**
+  - BVA upper-boundary BUY rechazado con `{"error":"Insufficient cash"}` aunque `floor(cash / last_price)` debería entrar
+  - Multi-BUY: esperado `999862.84`, recibido `999849.79` (debitó de más)
+  - BUY qty=5 rechazado en silencio → cash sigue en 1.000.000
 
 ---
 
-## 6. How to Reproduce
-
-Run the suite against any tier:
+## 6. Cómo reproducir
 
 ```bash
-# Baseline (no bug injection)
+# Baseline (sin inyección)
 BUGS_TIER=off npx playwright test --reporter=list
 
-# Specific tier
 BUGS_TIER=easy   npx playwright test --reporter=list
 BUGS_TIER=medium npx playwright test --reporter=list
 BUGS_TIER=hard   npx playwright test --reporter=list
 ```
 
-The `BUGS_TIER` environment variable overrides the `.env` value for that run.
-Results are deterministic within the same tier (workers=1, sequential execution).
+`BUGS_TIER` pisa el valor del `.env` en esa corrida.  
+Dentro del mismo tier el resultado es determinístico (`workers=1`, sequential).
 
 ---
 
-## 7. Traceability
+## 7. Trazabilidad
+
+`Technique` = cómo se diseñó el caso (EP, BVA, oracle, schema). No es la prioridad (P0) ni el tier.
 
 | Test file | Priority | Technique | Allure severity |
 |-----------|----------|-----------|-----------------|
