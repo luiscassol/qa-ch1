@@ -16,5 +16,8 @@ maestro/screenshots/
 maestro/debug/
 maestro/junit-report.xml
 
+# Local agent recipes (not part of the submission)
+.cursor/
+
 # OS
 .DS_Store

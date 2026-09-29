@@ -1,15 +1,15 @@
 # Findings — Cocos QA Challenge
 
 **API:** `https://dummy-api-topaz.vercel.app`  
-**Candidate:** `lc-qa-1`  
+**Candidate:** el `CANDIDATE_ID` de la corrida (`.env` local o `ci-<run_id>` en Actions)  
 **Evidencia de ejecución:** [`docs/test-results.md`](test-results.md) y [`docs/tier-results/`](tier-results/)  
 **Cómo ver este documento:** en GitHub (`docs/findings.md`) o preview Markdown del editor.
 
-Este archivo es el **reporte de defectos**. No se regenera al correr la suite: se edita cuando hay un hallazgo nuevo (por ejemplo, un escenario UI). La matriz por tier vive en `test-results.md`.
+Este archivo es el **reporte de defectos**. No se regenera al correr la suite: se edita cuando hay un hallazgo nuevo (por ejemplo, un escenario UI). La matriz por tier vive en `test-results.md`. Los IDs **API-xx** y **UI-M-xx** son el catálogo: [`catalog.md`](catalog.md).
 
 **Severity** = impacto técnico o de negocio. **Priority** no la asignamos: la decide el equipo. Acá solo se justifica el impacto.
 
-**Nota de alcance de la matriz:** los conteos de `test-results.md` corresponden a la suite de **70 tests** (antes de los gaps de `feat/suite-gaps`). Los IDs F-01…F-10 no cambian.
+**Nota de alcance de la matriz:** `npm test` hoy son **75** tests (API-01…75). Los conteos de `test-results.md` son de una corrida de **70** (histórica). Los IDs F-01…F-10 no cambian. **F-11…F-19** son de la **app**. **F-20** se vio en la app y es `API-75`.
 
 ---
 
@@ -27,6 +27,16 @@ Este archivo es el **reporte de defectos**. No se regenera al correr la suite: s
 | [F-08](#f-08--quantity-decimal-aceptada-y-truncada) | `quantity` decimal aceptada y truncada | medium+ | Normal |
 | [F-09](#f-09--avg_cost_price-ausente-en-el-holding) | `avg_cost_price` ausente en el holding | hard | Critical |
 | [F-10](#f-10--market-se-ejecuta-a-un-precio--last_price) | MARKET se ejecuta a un precio ≠ `last_price` | hard | Blocker |
+| [F-11](#f-11--strip-de-mercados-241--26) | Strip Mercados: 24 suben + 1 baja ≠ 26 | app `off` | Normal |
+| [F-12](#f-12--search-no-encuentra-por-nombre-de-empresa) | Search no encuentra por nombre de empresa | app `off` | Normal |
+| [F-13](#f-13--la-barra-de-tabs-tapa-contenido) | La barra de tabs tapa la última fila / resultados | app `off` | Normal |
+| [F-14](#f-14--comprar--vender-persiste-cantidad-y-pesos) | Comprar ↔ Vender persiste cantidad/pesos | app `off` | Critical |
+| [F-15](#f-15--se-puede-operar-ars-como-acción) | Se puede operar ARS (MONEDA) como acción | app `off` | Critical |
+| [F-16](#f-16--el-ticket-de-venta-no-muestra-la-tenencia) | Ticket de venta (desde Mercados) no muestra tenencia | app `off` | Normal |
+| [F-17](#f-17--en-horizontal-no-se-puede-cargar-la-cantidad) | En horizontal no se puede cargar la cantidad | app `off` | Normal |
+| [F-18](#f-18--posición-no-encontrada-tras-vender-o-reiniciar) | “Posición no encontrada” tras vender todo o reiniciar | app `off` | Normal |
+| [F-19](#f-19--orden-límite-rechazada-sin-motivo-ni-detalle) | LIMIT rechazada: sin motivo; el tap no abre ficha | app `off` | Normal |
+| [F-20](#f-20--limit-sell-rechazada-descuenta-acciones-sin-acreditar-cash) | LIMIT SELL rechazada descuenta acciones sin acreditar cash | app + API `off` | Critical |
 | [Observaciones](#observaciones) | Coerción, HTML en error, headers, LIMIT, cliente | — | — |
 
 ---
@@ -60,8 +70,9 @@ Luego `GET /portfolio`. En `off` la orden se acepta. El impacto de cash se ve co
 
 ### Tests
 
-- `tests/p0/portfolio-consistency.spec.js` — sentinel: status `400` y `cash ≤ 1_000_000`
-- `tests/p1/order-validation.spec.js` — BUY `0` / `-1` / `null`; SELL `0` / `-1` (easy+)
+- [`API-21`](catalog.md) — sentinel P0: `400` y `cash ≤ 1_000_000`
+- [`API-58`](catalog.md), [`API-59`](catalog.md), [`API-60`](catalog.md) — LIMIT BUY `price` 0 / -1 / `null`
+- [`API-61`](catalog.md), [`API-62`](catalog.md) — LIMIT SELL `price` 0 / -1 (easy+)
 
 No se usa `test.fail()`: el fallo es el defecto.
 
@@ -88,7 +99,7 @@ No se usa `test.fail()`: el fallo es el defecto.
 
 ### Tests
 
-- `tests/p1/order-validation.spec.js` — *side is lowercase*
+- [`API-43`](catalog.md) — *side is lowercase*
 
 ---
 
@@ -107,7 +118,7 @@ No se usa `test.fail()`: el fallo es el defecto.
 
 ### Tests
 
-- `tests/p1/order-validation.spec.js` — *type is lowercase*
+- [`API-48`](catalog.md) — *type is lowercase*
 
 ---
 
@@ -136,8 +147,8 @@ Header: `X-Enable-Bugs: easy`.
 
 ### Tests
 
-- `tests/p0/market-orders.spec.js` — SELL sin holdings; BVA oversell
-- `tests/p0/limit-orders.spec.js` — LIMIT SELL sin holdings
+- [`API-08`](catalog.md), [`API-09`](catalog.md) — MARKET SELL sin holdings; BVA oversell
+- [`API-14`](catalog.md) — LIMIT SELL sin holdings
 
 ---
 
@@ -156,7 +167,7 @@ Header: `X-Enable-Bugs: easy`.
 
 ### Tests
 
-- `tests/p2/catalog.spec.js` — *All instruments have a positive last_price*
+- [`API-66`](catalog.md) — *All instruments have a positive last_price*
 
 ---
 
@@ -175,7 +186,7 @@ Header: `X-Enable-Bugs: easy`.
 
 ### Tests
 
-- `tests/p3/search.spec.js` — *Search is case-insensitive*
+- [`API-71`](catalog.md) — *Search is case-insensitive*
 
 ---
 
@@ -196,7 +207,7 @@ En la matriz de 70 tests esto **cascadió**: varios P0 fallaban en el `expect(20
 
 ### Tests
 
-- `tests/p1/contract.spec.js` — POST MARKET y POST LIMIT deben ser `201`
+- [`API-26`](catalog.md), [`API-27`](catalog.md) — POST MARKET y POST LIMIT deben ser `201`
 
 ---
 
@@ -223,7 +234,7 @@ En la matriz de 70 tests esto **cascadió**: varios P0 fallaban en el `expect(20
 
 ### Tests
 
-- `tests/p1/order-validation.spec.js` — *quantity is a float*
+- [`API-38`](catalog.md) — *quantity is a float*
 
 ---
 
@@ -244,8 +255,8 @@ Un contract sobre `holdings: []` **no detecta** esto (AJV no evalúa `items.requ
 
 ### Tests
 
-- `tests/p0/portfolio-consistency.spec.js` — inputs para métricas client-side
-- `tests/p1/contract.spec.js` — `GET /portfolio` con holdings
+- [`API-19`](catalog.md) — inputs para métricas client-side
+- [`API-30`](catalog.md) — `GET /portfolio` con holdings
 
 ---
 
@@ -272,8 +283,260 @@ Comparar `order.price` con `GET /instruments` → `last_price` y `close_price`.
 
 ### Tests
 
-- `assertMarketOrderFilled` — `price ≈ last_price` y ≠ `close_price` cuando difieren
-- `tests/p0/portfolio-consistency.spec.js` — cash acumulado; reset after trades (síntoma: cash no baja)
+- [`API-04`](catalog.md) — `assertMarketOrderFilled`: `price ≈ last_price` (y ≠ `close_price` cuando difieren)
+- [`API-06`](catalog.md) — BVA qty máxima calculada con `last_price`
+- [`API-18`](catalog.md), [`API-20`](catalog.md) — reset tras trades; cash de varios BUY
+
+---
+
+## F-11 — Strip de Mercados: 24+1 ≠ 26
+
+**Tiers:** app, `off` (no es inyección de API).  
+**Plataforma:** Android, emulador.  
+**Severity:** Normal — el resumen del panel miente (un instrumento *flat* no se nombra).  
+**Priority:** a definir por el equipo.
+
+### Esperado vs actual
+
+| | |
+|---|---|
+| **Esperado** | Suben + bajan + sin cambio = Total (26), o un renglón para *flat*. |
+| **Actual** | Total 26, 24 suben, 1 baja (suma 25). |
+
+### Reproducción
+
+Mercados (tab). Leer el strip: Total / suben / bajan.
+
+### Tests
+
+- [`UI-M-14`](catalog.md)
+
+---
+
+## F-12 — Search no encuentra por nombre de empresa
+
+**Tiers:** app, `off`.  
+**Plataforma:** Android.  
+**Severity:** Normal — el campo dice *Ticker o empresa*; solo matchea ticker (la API de search tampoco busca razón social).  
+**Priority:** a definir por el equipo.
+
+### Esperado vs actual
+
+| | |
+|---|---|
+| **Esperado** | Buscar el nombre de la empresa (p. ej. el de TECO2 / DYCA) devuelve el instrumento. |
+| **Actual** | Vacío o sin match. El ticker y el parcial de ticker sí filtran. |
+
+### Reproducción
+
+Buscar → query = nombre de empresa (no ticker). Contrastar con el ticker del mismo activo.
+
+### Tests
+
+- [`UI-M-13`](catalog.md)
+
+---
+
+## F-13 — La barra de tabs tapa contenido
+
+**Tiers:** app, `off`.  
+**Plataforma:** Android.  
+**Severity:** Normal — no se ve (ni se toca bien) el último ítem; en horizontal tapa resultados de search.  
+**Priority:** a definir por el equipo.
+
+### Esperado vs actual
+
+| | |
+|---|---|
+| **Esperado** | La lista scrollea por encima o con padding de la tab bar (Mercados, Portafolio, Órdenes, Buscar). |
+| **Actual** | Con 2+ filas, el **último** queda tapado en Portafolio y en Órdenes. En **horizontal**, Buscar: la tab tapa el resultado. |
+
+### Reproducción
+
+Portafolio u Órdenes con varias filas → scroll al final. Rotar a horizontal → Buscar → ver resultados vs tab.
+
+### Tests
+
+- [`UI-M-15`](catalog.md)
+
+---
+
+## F-14 — Comprar ↔ Vender persiste cantidad y pesos
+
+**Tiers:** app, `off`.  
+**Plataforma:** Android.  
+**Severity:** Critical — el usuario puede enviar un SELL con la qty que armó para comprar (o al revés), sin vaciar el form.  
+**Priority:** a definir por el equipo.
+
+### Esperado vs actual
+
+| | |
+|---|---|
+| **Esperado** | Al cambiar Comprar/Vender, se limpian cantidad y pesos (o se pide confirmación). |
+| **Actual** | El número persiste. El ticket de venta **no** se abre desde Portafolio: se opera desde **Mercados**. |
+
+### Reproducción
+
+Mercados → instrumento → Operar → Comprar, cargar qty o pesos → tocar Vender (y al revés). Los campos siguen.
+
+### Tests
+
+- [`UI-M-10`](catalog.md)
+
+---
+
+## F-15 — Se puede operar ARS como acción
+
+**Tiers:** app, `off`.  
+**Plataforma:** Android.  
+**Severity:** Critical — el instrumento MONEDA/ARS es el cash; “comprarlo” como acción no es un flujo de trading de acciones.  
+**Priority:** a definir por el equipo.
+
+### Esperado vs actual
+
+| | |
+|---|---|
+| **Esperado** | ARS no se opera como acción (oculto, o el ticket no deja comprar/vender). |
+| **Actual** | En Mercados se puede abrir y **enviar** una orden sobre ARS. Confirmado: MARKET **10 × $1,00** *Ejecutada* (orden #348104); el cash se debita. La **venta** de ARS no está en Mercados: se arma desde **Buscar**. |
+
+### Reproducción
+
+Mercados → ARS / MONEDA → Operar → MARKET (p. ej. 10 acciones). Órdenes: fila ARS COMPRA. Portafolio: cash menor y/o holding ARS. Vender: tab Buscar → ARS.
+
+Evidencia: [`evidencia/f-15-compra-ars-market.png`](evidencia/f-15-compra-ars-market.png).
+
+### Tests
+
+- [`UI-M-11`](catalog.md)
+
+---
+
+## F-16 — El ticket de venta no muestra la tenencia
+
+**Tiers:** app, `off`.  
+**Plataforma:** Android.  
+**Severity:** Normal — se vende a ciegas: no hay “tenés N” en el form.  
+**Priority:** a definir por el equipo.
+
+### Esperado vs actual
+
+| | |
+|---|---|
+| **Esperado** | El ticket de Vender muestra la cantidad en cartera (o no deja vender más de eso con un tope visible). |
+| **Actual** | La venta se arma desde **Mercados**, no desde Portafolio. El form no trae el saldo. Hay que ir a Portafolio, memorizar qty, volver a Mercados. |
+
+### Reproducción
+
+Tener DYCA en cartera. Mercados → DYCA → Operar → Vender. El ticket no muestra cuántas acciones hay.
+
+### Tests
+
+- [`UI-M-12`](catalog.md)
+
+---
+
+## F-17 — En horizontal no se puede cargar la cantidad
+
+**Tiers:** app, `off`.  
+**Plataforma:** Android (rotar emulador).  
+**Severity:** Normal — el ticket queda inusable en landscape.  
+**Priority:** a definir por el equipo.
+
+### Esperado vs actual
+
+| | |
+|---|---|
+| **Esperado** | Se puede tipear cantidad / pesos igual que en vertical. |
+| **Actual** | Solo se puede elegir Comprar, Limit, Pesos o Acciones. No deja poner la cantidad. |
+
+### Reproducción
+
+Rotar a horizontal → Mercados → instrumento → Operar ahora → intentar cargar qty.
+
+### Tests
+
+- [`UI-M-16`](catalog.md)
+
+---
+
+## F-18 — “Posición no encontrada” tras vender o reiniciar
+
+**Tiers:** app, `off`.  
+**Plataforma:** Android.  
+**Severity:** Normal — la venta/reset está bien; queda un detalle de posición huérfano en el stack.  
+**Priority:** a definir por el equipo.
+
+### Esperado vs actual
+
+| | |
+|---|---|
+| **Esperado** | Tras vender todo (o Reiniciar), Portafolio muestra el dashboard (efectivo, 0 posiciones) sin modal de error. |
+| **Actual** | Modal *Posición no encontrada* / *No encontramos esta posición en tu portafolio actual* → *Volver a Portafolio*. Recurrido también al **Reiniciar**. Después del CTA el dashboard es correcto: $1.000.000, 0 posiciones, valor total $0 (el valor es de tenencias, no ignora el cash). |
+
+Evidencia: [`evidencia/f-18-posicion-no-encontrada.png`](evidencia/f-18-posicion-no-encontrada.png).
+
+### Reproducción
+
+Vender toda una posición (p. ej. DYCA) → ir a Órdenes (la orden está) → Portafolio. O: Reiniciar cuenta.
+
+### Tests
+
+- [`UI-M-17`](catalog.md) — modal post-venta / post-reset
+
+---
+
+## F-19 — Orden límite rechazada sin motivo ni detalle
+
+**Tiers:** app, `off`.  
+**Plataforma:** Android.  
+**Severity:** Normal — se ve *Rechazada* y un monto; no hay causa ni ficha al tap.  
+**Priority:** a definir por el equipo.
+
+### Esperado vs actual
+
+| | |
+|---|---|
+| **Esperado** | Motivo de rechazo (precio, liquidez, etc.) y/o una ficha al tocar la fila. |
+| **Actual** | Fila p. ej. DYCA COMPRA 21×$88 Límite *Rechazada*. El tap no abre nada. |
+
+Evidencia: [`evidencia/f-19-orden-limit-rechazada.png`](evidencia/f-19-orden-limit-rechazada.png).
+
+### Reproducción
+
+LIMIT BUY lejos del mercado → Órdenes → fila *Rechazada* → tap.
+
+### Tests
+
+- [`UI-M-18`](catalog.md)
+
+---
+
+## F-20 — LIMIT SELL rechazada descuenta acciones sin acreditar cash
+
+**Tiers:** `off` (app + API).  
+**Plataforma:** Android; el invariante es de portfolio, no de pantalla.  
+**Severity:** Critical — se pierde 1 acción y el cash no sube (peor que un fill: en un fill entrarían pesos).  
+**Priority:** a definir por el equipo.
+
+### Esperado vs actual
+
+| | |
+|---|---|
+| **Esperado** | Tras LIMIT SELL *Rechazada*, tenencia y cash iguales que después del BUY de setup. |
+| **Actual** | BUY 10 DYCA @ 45,72 → cash **999.542,80** (1.000.000 − 457,20). LIMIT SELL 1 @ 45,76 → *Rechazada*. Portafolio: **9** acciones, valor **411,48** (= 9 × 45,72). El cash **no** se acreditó. No es 457,20 − 45,76 (daría 411,44): es **una acción a last_price**. |
+
+Evidencia: [`evidencia/f-20-portafolio-qty-tras-limit-sell-rechazada.png`](evidencia/f-20-portafolio-qty-tras-limit-sell-rechazada.png), [`evidencia/f-20-ordenes-limit-sell-rechazada.png`](evidencia/f-20-ordenes-limit-sell-rechazada.png).
+
+### Reproducción
+
+1. Reset / cuenta limpia. MARKET BUY 10 DYCA.  
+2. LIMIT SELL 1, precio un poco por encima de `last_price` (p. ej. 45,76).  
+3. Esperar a *Rechazada*. Ver Portafolio: qty y valor vs 10 × last.
+
+### Tests
+
+- [`UI-M-19`](catalog.md) — repro en emulador  
+- [`API-75`](catalog.md) — `F-20: REJECTED LIMIT SELL must not reduce holdings`
 
 ---
 
@@ -329,6 +592,8 @@ Además de F-09, en discovery faltó `ticker` en algún holding. El schema y el 
 
 ## Cómo reproducir un finding
 
+**API (F-01…F-10):**
+
 1. `X-Enable-Bugs` = tier de la tabla (o `BUGS_TIER=<tier>` al correr Playwright).
 2. `X-Candidate-Id` propio; `POST /reset` antes del escenario.
 3. Payload de la sección del finding, o el test citado.
@@ -341,7 +606,9 @@ BUGS_TIER=medium npx playwright test --reporter=list
 BUGS_TIER=hard   npx playwright test --reporter=list
 ```
 
-Repro manual: el JSON de cada finding, `curl`, o la carpeta **Findings** de [`postman/cocos-api.postman_collection.json`](../postman/cocos-api.postman_collection.json) (environment en `postman/cocos-api.postman_environment.json`).
+Repro HTTP: JSON del finding, `curl`, o la carpeta **Findings** de [`postman/cocos-api.postman_collection.json`](../postman/cocos-api.postman_collection.json).
+
+**App (F-11…F-20):** emulador Android, `off`, pasos en cada ficha. Capturas en [`evidencia/`](evidencia/). No usar el mismo `CANDIDATE_ID` si Playwright está corriendo en paralelo. F-20 también: `npx playwright test tests/p0/limit-orders.spec.js --grep "F-20"`.
 
 ---
 
@@ -349,8 +616,10 @@ Repro manual: el JSON de cada finding, `curl`, o la carpeta **Findings** de [`po
 
 | Pregunta | Dónde |
 |----------|--------|
+| ¿Este bug qué casos del catálogo lo cubren? | Este archivo, bloque **Tests** (`API-xx` / `UI-M-xx` → [`catalog.md`](catalog.md)) |
 | ¿Qué tests fallaron por tier? | `docs/test-results.md` + `docs/tier-results/` |
 | ¿Qué es el bug y cómo lo reproduzco? | Este archivo + Postman (`postman/`) |
 | ¿Cuál es el contrato (conocido vs inferido)? | `docs/api-contract.md` |
+| ¿Plan / arquitectura / trazabilidad / catálogo? | `docs/test-plan.md`, `docs/architecture.md`, `docs/traceability.md`, `docs/catalog.md` |
 | ¿Qué se automatiza en la UI y qué no? | `docs/ui-assessment.md` + `maestro/` |
 | ¿Pasó esta corrida? | Allure (`npx allure serve allure-results`) o `npm run test:report` — locales, no commiteados |

@@ -259,4 +259,53 @@ test.describe('P0 - LIMIT order lifecycle @p0', () => {
       assertErrorContains(marketSell, 'Insufficient shares');
     });
   });
+
+  test('F-20: REJECTED LIMIT SELL must not reduce holdings @p0', async ({ ordersApi, portfolioApi }) => {
+    await allure.story('SELL reject — holdings restored (no share loss without cash credit)');
+    test.info().annotations.push(
+      { type: 'businessRule', description: 'BR-RSV-001 / BR-PRT-001: REJECTED LIMIT SELL releases reserved shares; cash unchanged vs post-BUY' },
+      { type: 'technique', description: 'State transition: MARKET BUY 10 → LIMIT SELL 1 → REJECTED ⇒ qty still 10' },
+    );
+
+    const setupQty = 10;
+    const sellQty = 1;
+    let cashAfterBuy;
+    let orderId;
+    const limitSellPrice = Number((lastPrice + 0.04).toFixed(2));
+
+    await test.step('Setup: MARKET BUY 10', async () => {
+      const buyOrder = await ordersApi.create(buildMarketBuyOrder({ quantity: setupQty }));
+      await attachResponse('setup-buy-order', buyOrder.body);
+      cashAfterBuy = calcCashAfterMarketBuy(1_000_000, setupQty, lastPrice);
+    });
+
+    await test.step('LIMIT SELL 1 (price slightly above last_price)', async () => {
+      const order = await ordersApi.create(buildLimitSellOrder({ quantity: sellQty, price: limitSellPrice }));
+      await attachResponse('limit-sell', order.body);
+      assertLimitOrderPending(order, { side: 'SELL', quantity: sellQty });
+      orderId = order.body.id;
+    });
+
+    const stableOrder = await waitForStableOrderStatus(
+      () => ordersApi.getAll(),
+      orderId,
+      { timeoutMs: 20_000, intervalMs: 1_500 },
+    );
+    expect(stableOrder, 'LIMIT SELL should reach a stable status').not.toBeNull();
+    await attachResponse('stable-limit-sell', stableOrder);
+    test.info().annotations.push({ type: 'stableStatus', description: stableOrder.status });
+
+    if (stableOrder.status !== 'REJECTED' && stableOrder.status !== 'CANCELLED') {
+      test.info().annotations.push({
+        type: 'note',
+        description: `F-20 asserts the REJECTED path; got ${stableOrder.status} — holdings check skipped`,
+      });
+      return;
+    }
+
+    const portfolio = await portfolioApi.get();
+    await attachResponse('portfolio-after-rejected-sell', portfolio.body);
+    assertPortfolioCash(portfolio, cashAfterBuy);
+    assertHolding(portfolio, DEFAULT_INSTRUMENT_ID, setupQty);
+  });
 });
