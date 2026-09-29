@@ -30,16 +30,16 @@ Cada ID aparece primero en el tier que lo expone.
 
 | Bug ID | Descripción | off | easy | medium | hard | Severity |
 |--------|-------------|-----|------|--------|------|----------|
-| F-01 | Orden LIMIT con `price ≤ 0` o `price = null` aceptada (BUY y SELL) | ✗ | ✗ | ✗ | ✗ | Critical |
-| F-02 | `side` en minúsculas (p. ej. `"buy"`) normalizado y aceptado | ✗ | ✗ | ✗ | ✗ | Critical |
-| F-03 | `type` en minúsculas (p. ej. `"market"`) normalizado y aceptado | ✗ | ✗ | ✗ | ✗ | Critical |
-| F-04 | SELL aceptado sin holdings (MARKET y LIMIT) | ✓ | ✗ | ✗ | ✗ | Critical |
-| F-05 | `MIRG` (id=5) tiene `last_price = 0` en el catálogo | ✓ | ✗ | ✗ | ✗ | Normal |
-| F-06 | `GET /search` pasa a ser case-sensitive — ticker en minúsculas → lista vacía | ✓ | ✗ | ✗ | ✗ | Normal |
-| F-07 | `POST /orders` devuelve HTTP 200 en lugar de 201 al crear la orden | ✓ | ✓ | ✗ | ✗ | Critical |
-| F-08 | `quantity` decimal (p. ej. `1.5`) aceptada — se trunca a `1` y queda FILLED | ✓ | ✓ | ✗ | ✗ | Normal |
-| F-09 | El holding no trae `avg_cost_price` — regresión de schema | ✓ | ✓ | ✓ | ✗ | Critical |
-| F-10 | MARKET se ejecuta a un precio ≠ `last_price` — el cash se debita a otro precio | ✓ | ✓ | ✓ | ✗ | Blocker |
+| [F-01](findings.md#f-01) | Orden LIMIT con `price ≤ 0` o `price = null` aceptada (BUY y SELL) | ✗ | ✗ | ✗ | ✗ | Critical |
+| [F-02](findings.md#f-02) | `side` en minúsculas (p. ej. `"buy"`) normalizado y aceptado | ✗ | ✗ | ✗ | ✗ | Critical |
+| [F-03](findings.md#f-03) | `type` en minúsculas (p. ej. `"market"`) normalizado y aceptado | ✗ | ✗ | ✗ | ✗ | Critical |
+| [F-04](findings.md#f-04) | SELL aceptado sin holdings (MARKET y LIMIT) | ✓ | ✗ | ✗ | ✗ | Critical |
+| [F-05](findings.md#f-05) | `MIRG` (id=5) tiene `last_price = 0` en el catálogo | ✓ | ✗ | ✗ | ✗ | Normal |
+| [F-06](findings.md#f-06) | `GET /search` pasa a ser case-sensitive — ticker en minúsculas → lista vacía | ✓ | ✗ | ✗ | ✗ | Normal |
+| [F-07](findings.md#f-07) | `POST /orders` devuelve HTTP 200 en lugar de 201 al crear la orden | ✓ | ✓ | ✗ | ✗ | Critical |
+| [F-08](findings.md#f-08) | `quantity` decimal (p. ej. `1.5`) aceptada — se trunca a `1` y queda FILLED | ✓ | ✓ | ✗ | ✗ | Normal |
+| [F-09](findings.md#f-09) | El holding no trae `avg_cost_price` — regresión de schema | ✓ | ✓ | ✓ | ✗ | Critical |
+| [F-10](findings.md#f-10) | MARKET se ejecuta a un precio ≠ `last_price` — el cash se debita a otro precio | ✓ | ✓ | ✓ | ✗ | Blocker |
 
 F-11…F-20 son de **app / UI** (F-20 también tiene spec API). No entran en esta tabla de tiers de API.
 
@@ -55,12 +55,12 @@ Títulos = nombre del test en Playwright.
 
 | # | Test | File | Bug |
 |---|------|------|-----|
-| 1 | F-01: LIMIT BUY with price<=0 should be rejected and must not inflate cash | p0/portfolio-consistency | F-01 |
-| 2 | rejects order: side is lowercase (case-sensitive check) | p1/order-validation | F-02 |
-| 3 | rejects order: type is lowercase (case-sensitive check) | p1/order-validation | F-03 |
-| 4 | rejects order: LIMIT BUY with price = 0 | p1/order-validation | F-01 |
-| 5 | rejects order: LIMIT BUY with price = -1 | p1/order-validation | F-01 |
-| 6 | rejects order: LIMIT BUY with price = null | p1/order-validation | F-01 |
+| 1 | F-01: LIMIT BUY with price<=0 should be rejected and must not inflate cash | p0/portfolio-consistency | [F-01](findings.md#f-01) |
+| 2 | rejects order: side is lowercase (case-sensitive check) | p1/order-validation | [F-02](findings.md#f-02) |
+| 3 | rejects order: type is lowercase (case-sensitive check) | p1/order-validation | [F-03](findings.md#f-03) |
+| 4 | rejects order: LIMIT BUY with price = 0 | p1/order-validation | [F-01](findings.md#f-01) |
+| 5 | rejects order: LIMIT BUY with price = -1 | p1/order-validation | [F-01](findings.md#f-01) |
+| 6 | rejects order: LIMIT BUY with price = null | p1/order-validation | [F-01](findings.md#f-01) |
 
 ### 3.2 Tier: easy (`X-Enable-Bugs: easy`)
 
@@ -68,15 +68,15 @@ Títulos = nombre del test en Playwright.
 
 | # | Test | File | Bug |
 |---|------|------|-----|
-| 1–6 | (los 6 de off) | — | F-01, F-02, F-03 |
-| 7 | LIMIT SELL is rejected with no holdings | p0/limit-orders | F-04 |
-| 8 | PENDING LIMIT SELL reservation blocks a subsequent MARKET SELL of the same shares | p0/limit-orders | F-04 |
-| 9 | MARKET SELL with no holdings is rejected | p0/market-orders | F-04 |
-| 10 | MARKET SELL more shares than owned is rejected (BVA: oversell) | p0/market-orders | F-04 |
-| 11 | rejects order: LIMIT SELL with price = 0 | p1/order-validation | F-01 |
-| 12 | rejects order: LIMIT SELL with price = -1 | p1/order-validation | F-01 |
-| 13 | All instruments have a positive last_price | p2/catalog | F-05 |
-| 14 | Search is case-insensitive — lowercase ticker returns same result | p3/search | F-06 |
+| 1–6 | (los 6 de off) | — | [F-01](findings.md#f-01), [F-02](findings.md#f-02), [F-03](findings.md#f-03) |
+| 7 | LIMIT SELL is rejected with no holdings | p0/limit-orders | [F-04](findings.md#f-04) |
+| 8 | PENDING LIMIT SELL reservation blocks a subsequent MARKET SELL of the same shares | p0/limit-orders | [F-04](findings.md#f-04) |
+| 9 | MARKET SELL with no holdings is rejected | p0/market-orders | [F-04](findings.md#f-04) |
+| 10 | MARKET SELL more shares than owned is rejected (BVA: oversell) | p0/market-orders | [F-04](findings.md#f-04) |
+| 11 | rejects order: LIMIT SELL with price = 0 | p1/order-validation | [F-01](findings.md#f-01) |
+| 12 | rejects order: LIMIT SELL with price = -1 | p1/order-validation | [F-01](findings.md#f-01) |
+| 13 | All instruments have a positive last_price | p2/catalog | [F-05](findings.md#f-05) |
+| 14 | Search is case-insensitive — lowercase ticker returns same result | p3/search | [F-06](findings.md#f-06) |
 
 ### 3.3 Tier: medium (`X-Enable-Bugs: medium`)
 
@@ -86,9 +86,9 @@ Los 14 de easy, más:
 
 | # | Test | File | Bug / causa |
 |---|------|------|-------------|
-| 15 | POST /orders (MARKET BUY) returns 201 and matches order schema | p1/contract | F-07 |
-| 16 | POST /orders (LIMIT BUY) returns 201 and matches order schema | p1/contract | F-07 |
-| 17 | rejects order: quantity is a float | p1/order-validation | F-08 |
+| 15 | POST /orders (MARKET BUY) returns 201 and matches order schema | p1/contract | [F-07](findings.md#f-07) |
+| 16 | POST /orders (LIMIT BUY) returns 201 and matches order schema | p1/contract | [F-07](findings.md#f-07) |
+| 17 | rejects order: quantity is a float | p1/order-validation | [F-08](findings.md#f-08) |
 
 ### 3.4 Tier: hard (`X-Enable-Bugs: hard`)
 
@@ -98,30 +98,31 @@ Los 17 de medium, más:
 
 | # | Test | File | Bug / causa |
 |---|------|------|-------------|
-| 18 | F-20: REJECTED LIMIT SELL must not reduce holdings | p0/limit-orders | F-20 (API) / F-10 |
-| 19 | MARKET BUY fills at last_price and debits cash | p0/market-orders | F-10 |
-| 20 | MARKET SELL fills at last_price and credits cash | p0/market-orders | F-10 |
-| 21 | MARKET BUY at maximum affordable quantity succeeds (BVA: upper boundary) | p0/market-orders | F-10 |
-| 22 | Portfolio holding contains correct inputs for client-side metric calculation | p0/portfolio-consistency | F-09 |
-| 23 | Portfolio cash decreases correctly after multiple sequential BUY orders | p0/portfolio-consistency | F-10 |
+| 18 | F-20: REJECTED LIMIT SELL must not reduce holdings | p0/limit-orders | [F-20](findings.md#f-20) / [F-10](findings.md#f-10) |
+| 19 | MARKET BUY fills at last_price and debits cash | p0/market-orders | [F-10](findings.md#f-10) |
+| 20 | MARKET SELL fills at last_price and credits cash | p0/market-orders | [F-10](findings.md#f-10) |
+| 21 | MARKET BUY at maximum affordable quantity succeeds (BVA: upper boundary) | p0/market-orders | [F-10](findings.md#f-10) |
+| 22 | Portfolio holding contains correct inputs for client-side metric calculation | p0/portfolio-consistency | [F-09](findings.md#f-09) |
+| 23 | Portfolio cash decreases correctly after multiple sequential BUY orders | p0/portfolio-consistency | [F-10](findings.md#f-10) |
 
 ---
 
 ## 4. Distribución de fallos por área de riesgo
 
-Este eje es **P0/P1/…** (prioridad del test). Las columnas son el **tier** (inyección).
+Este eje es **P0/P1/…** (prioridad del test). Las columnas son el **tier** (inyección).  
+**Hallazgos** lleva a la ficha en [`findings.md`](findings.md). Un área puede tener más de un F-xx.
 
-| Área de riesgo | off | easy | medium | hard |
-|----------------|-----|------|--------|------|
-| P0 — LIMIT lifecycle | 0 | 2 | 2 | 3 |
-| P0 — MARKET settlement | 0 | 2 | 2 | 5 |
-| P0 — Portfolio consistency | 1 | 1 | 1 | 3 |
-| P1 — Input validation | 5 | 7 | 8 | 8 |
-| P1 — API contract | 0 | 0 | 2 | 2 |
-| P1 — State isolation | 0 | 0 | 0 | 0 |
-| P2 — Catalog | 0 | 1 | 1 | 1 |
-| P3 — Search | 0 | 1 | 1 | 1 |
-| Smoke | 0 | 0 | 0 | 0 |
+| Área de riesgo | Hallazgos | off | easy | medium | hard |
+|----------------|-----------|-----|------|--------|------|
+| P0 — LIMIT lifecycle | [F-04](findings.md#f-04), [F-20](findings.md#f-20) | 0 | 2 | 2 | 3 |
+| P0 — MARKET settlement | [F-04](findings.md#f-04), [F-10](findings.md#f-10) | 0 | 2 | 2 | 5 |
+| P0 — Portfolio consistency | [F-01](findings.md#f-01), [F-09](findings.md#f-09), [F-10](findings.md#f-10) | 1 | 1 | 1 | 3 |
+| P1 — Input validation | [F-01](findings.md#f-01), [F-02](findings.md#f-02), [F-03](findings.md#f-03), [F-08](findings.md#f-08) | 5 | 7 | 8 | 8 |
+| P1 — API contract | [F-07](findings.md#f-07) | 0 | 0 | 2 | 2 |
+| P1 — State isolation | — | 0 | 0 | 0 | 0 |
+| P2 — Catalog | [F-05](findings.md#f-05) | 0 | 1 | 1 | 1 |
+| P3 — Search | [F-06](findings.md#f-06) | 0 | 1 | 1 | 1 |
+| Smoke | — | 0 | 0 | 0 | 0 |
 
 Los **smoke tests** pasan en todos los tiers — el criterio de entrada se cumple.
 
