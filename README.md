@@ -155,9 +155,9 @@ Workflow **API tests**: `npm ci` + Playwright de API (sin Maestro). No es check 
 
 Mismas variables que `.env` (`CANDIDATE_ID`, `BUGS_TIER`, `API_BASE_URL`).
 
-**Allure (link, no zip):** cada corrida genera el HTML y lo publica en GitHub Pages. En el Summary del run: sección **Allure report** y, si Pages está activo, el environment `github-pages` con el URL (`https://luiscassol.github.io/qa-ch1/`). Cada corrida pisa el reporte anterior. El artifact `playwright-report` sigue ahí por si querés el HTML de Playwright.
+**Allure (link, no zip):** cada corrida genera el HTML y lo publica en la branch `gh-pages`. En el Summary del run: sección **Allure report** con el URL (`https://luiscassol.github.io/qa-ch1/`). Cada corrida pisa el reporte anterior. El artifact `playwright-report` sigue ahí por si querés el HTML de Playwright.
 
-Una vez: **Settings → Pages → Source: GitHub Actions**. Sin eso el job `publish-allure` falla y no hay link.
+Una vez (después de la primera corrida que cree `gh-pages`): **Settings → Pages → Deploy from a branch → `gh-pages` / (root)**. Sin eso el URL 404.
 
 ## Decisiones
 

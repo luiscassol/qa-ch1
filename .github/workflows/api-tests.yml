@@ -23,10 +23,9 @@ on:
           - "hard"
 
 # Not a required status check. off is expected to fail (baseline defects, e.g. F-01).
+# contents: write — push the Allure HTML to the gh-pages branch (no github-pages environment).
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 jobs:
   playwright:
@@ -58,40 +57,25 @@ jobs:
         run: |
           npm install --global allure
           npm run test:allure
-          touch allure-report/.nojekyll
-      - name: Setup Pages
+      - name: Publish Allure to GitHub Pages
         if: always()
-        uses: actions/configure-pages@v5
-      - name: Upload Allure for GitHub Pages
-        if: always()
-        uses: actions/upload-pages-artifact@v3
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          path: allure-report
-
-  publish-allure:
-    needs: playwright
-    if: always() && !cancelled() && needs.playwright.result != 'cancelled'
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    concurrency:
-      group: github-pages
-      cancel-in-progress: false
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy Allure report
-        id: deployment
-        uses: actions/deploy-pages@v4
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: allure-report
+          force_orphan: true
+          enable_jekyll: false
       - name: Allure report URL
+        if: always()
         run: |
+          REPORT_URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
           {
             echo "## Allure report"
             echo ""
-            echo "[${{ steps.deployment.outputs.page_url }}](${{ steps.deployment.outputs.page_url }})"
+            echo "[${REPORT_URL}](${REPORT_URL})"
             echo ""
             echo "This is the last published report (each run overwrites it). Tests may still be red; the report is published anyway."
+            echo ""
+            echo "If the URL 404s: Settings → Pages → Deploy from a branch → \`gh-pages\` / (root)."
           } >> "$GITHUB_STEP_SUMMARY"
