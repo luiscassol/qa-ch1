@@ -6,7 +6,7 @@ Suite de automatización de API para el [Cocos QA Challenge](https://github.com/
 
 Enfoque API-first: todos los riesgos críticos (settlement de órdenes, suficiencia de fondos y acciones, reservas, consistencia del portfolio) están en la API. La lógica ejecutada del lado del cliente ya tiene cobertura con tests unitarios en el repositorio de la app.
 
-La decisión de priorizar la automatización de API sobre la UI mobile está justificada en [`docs/architecture.md`](docs/architecture.md).
+La decisión de priorizar la automatización de API sobre la UI mobile está justificada en [`docs/ui-assessment.md`](docs/ui-assessment.md) (y en `docs/architecture.md` cuando exista).
 
 ## Requisitos
 
@@ -54,6 +54,14 @@ npm run test:p0      # Reglas de negocio críticas
 
 # Ver reporte HTML (después de cualquier corrida)
 npm run test:report
+
+# Allure: generar HTML estático en allure-report/ (después de npm test)
+npm run test:allure
+npm run test:allure:open
+# o servir sin dejar la carpeta: npm run test:allure:serve
+
+# UI (opt-in: emulador Android + app Cocos + Maestro CLI)
+npm run test:ui
 ```
 
 ## Estructura del proyecto
@@ -67,6 +75,7 @@ tests/        Specs organizados por dominio
 utils/        Oracle de cálculos, helpers de montos, utilidad de polling
 docs/         Test plan, arquitectura, contrato de API, findings, trazabilidad
 postman/      Colección de Postman para exploración manual y reproducción de findings
+maestro/      Smokes de UI (opt-in; no forman parte de `npm test`)
 ```
 
 ## Bug tiers
@@ -89,6 +98,16 @@ Exploración y repro manual (no reemplaza Playwright):
 1. Importar [`postman/cocos-api.postman_collection.json`](postman/cocos-api.postman_collection.json)
 2. Importar [`postman/cocos-api.postman_environment.json`](postman/cocos-api.postman_environment.json) y completar `candidateId`
 3. Contrato conocido vs inferido: [`docs/api-contract.md`](docs/api-contract.md)
+
+## UI (Maestro)
+
+Opt-in. `npm test` no abre el emulador.
+
+1. App [cocoscap/app-qa](https://github.com/cocoscap/app-qa) corriendo en Android (`com.cocos.trading`).
+2. Instalar [Maestro](https://maestro.mobile.dev).
+3. `npm run test:ui`
+
+Detalle: [`maestro/README.md`](maestro/README.md) y [`docs/ui-assessment.md`](docs/ui-assessment.md).
 
 ## Aislamiento
 

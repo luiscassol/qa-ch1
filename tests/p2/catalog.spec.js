@@ -23,6 +23,7 @@ const instrumentsSchema = require('../../schemas/instruments.schema.json');
  *   BR-CAT-001: Catalog must contain at least one tradeable instrument.
  *   BR-CAT-002: Each instrument must have a positive last_price and close_price.
  *   BR-CAT-003: The instrument used in all other tests (id=1, DYCA) must exist.
+ *   BR-CAT-004: last vs close partitions (up/down/flat) sum to catalog length.
  */
 
 test.describe('P2 - Instrument catalog @p2', () => {
@@ -129,6 +130,37 @@ test.describe('P2 - Instrument catalog @p2', () => {
       invalid,
       `Found ${invalid.length} instrument(s) with invalid close_price: ${JSON.stringify(invalid.map((i) => i.ticker))}`
     ).toHaveLength(0);
+  });
+
+  test('Daily direction partitions sum to catalog size @p2', async () => {
+    await allure.story('Catalog data integrity');
+    test.info().annotations.push(
+      { type: 'businessRule', description: 'BR-CAT-004: up + down + flat equals catalog length (UI strip omits flat)' },
+      { type: 'technique', description: 'EP — last vs close; independent of the Markets strip' },
+    );
+
+    expect(catalog.status).toBe(200);
+
+    const classify = (instrument) => {
+      const last = instrument.last_price;
+      const close = instrument.close_price;
+      if (!(close > 0)) return 'flat';
+      if (last > close) return 'up';
+      if (last < close) return 'down';
+      return 'flat';
+    };
+
+    const counts = { up: 0, down: 0, flat: 0 };
+    for (const instrument of catalog.body) {
+      counts[classify(instrument)] += 1;
+    }
+
+    await attachResponse('direction-partitions', counts);
+
+    expect(
+      counts.up + counts.down + counts.flat,
+      `up=${counts.up} down=${counts.down} flat=${counts.flat} catalog=${catalog.body.length}`
+    ).toBe(catalog.body.length);
   });
 
   test('All instruments have a non-empty ticker and name @p2', async () => {

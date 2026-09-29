@@ -10,5 +10,11 @@ allure-report/
 # Personal interview preparation notes (not part of the submission)
 NOTES.md
 
+# Maestro local screenshots
+maestro/*.png
+maestro/screenshots/
+maestro/debug/
+maestro/junit-report.xml
+
 # OS
 .DS_Store

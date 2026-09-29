@@ -1,0 +1,33 @@
+appId: com.cocos.trading
+name: MARKET buy is visible on Portfolio and Orders tabs
+---
+# After FILLED the toast is brief; the durable signal is "Enviar otra orden".
+# Do not tap that button (it submits again). Dismiss the sheet, then back.
+- launchApp:
+    stopApp: true
+- runFlow: subflows/open-ticket.yaml
+- runFlow:
+    when:
+      visible: "Monto en pesos"
+    commands:
+      - tapOn: Acciones
+- tapOn: Cantidad de acciones
+- eraseText
+- inputText: "1"
+- hideKeyboard
+- tapOn: Enviar orden
+- extendedWaitUntil:
+    visible: "Enviar otra orden"
+    timeout: 12000
+- swipe:
+    start: 50%, 28%
+    end: 50%, 92%
+- waitForAnimationToEnd
+- tapOn: Mercados
+- tapOn: Portafolio
+- assertVisible: DYCA
+- assertVisible: Valor total
+- takeScreenshot: portfolio-after-buy
+- tapOn: Órdenes
+- assertVisible: DYCA
+- takeScreenshot: orders-after-buy

@@ -352,4 +352,5 @@ Repro manual: el JSON de cada finding, `curl`, o la carpeta **Findings** de [`po
 | ¿Qué tests fallaron por tier? | `docs/test-results.md` + `docs/tier-results/` |
 | ¿Qué es el bug y cómo lo reproduzco? | Este archivo + Postman (`postman/`) |
 | ¿Cuál es el contrato (conocido vs inferido)? | `docs/api-contract.md` |
+| ¿Qué se automatiza en la UI y qué no? | `docs/ui-assessment.md` + `maestro/` |
 | ¿Pasó esta corrida? | Allure (`npx allure serve allure-results`) o `npm run test:report` — locales, no commiteados |
