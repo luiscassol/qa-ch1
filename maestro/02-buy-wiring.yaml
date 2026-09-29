@@ -2,7 +2,8 @@ appId: com.cocos.trading
 name: MARKET buy is visible on Portfolio and Orders tabs
 ---
 # After FILLED the toast is brief; the durable signal is "Enviar otra orden".
-# Do not tap that button (it submits again). Dismiss the sheet, then back.
+# That button clears the form for the same instrument (does not resubmit).
+# Dismiss the sheet, then back.
 - launchApp:
     stopApp: true
 - runFlow: subflows/open-ticket.yaml

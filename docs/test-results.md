@@ -1,7 +1,7 @@
 # Resultados de tests — matriz multi-tier
 
-**Suite:** 70 tests · 1 worker (sequential) · API: `https://dummy-api-topaz.vercel.app`  
-**Candidate:** `lc-qa-1`  
+**Suite:** matriz histórica de **70** tests · suite actual **75** (`npm test`) · 1 worker · API: `https://dummy-api-topaz.vercel.app`  
+**Candidate:** el `CANDIDATE_ID` de esa corrida (no reutilizar el tenant de Playwright y el emulador a la vez)  
 **Header:** `X-Enable-Bugs: <tier>` — controla el nivel de inyección de bugs  
 **Framework:** Playwright Test (CommonJS) + Allure reporter
 
@@ -21,7 +21,7 @@ Los **títulos de tests** se dejan en inglés: son el texto del reporter `list` 
 > **Nota:** la corrida `off` se capturó en una sesión anterior; no quedó el output crudo.
 > `easy`, `medium` y `hard` están en `docs/tier-results/`.
 
-Esta matriz es de la suite de **70 tests** (antes de los gaps de `feat/suite-gaps`). Los IDs F-01…F-10 no cambian.
+Esta matriz es de una corrida de **70 tests**. Hoy `npm test` son **75** (incluye `API-75` / F-20). Los IDs F-01…F-10 no cambian.
 
 ---
 
@@ -38,7 +38,7 @@ Cada ID aparece primero en el tier que lo expone.
 | F-04 | SELL aceptado sin holdings (MARKET y LIMIT) | ✓ | ✗ | ✗ | ✗ | Critical |
 | F-05 | `MIRG` (id=5) tiene `last_price = 0` en el catálogo | ✓ | ✗ | ✗ | ✗ | Normal |
 | F-06 | `GET /search` pasa a ser case-sensitive — ticker en minúsculas → lista vacía | ✓ | ✗ | ✗ | ✗ | Normal |
-| F-07 | `POST /orders` devuelve HTTP 200 en lugar de 201 al crear la orden | ✓ | ✓ | ✗ | ✗ | Blocker |
+| F-07 | `POST /orders` devuelve HTTP 200 en lugar de 201 al crear la orden | ✓ | ✓ | ✗ | ✗ | Critical |
 | F-08 | `quantity` decimal (p. ej. `1.5`) aceptada — se trunca a `1` y queda FILLED | ✓ | ✓ | ✗ | ✗ | Normal |
 | F-09 | El holding no trae `avg_cost_price` — regresión de schema | ✓ | ✓ | ✓ | ✗ | Critical |
 | F-10 | MARKET se ejecuta a un precio ≠ `last_price` — el cash se debita a otro precio | ✓ | ✓ | ✓ | ✗ | Blocker |
