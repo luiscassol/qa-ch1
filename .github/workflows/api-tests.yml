@@ -23,7 +23,7 @@ on:
           - "hard"
 
 # Not a required status check. off is expected to fail (baseline defects, e.g. F-01).
-# contents: write — push the Allure HTML to the gh-pages branch (no github-pages environment).
+# contents: write — push the Allure HTML to the gh-pages branch.
 permissions:
   contents: write
 
@@ -53,12 +53,19 @@ jobs:
           path: playwright-report/
           retention-days: 7
       - name: Generate Allure report
+        id: allure
         if: always()
         run: |
-          npm install --global allure
           npm run test:allure
+          echo "ok=true" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.allure.outputs.ok == 'true'
+        with:
+          name: allure-report
+          path: allure-report/
+          retention-days: 7
       - name: Publish Allure to GitHub Pages
-        if: always()
+        if: always() && steps.allure.outputs.ok == 'true'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -67,15 +74,18 @@ jobs:
           force_orphan: true
           enable_jekyll: false
       - name: Allure report URL
-        if: always()
+        if: always() && steps.allure.outputs.ok == 'true'
         run: |
           REPORT_URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
+          echo "Allure report: ${REPORT_URL}"
           {
             echo "## Allure report"
             echo ""
             echo "[${REPORT_URL}](${REPORT_URL})"
             echo ""
             echo "This is the last published report (each run overwrites it). Tests may still be red; the report is published anyway."
+            echo ""
+            echo "The same URL is printed in this step log. On the run **Summary** tab it appears as a markdown link."
             echo ""
             echo "If the URL 404s: Settings → Pages → Deploy from a branch → \`gh-pages\` / (root)."
           } >> "$GITHUB_STEP_SUMMARY"
