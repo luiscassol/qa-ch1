@@ -23,6 +23,11 @@ on:
           - "hard"
 
 # Not a required status check. off is expected to fail (baseline defects, e.g. F-01).
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   playwright:
     runs-on: ubuntu-latest
@@ -48,3 +53,45 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 7
+      - name: Generate Allure report
+        if: always()
+        run: |
+          npm install --global allure
+          npm run test:allure
+          touch allure-report/.nojekyll
+      - name: Setup Pages
+        if: always()
+        uses: actions/configure-pages@v5
+      - name: Upload Allure for GitHub Pages
+        if: always()
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: allure-report
+
+  publish-allure:
+    needs: playwright
+    if: always() && !cancelled() && needs.playwright.result != 'cancelled'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    concurrency:
+      group: github-pages
+      cancel-in-progress: false
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy Allure report
+        id: deployment
+        uses: actions/deploy-pages@v4
+      - name: Allure report URL
+        run: |
+          {
+            echo "## Allure report"
+            echo ""
+            echo "[${{ steps.deployment.outputs.page_url }}](${{ steps.deployment.outputs.page_url }})"
+            echo ""
+            echo "This is the last published report (each run overwrites it). Tests may still be red; the report is published anyway."
+          } >> "$GITHUB_STEP_SUMMARY"

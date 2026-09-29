@@ -24,7 +24,7 @@ API-first: settlement, suficiencia, reservas y portfolio viven en Playwright. La
 Orden para recorrer el repo (correr, ver la corrida, después los docs):
 
 1. **Correr** — local: [Instalación](#instalación) y [Ejecución](#ejecución) (`npm run test:smoke`, después `npm test`). Sin instalar: [GitHub Actions](#github-actions) → *API tests* → *Run workflow*.
-2. **Esta corrida** — HTML: `npm run test:report`. Allure: `npm run test:allure` / `test:allure:open`. En Actions, artifact `playwright-report`.
+2. **Esta corrida** — HTML: `npm run test:report`. Allure: `npm run test:allure` / `test:allure:open`. En Actions, el Summary del run tiene el link de Allure (GitHub Pages); el artifact `playwright-report` queda de backup.
 3. **Plan** — empezar por Resumen, Riesgo y Escenarios: [`docs/test-plan.md`](docs/test-plan.md). Catálogo caso → riesgo → prioridad: [`docs/catalog.md`](docs/catalog.md).
 4. **Hallazgos** — repro, esperado vs actual, severidad, evidencia: [`docs/findings.md`](docs/findings.md).
 5. **Por tier** — qué falló en `off`…`hard`: [`docs/test-results.md`](docs/test-results.md).
@@ -153,7 +153,11 @@ Workflow **API tests**: `npm ci` + Playwright de API (sin Maestro). No es check 
 1. `candidate_id` — string distinto al de tu `.env` (si la suite o la app están corriendo, no reutilizar el mismo tenant).
 2. `bugs_tier` — `off` \| `easy` \| `medium` \| `hard`.
 
-Mismas variables que `.env` (`CANDIDATE_ID`, `BUGS_TIER`, `API_BASE_URL`). El reporte HTML queda como artifact `playwright-report`.
+Mismas variables que `.env` (`CANDIDATE_ID`, `BUGS_TIER`, `API_BASE_URL`).
+
+**Allure (link, no zip):** cada corrida genera el HTML y lo publica en GitHub Pages. En el Summary del run: sección **Allure report** y, si Pages está activo, el environment `github-pages` con el URL (`https://luiscassol.github.io/qa-ch1/`). Cada corrida pisa el reporte anterior. El artifact `playwright-report` sigue ahí por si querés el HTML de Playwright.
+
+Una vez: **Settings → Pages → Source: GitHub Actions**. Sin eso el job `publish-allure` falla y no hay link.
 
 ## Decisiones
 
