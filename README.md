@@ -10,7 +10,7 @@ Suite de automatización de API para el [Cocos QA Challenge](https://github.com/
 | UI (Maestro) | **3** smokes, opt-in, no CI |
 | UI (manual) | **20** escenarios (UI-M-01…20) — [`docs/ui-assessment.md`](docs/ui-assessment.md) |
 | Defectos | **F-01–F-10** (API) + **F-11–F-20** (app; F-20 también API) — [`docs/findings.md`](docs/findings.md) |
-| `off` (baseline) | **64 passed / 6 failed** en la matriz de 70 (`test-results.md`); la suite actual son 75 |
+| `off` (baseline) | **69 passed / 6 failed** de 75 — [`docs/test-results.md`](docs/test-results.md) |
 | Tiers | misma suite en `easy` / `medium` / `hard` — [`docs/test-results.md`](docs/test-results.md) |
 
 El dinero (cash, reservas, settlement) se prueba en la API. La UI cubre lo que la API no ve (orden en pantalla, ARS→acciones). Plan: [`docs/test-plan.md`](docs/test-plan.md). Catálogo: [`docs/catalog.md`](docs/catalog.md).

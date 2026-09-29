@@ -37,16 +37,16 @@ jobs:
       CANDIDATE_ID: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.candidate_id || format('ci-{0}', github.run_id) }}
       BUGS_TIER: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.bugs_tier || 'off' }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
-          node-version: "20"
+          node-version: "22"
           cache: npm
       - run: npm ci
       - run: npx playwright install --with-deps chromium
       - name: Run Playwright
         run: npx playwright test
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         if: always()
         with:
           name: playwright-report
@@ -58,7 +58,7 @@ jobs:
         run: |
           npm run test:allure
           echo "ok=true" >> "$GITHUB_OUTPUT"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         if: always() && steps.allure.outputs.ok == 'true'
         with:
           name: allure-report

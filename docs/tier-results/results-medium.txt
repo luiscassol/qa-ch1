@@ -1,176 +1,14 @@
 
-Running 70 tests using 1 worker
+Running 75 tests using 1 worker
 
-  ✘   1 tests/p0/limit-orders.spec.js:55:3 › P0 - LIMIT order lifecycle @p0 › LIMIT BUY immediate response is PENDING (BR-ORD-006) @p0 (923ms)
-  ✘   2 tests/p0/limit-orders.spec.js:72:3 › P0 - LIMIT order lifecycle @p0 › LIMIT SELL creates PENDING order and satisfies its invariant (oracle) @p0 (992ms)
-  ✘   3 tests/p0/limit-orders.spec.js:139:3 › P0 - LIMIT order lifecycle @p0 › LIMIT BUY reaches a consistent state and satisfies its invariant (oracle) @p0 (751ms)
-  ✓   4 tests/p0/limit-orders.spec.js:195:3 › P0 - LIMIT order lifecycle @p0 › LIMIT BUY is rejected when reservation cost exceeds available cash @p0 (725ms)
-  ✘   5 tests/p0/limit-orders.spec.js:208:3 › P0 - LIMIT order lifecycle @p0 › LIMIT SELL is rejected with no holdings @p0 (792ms)
-  ✘   6 tests/p0/market-orders.spec.js:54:3 › P0 - MARKET order settlement @p0 › MARKET BUY fills at last_price and debits cash @p0 (770ms)
-  ✘   7 tests/p0/market-orders.spec.js:88:3 › P0 - MARKET order settlement @p0 › MARKET SELL fills at last_price and credits cash @p0 (977ms)
-  ✘   8 tests/p0/market-orders.spec.js:130:3 › P0 - MARKET order settlement @p0 › MARKET BUY at maximum affordable quantity succeeds (BVA: upper boundary) @p0 (751ms)
-  ✓   9 tests/p0/market-orders.spec.js:159:3 › P0 - MARKET order settlement @p0 › MARKET BUY one share over budget is rejected (BVA: just above maximum) @p0 (769ms)
-  ✘  10 tests/p0/market-orders.spec.js:176:3 › P0 - MARKET order settlement @p0 › MARKET SELL with no holdings is rejected @p0 (716ms)
-  ✘  11 tests/p0/market-orders.spec.js:188:3 › P0 - MARKET order settlement @p0 › MARKET SELL more shares than owned is rejected (BVA: oversell) @p0 (968ms)
-  ✓  12 tests/p0/portfolio-consistency.spec.js:52:3 › P0 - Portfolio consistency @p0 › Portfolio is at initial state after reset @p0 (750ms)
-  ✓  13 tests/p0/portfolio-consistency.spec.js:64:3 › P0 - Portfolio consistency @p0 › Reset restores initial state after trades @p0 (1.3s)
-  ✓  14 tests/p0/portfolio-consistency.spec.js:96:3 › P0 - Portfolio consistency @p0 › Portfolio holding contains correct inputs for client-side metric calculation @p0 (883ms)
-  ✓  15 tests/p0/portfolio-consistency.spec.js:133:3 › P0 - Portfolio consistency @p0 › Portfolio cash decreases correctly after multiple sequential BUY orders @p0 (1.1s)
-  ✘  16 tests/p0/portfolio-consistency.spec.js:169:3 › P0 - Portfolio consistency @p0 › F-01: LIMIT BUY with price=0 should be rejected but is accepted @p0 (686ms)
-  ✓  17 tests/p1/contract.spec.js:47:3 › P1 - API contract (schema validation) @p1 › GET /instruments returns 200 and matches instruments schema @p1 (587ms)
-  ✘  18 tests/p1/contract.spec.js:65:3 › P1 - API contract (schema validation) @p1 › POST /orders (MARKET BUY) returns 201 and matches order schema @p1 (516ms)
-  ✘  19 tests/p1/contract.spec.js:80:3 › P1 - API contract (schema validation) @p1 › POST /orders (LIMIT BUY) returns 201 and matches order schema @p1 (587ms)
-  ✓  20 tests/p1/contract.spec.js:97:3 › P1 - API contract (schema validation) @p1 › GET /orders returns 200 and each item matches order schema @p1 (785ms)
-  ✓  21 tests/p1/contract.spec.js:124:3 › P1 - API contract (schema validation) @p1 › GET /portfolio returns 200 and matches portfolio schema @p1 (479ms)
-  ✓  22 tests/p1/contract.spec.js:141:3 › P1 - API contract (schema validation) @p1 › POST /orders with invalid payload returns 400 and matches error schema @p1 (489ms)
-  ✓  23 tests/p1/contract.spec.js:159:3 › P1 - API contract (schema validation) @p1 › POST /reset returns 200 @p1 (542ms)
-  ✓  24 tests/p1/isolation.spec.js:38:3 › P1 - State isolation and reset idempotence @p1 › POST /reset is idempotent — two consecutive resets yield the same initial state @p1 (704ms)
-  ✘  25 tests/p1/isolation.spec.js:65:3 › P1 - State isolation and reset idempotence @p1 › POST /reset after trades restores portfolio to initial state @p1 (605ms)
-  ✓  26 tests/p1/isolation.spec.js:105:3 › P1 - State isolation and reset idempotence @p1 › GET /orders returns empty list after reset @p1 (1.3s)
-  ✓  27 tests/p1/order-validation.spec.js:72:7 › P1 - Order input validation @p1 › Invalid quantity (EP + BVA) › rejects order: quantity is zero (BVA: just below minimum) @p1 (476ms)
-  ✓  28 tests/p1/order-validation.spec.js:72:7 › P1 - Order input validation @p1 › Invalid quantity (EP + BVA) › rejects order: quantity is -1 (BVA: one below zero) @p1 (487ms)
-  ✓  29 tests/p1/order-validation.spec.js:72:7 › P1 - Order input validation @p1 › Invalid quantity (EP + BVA) › rejects order: quantity is deeply negative @p1 (494ms)
-  ✓  30 tests/p1/order-validation.spec.js:72:7 › P1 - Order input validation @p1 › Invalid quantity (EP + BVA) › rejects order: quantity is null @p1 (496ms)
-  ✓  31 tests/p1/order-validation.spec.js:72:7 › P1 - Order input validation @p1 › Invalid quantity (EP + BVA) › rejects order: quantity is a string @p1 (493ms)
-  ✘  32 tests/p1/order-validation.spec.js:72:7 › P1 - Order input validation @p1 › Invalid quantity (EP + BVA) › rejects order: quantity is a float @p1 (532ms)
-  ✓  33 tests/p1/order-validation.spec.js:72:7 › P1 - Order input validation @p1 › Invalid quantity (EP + BVA) › rejects order: quantity field is missing @p1 (669ms)
-  ✓  34 tests/p1/order-validation.spec.js:92:7 › P1 - Order input validation @p1 › Invalid side (EP) › rejects order: side is an unknown string @p1 (497ms)
-  ✓  35 tests/p1/order-validation.spec.js:92:7 › P1 - Order input validation @p1 › Invalid side (EP) › rejects order: side is empty string @p1 (489ms)
-  ✓  36 tests/p1/order-validation.spec.js:92:7 › P1 - Order input validation @p1 › Invalid side (EP) › rejects order: side is null @p1 (495ms)
-  ✘  37 tests/p1/order-validation.spec.js:92:7 › P1 - Order input validation @p1 › Invalid side (EP) › rejects order: side is lowercase (case-sensitive check) @p1 (534ms)
-  ✓  38 tests/p1/order-validation.spec.js:92:7 › P1 - Order input validation @p1 › Invalid side (EP) › rejects order: side field is missing @p1 (551ms)
-  ✓  39 tests/p1/order-validation.spec.js:112:7 › P1 - Order input validation @p1 › Invalid type (EP) › rejects order: type is an unknown string @p1 (471ms)
-  ✓  40 tests/p1/order-validation.spec.js:112:7 › P1 - Order input validation @p1 › Invalid type (EP) › rejects order: type is empty string @p1 (532ms)
-  ✓  41 tests/p1/order-validation.spec.js:112:7 › P1 - Order input validation @p1 › Invalid type (EP) › rejects order: type is null @p1 (997ms)
-  ✘  42 tests/p1/order-validation.spec.js:112:7 › P1 - Order input validation @p1 › Invalid type (EP) › rejects order: type is lowercase (case-sensitive check) @p1 (517ms)
-  ✓  43 tests/p1/order-validation.spec.js:112:7 › P1 - Order input validation @p1 › Invalid type (EP) › rejects order: type field is missing @p1 (551ms)
-  ✓  44 tests/p1/order-validation.spec.js:132:7 › P1 - Order input validation @p1 › Invalid instrument_id (EP + BVA) › rejects order: instrument_id is zero (BVA: boundary below valid range) @p1 (505ms)
-  ✓  45 tests/p1/order-validation.spec.js:132:7 › P1 - Order input validation @p1 › Invalid instrument_id (EP + BVA) › rejects order: instrument_id is negative (BVA: one below zero) @p1 (510ms)
-  ✓  46 tests/p1/order-validation.spec.js:132:7 › P1 - Order input validation @p1 › Invalid instrument_id (EP + BVA) › rejects order: instrument_id is null @p1 (475ms)
-  ✓  47 tests/p1/order-validation.spec.js:132:7 › P1 - Order input validation @p1 › Invalid instrument_id (EP + BVA) › rejects order: instrument_id is a ticker string instead of integer @p1 (494ms)
-  ✓  48 tests/p1/order-validation.spec.js:132:7 › P1 - Order input validation @p1 › Invalid instrument_id (EP + BVA) › rejects order: instrument_id does not exist in catalog @p1 (483ms)
-  ✓  49 tests/p1/order-validation.spec.js:132:7 › P1 - Order input validation @p1 › Invalid instrument_id (EP + BVA) › rejects order: instrument_id field is missing @p1 (481ms)
-  ✓  50 tests/p1/order-validation.spec.js:152:7 › P1 - Order input validation @p1 › LIMIT order without price (EP) › rejects order: LIMIT BUY order with price field missing @p1 (486ms)
-  ✓  51 tests/p1/order-validation.spec.js:152:7 › P1 - Order input validation @p1 › LIMIT order without price (EP) › rejects order: LIMIT SELL order with price field missing @p1 (508ms)
-  ✘  52 tests/p1/order-validation.spec.js:172:7 › P1 - Order input validation @p1 › LIMIT order with invalid price (BVA + F-01) › rejects order: LIMIT BUY with price = 0 (F-01: accepted in off tier, should be rejected) @p1 (510ms)
-  ✘  53 tests/p1/order-validation.spec.js:172:7 › P1 - Order input validation @p1 › LIMIT order with invalid price (BVA + F-01) › rejects order: LIMIT BUY with price = -1 (negative price) @p1 (592ms)
-  ✘  54 tests/p1/order-validation.spec.js:172:7 › P1 - Order input validation @p1 › LIMIT order with invalid price (BVA + F-01) › rejects order: LIMIT BUY with price = null @p1 (584ms)
-  ✘  55 tests/p1/order-validation.spec.js:172:7 › P1 - Order input validation @p1 › LIMIT order with invalid price (BVA + F-01) › rejects order: LIMIT SELL with price = 0 @p1 (570ms)
-  ✘  56 tests/p1/order-validation.spec.js:172:7 › P1 - Order input validation @p1 › LIMIT order with invalid price (BVA + F-01) › rejects order: LIMIT SELL with price = -1 (negative price) @p1 (562ms)
-  ✓  57 tests/p2/catalog.spec.js:51:3 › P2 - Instrument catalog @p2 › GET /instruments returns 200 with a non-empty list @p2 (553ms)
-  ✓  58 tests/p2/catalog.spec.js:67:3 › P2 - Instrument catalog @p2 › Catalog matches instruments schema @p2 (504ms)
-  ✓  59 tests/p2/catalog.spec.js:78:3 › P2 - Instrument catalog @p2 › Default test instrument (id=1, DYCA) exists in catalog @p2 (487ms)
-  ✘  60 tests/p2/catalog.spec.js:102:3 › P2 - Instrument catalog @p2 › All instruments have a positive last_price @p2 (518ms)
-  ✓  61 tests/p2/catalog.spec.js:118:3 › P2 - Instrument catalog @p2 › All instruments have a non-negative close_price @p2 (562ms)
-  ✓  62 tests/p2/catalog.spec.js:134:3 › P2 - Instrument catalog @p2 › All instruments have a non-empty ticker and name @p2 (487ms)
-  ✓  63 tests/p3/search.spec.js:44:3 › P3 - Instrument search @p3 › Search by exact ticker (DYCA) returns matching result @p3 (511ms)
-  ✘  64 tests/p3/search.spec.js:64:3 › P3 - Instrument search @p3 › Search is case-insensitive — lowercase ticker returns same result @p3 (663ms)
-  ✓  65 tests/p3/search.spec.js:82:3 › P3 - Instrument search @p3 › Search by partial ticker returns relevant results @p3 (539ms)
-  ✓  66 tests/p3/search.spec.js:110:3 › P3 - Instrument search @p3 › Search with no match returns empty list @p3 (506ms)
-  ✓  67 tests/p3/search.spec.js:127:3 › P3 - Instrument search @p3 › Search results match instruments schema @p3 (516ms)
-  ✓  68 tests/smoke/api-health.spec.js:29:3 › API smoke @smoke › GET /instruments returns the instrument catalog (511ms)
-  ✓  69 tests/smoke/api-health.spec.js:59:3 › API smoke @smoke › GET /portfolio returns initial state for candidate (472ms)
-  ✓  70 tests/smoke/api-health.spec.js:83:3 › API smoke @smoke › GET /orders returns empty list after reset (494ms)
+[1/75] tests/p0/limit-orders.spec.js:55:3 › P0 - LIMIT order lifecycle @p0 › LIMIT BUY immediate response is PENDING (BR-ORD-006) @p0
+[2/75] tests/p0/limit-orders.spec.js:72:3 › P0 - LIMIT order lifecycle @p0 › LIMIT SELL creates PENDING order and satisfies its invariant (oracle) @p0
+[3/75] tests/p0/limit-orders.spec.js:139:3 › P0 - LIMIT order lifecycle @p0 › LIMIT BUY reaches a consistent state and satisfies its invariant (oracle) @p0
+[4/75] tests/p0/limit-orders.spec.js:195:3 › P0 - LIMIT order lifecycle @p0 › LIMIT BUY is rejected when reservation cost exceeds available cash @p0
+[5/75] tests/p0/limit-orders.spec.js:208:3 › P0 - LIMIT order lifecycle @p0 › LIMIT SELL is rejected with no holdings @p0
+  1) tests/p0/limit-orders.spec.js:208:3 › P0 - LIMIT order lifecycle @p0 › LIMIT SELL is rejected with no holdings @p0 
 
-
-  1) tests/p0/limit-orders.spec.js:55:3 › P0 - LIMIT order lifecycle @p0 › LIMIT BUY immediate response is PENDING (BR-ORD-006) @p0 
-
-    Error: LIMIT order should return 201. Body: {"id":807066,"candidate_id":"lc-qa-1","instrument_id":1,"side":"BUY","type":"LIMIT","quantity":1,"price":40,"status":"PENDING","created_at":"2026-09-26T22:36:09.251Z"}
-
-    expect(received).toBe(expected) // Object.is equality
-
-    Expected: 201
-    Received: 200
-
-       at ../assertions/order.assertions.js:45
-
-      43 | function assertLimitOrderPending(response, expected) {
-      44 |   const bodyStr = JSON.stringify(response.body);
-    > 45 |   expect(response.status, `LIMIT order should return 201. Body: ${bodyStr}`).toBe(201);
-         |                                                                              ^
-      46 |   expect(response.body.status, `LIMIT order initial status should be PENDING. Body: ${bodyStr}`).toBe('PENDING');
-      47 |   expect(response.body.side, 'Order side should match').toBe(expected.side);
-      48 |   expect(response.body.quantity, 'Order quantity should match').toBe(expected.quantity);
-        at assertLimitOrderPending (/Users/lucho/Documents/Luis/Ch1/assertions/order.assertions.js:45:78)
-        at /Users/lucho/Documents/Luis/Ch1/tests/p0/limit-orders.spec.js:68:5
-
-    Error Context: test-results/p0-limit-orders-P0---LIMIT-4b010-se-is-PENDING-BR-ORD-006-p0/error-context.md
-
-    attachment #10: trace (application/zip) ────────────────────────────────────────────────────────
-    test-results/p0-limit-orders-P0---LIMIT-4b010-se-is-PENDING-BR-ORD-006-p0/trace.zip
-    Usage:
-
-        npx playwright show-trace test-results/p0-limit-orders-P0---LIMIT-4b010-se-is-PENDING-BR-ORD-006-p0/trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-  2) tests/p0/limit-orders.spec.js:72:3 › P0 - LIMIT order lifecycle @p0 › LIMIT SELL creates PENDING order and satisfies its invariant (oracle) @p0 › Create LIMIT SELL — verify immediate PENDING response 
-
-    Error: LIMIT order should return 201. Body: {"id":418161,"candidate_id":"lc-qa-1","instrument_id":1,"side":"SELL","type":"LIMIT","quantity":1,"price":50,"status":"PENDING","created_at":"2026-09-26T22:36:10.602Z"}
-
-    expect(received).toBe(expected) // Object.is equality
-
-    Expected: 201
-    Received: 200
-
-       at ../assertions/order.assertions.js:45
-
-      43 | function assertLimitOrderPending(response, expected) {
-      44 |   const bodyStr = JSON.stringify(response.body);
-    > 45 |   expect(response.status, `LIMIT order should return 201. Body: ${bodyStr}`).toBe(201);
-         |                                                                              ^
-      46 |   expect(response.body.status, `LIMIT order initial status should be PENDING. Body: ${bodyStr}`).toBe('PENDING');
-      47 |   expect(response.body.side, 'Order side should match').toBe(expected.side);
-      48 |   expect(response.body.quantity, 'Order quantity should match').toBe(expected.quantity);
-        at assertLimitOrderPending (/Users/lucho/Documents/Luis/Ch1/assertions/order.assertions.js:45:78)
-        at /Users/lucho/Documents/Luis/Ch1/tests/p0/limit-orders.spec.js:94:7
-        at /Users/lucho/Documents/Luis/Ch1/tests/p0/limit-orders.spec.js:89:5
-
-    Error Context: test-results/p0-limit-orders-P0---LIMIT-a9d1f-ies-its-invariant-oracle-p0/error-context.md
-
-    attachment #11: trace (application/zip) ────────────────────────────────────────────────────────
-    test-results/p0-limit-orders-P0---LIMIT-a9d1f-ies-its-invariant-oracle-p0/trace.zip
-    Usage:
-
-        npx playwright show-trace test-results/p0-limit-orders-P0---LIMIT-a9d1f-ies-its-invariant-oracle-p0/trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-  3) tests/p0/limit-orders.spec.js:139:3 › P0 - LIMIT order lifecycle @p0 › LIMIT BUY reaches a consistent state and satisfies its invariant (oracle) @p0 › Create LIMIT BUY order at last_price 
-
-    Error: LIMIT order should return 201. Body: {"id":299639,"candidate_id":"lc-qa-1","instrument_id":1,"side":"BUY","type":"LIMIT","quantity":1,"price":45.72,"status":"PENDING","created_at":"2026-09-26T22:36:11.692Z"}
-
-    expect(received).toBe(expected) // Object.is equality
-
-    Expected: 201
-    Received: 200
-
-       at ../assertions/order.assertions.js:45
-
-      43 | function assertLimitOrderPending(response, expected) {
-      44 |   const bodyStr = JSON.stringify(response.body);
-    > 45 |   expect(response.status, `LIMIT order should return 201. Body: ${bodyStr}`).toBe(201);
-         |                                                                              ^
-      46 |   expect(response.body.status, `LIMIT order initial status should be PENDING. Body: ${bodyStr}`).toBe('PENDING');
-      47 |   expect(response.body.side, 'Order side should match').toBe(expected.side);
-      48 |   expect(response.body.quantity, 'Order quantity should match').toBe(expected.quantity);
-        at assertLimitOrderPending (/Users/lucho/Documents/Luis/Ch1/assertions/order.assertions.js:45:78)
-        at /Users/lucho/Documents/Luis/Ch1/tests/p0/limit-orders.spec.js:155:7
-        at /Users/lucho/Documents/Luis/Ch1/tests/p0/limit-orders.spec.js:152:5
-
-    Error Context: test-results/p0-limit-orders-P0---LIMIT-9024f-ies-its-invariant-oracle-p0/error-context.md
-
-    attachment #10: trace (application/zip) ────────────────────────────────────────────────────────
-    test-results/p0-limit-orders-P0---LIMIT-9024f-ies-its-invariant-oracle-p0/trace.zip
-    Usage:
-
-        npx playwright show-trace test-results/p0-limit-orders-P0---LIMIT-9024f-ies-its-invariant-oracle-p0/trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-  4) tests/p0/limit-orders.spec.js:208:3 › P0 - LIMIT order lifecycle @p0 › LIMIT SELL is rejected with no holdings @p0 
-
-    Error: Expected 400, got 200. Body: {"id":412889,"candidate_id":"lc-qa-1","instrument_id":1,"side":"SELL","type":"LIMIT","quantity":1,"price":50,"status":"PENDING","created_at":"2026-09-26T22:36:13.546Z"}
+    Error: Expected 400, got 200. Body: {"id":511962,"candidate_id":"ch1-matrix75-medium","instrument_id":1,"side":"SELL","type":"LIMIT","quantity":1,"price":50,"status":"PENDING","created_at":"2026-09-29T22:25:31.285Z"}
 
     expect(received).toBe(expected) // Object.is equality
 
@@ -199,105 +37,51 @@ Running 70 tests using 1 worker
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-  5) tests/p0/market-orders.spec.js:54:3 › P0 - MARKET order settlement @p0 › MARKET BUY fills at last_price and debits cash @p0 › Create MARKET BUY order 
 
-    Error: MARKET order should return 201. Body: {"id":414482,"candidate_id":"lc-qa-1","instrument_id":1,"side":"BUY","type":"MARKET","quantity":1,"price":45.72,"status":"FILLED","created_at":"2026-09-26T22:36:14.638Z"}
+[6/75] tests/p0/limit-orders.spec.js:222:3 › P0 - LIMIT order lifecycle @p0 › PENDING LIMIT BUY reservation blocks a subsequent MARKET BUY that exceeds remaining cash @p0
+[7/75] tests/p0/limit-orders.spec.js:242:3 › P0 - LIMIT order lifecycle @p0 › PENDING LIMIT SELL reservation blocks a subsequent MARKET SELL of the same shares @p0
+  2) tests/p0/limit-orders.spec.js:242:3 › P0 - LIMIT order lifecycle @p0 › PENDING LIMIT SELL reservation blocks a subsequent MARKET SELL of the same shares @p0 › Create LIMIT SELL and immediately attempt a second SELL 
 
-    expect(received).toBe(expected) // Object.is equality
-
-    Expected: 201
-    Received: 200
-
-       at ../assertions/order.assertions.js:25
-
-      23 | function assertMarketOrderFilled(response, expected) {
-      24 |   const bodyStr = JSON.stringify(response.body);
-    > 25 |   expect(response.status, `MARKET order should return 201. Body: ${bodyStr}`).toBe(201);
-         |                                                                               ^
-      26 |   expect(response.body.status, `MARKET order status should be FILLED. Body: ${bodyStr}`).toBe('FILLED');
-      27 |   expect(response.body.side, 'Order side should match').toBe(expected.side);
-      28 |   expect(response.body.quantity, 'Order quantity should match').toBe(expected.quantity);
-        at assertMarketOrderFilled (/Users/lucho/Documents/Luis/Ch1/assertions/order.assertions.js:25:79)
-        at /Users/lucho/Documents/Luis/Ch1/tests/p0/market-orders.spec.js:67:7
-        at /Users/lucho/Documents/Luis/Ch1/tests/p0/market-orders.spec.js:64:5
-
-    Error Context: test-results/p0-market-orders-P0---MARK-89193-st-price-and-debits-cash-p0/error-context.md
-
-    attachment #10: trace (application/zip) ────────────────────────────────────────────────────────
-    test-results/p0-market-orders-P0---MARK-89193-st-price-and-debits-cash-p0/trace.zip
-    Usage:
-
-        npx playwright show-trace test-results/p0-market-orders-P0---MARK-89193-st-price-and-debits-cash-p0/trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-  6) tests/p0/market-orders.spec.js:88:3 › P0 - MARKET order settlement @p0 › MARKET SELL fills at last_price and credits cash @p0 › Create MARKET SELL order 
-
-    Error: MARKET order should return 201. Body: {"id":922233,"candidate_id":"lc-qa-1","instrument_id":1,"side":"SELL","type":"MARKET","quantity":2,"price":45.72,"status":"FILLED","created_at":"2026-09-26T22:36:15.930Z"}
+    Error: Expected 400, got 200
 
     expect(received).toBe(expected) // Object.is equality
 
-    Expected: 201
+    Expected: 400
     Received: 200
 
-       at ../assertions/order.assertions.js:25
+       at ../assertions/error.assertions.js:41
 
-      23 | function assertMarketOrderFilled(response, expected) {
-      24 |   const bodyStr = JSON.stringify(response.body);
-    > 25 |   expect(response.status, `MARKET order should return 201. Body: ${bodyStr}`).toBe(201);
-         |                                                                               ^
-      26 |   expect(response.body.status, `MARKET order status should be FILLED. Body: ${bodyStr}`).toBe('FILLED');
-      27 |   expect(response.body.side, 'Order side should match').toBe(expected.side);
-      28 |   expect(response.body.quantity, 'Order quantity should match').toBe(expected.quantity);
-        at assertMarketOrderFilled (/Users/lucho/Documents/Luis/Ch1/assertions/order.assertions.js:25:79)
-        at /Users/lucho/Documents/Luis/Ch1/tests/p0/market-orders.spec.js:107:7
-        at /Users/lucho/Documents/Luis/Ch1/tests/p0/market-orders.spec.js:104:5
+      39 |  */
+      40 | function assertErrorContains(response, substring) {
+    > 41 |   expect(response.status, `Expected 400, got ${response.status}`).toBe(400);
+         |                                                                   ^
+      42 |   expect(response.body.error, 'Response should have an error message').toBeTruthy();
+      43 |   expect(response.body.error, `Error message should contain "${substring}"`).toContain(substring);
+      44 | }
+        at assertErrorContains (/Users/lucho/Documents/Luis/Ch1/assertions/error.assertions.js:41:67)
+        at /Users/lucho/Documents/Luis/Ch1/tests/p0/limit-orders.spec.js:261:7
+        at /Users/lucho/Documents/Luis/Ch1/tests/p0/limit-orders.spec.js:254:5
 
-    Error Context: test-results/p0-market-orders-P0---MARK-31668-t-price-and-credits-cash-p0/error-context.md
+    Error Context: test-results/p0-limit-orders-P0---LIMIT-2d17a--SELL-of-the-same-shares-p0/error-context.md
 
-    attachment #11: trace (application/zip) ────────────────────────────────────────────────────────
-    test-results/p0-market-orders-P0---MARK-31668-t-price-and-credits-cash-p0/trace.zip
+    attachment #12: trace (application/zip) ────────────────────────────────────────────────────────
+    test-results/p0-limit-orders-P0---LIMIT-2d17a--SELL-of-the-same-shares-p0/trace.zip
     Usage:
 
-        npx playwright show-trace test-results/p0-market-orders-P0---MARK-31668-t-price-and-credits-cash-p0/trace.zip
+        npx playwright show-trace test-results/p0-limit-orders-P0---LIMIT-2d17a--SELL-of-the-same-shares-p0/trace.zip
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-  7) tests/p0/market-orders.spec.js:130:3 › P0 - MARKET order settlement @p0 › MARKET BUY at maximum affordable quantity succeeds (BVA: upper boundary) @p0 › Buy maximum 21872 shares 
 
-    Error: MARKET order should return 201. Body: {"id":966856,"candidate_id":"lc-qa-1","instrument_id":1,"side":"BUY","type":"MARKET","quantity":21872,"price":45.72,"status":"FILLED","created_at":"2026-09-26T22:36:17.003Z"}
+[8/75] tests/p0/limit-orders.spec.js:265:3 › P0 - LIMIT order lifecycle @p0 › F-20: REJECTED LIMIT SELL must not reduce holdings @p0
+[9/75] tests/p0/market-orders.spec.js:56:3 › P0 - MARKET order settlement @p0 › MARKET BUY fills at last_price and debits cash @p0
+[10/75] tests/p0/market-orders.spec.js:91:3 › P0 - MARKET order settlement @p0 › MARKET SELL fills at last_price and credits cash @p0
+[11/75] tests/p0/market-orders.spec.js:134:3 › P0 - MARKET order settlement @p0 › MARKET BUY at maximum affordable quantity succeeds (BVA: upper boundary) @p0
+[12/75] tests/p0/market-orders.spec.js:164:3 › P0 - MARKET order settlement @p0 › MARKET BUY one share over budget is rejected (BVA: just above maximum) @p0
+[13/75] tests/p0/market-orders.spec.js:181:3 › P0 - MARKET order settlement @p0 › MARKET SELL with no holdings is rejected @p0
+  3) tests/p0/market-orders.spec.js:181:3 › P0 - MARKET order settlement @p0 › MARKET SELL with no holdings is rejected @p0 
 
-    expect(received).toBe(expected) // Object.is equality
-
-    Expected: 201
-    Received: 200
-
-       at ../assertions/order.assertions.js:25
-
-      23 | function assertMarketOrderFilled(response, expected) {
-      24 |   const bodyStr = JSON.stringify(response.body);
-    > 25 |   expect(response.status, `MARKET order should return 201. Body: ${bodyStr}`).toBe(201);
-         |                                                                               ^
-      26 |   expect(response.body.status, `MARKET order status should be FILLED. Body: ${bodyStr}`).toBe('FILLED');
-      27 |   expect(response.body.side, 'Order side should match').toBe(expected.side);
-      28 |   expect(response.body.quantity, 'Order quantity should match').toBe(expected.quantity);
-        at assertMarketOrderFilled (/Users/lucho/Documents/Luis/Ch1/assertions/order.assertions.js:25:79)
-        at /Users/lucho/Documents/Luis/Ch1/tests/p0/market-orders.spec.js:143:7
-        at /Users/lucho/Documents/Luis/Ch1/tests/p0/market-orders.spec.js:140:5
-
-    Error Context: test-results/p0-market-orders-P0---MARK-78c3f-ceeds-BVA-upper-boundary-p0/error-context.md
-
-    attachment #10: trace (application/zip) ────────────────────────────────────────────────────────
-    test-results/p0-market-orders-P0---MARK-78c3f-ceeds-BVA-upper-boundary-p0/trace.zip
-    Usage:
-
-        npx playwright show-trace test-results/p0-market-orders-P0---MARK-78c3f-ceeds-BVA-upper-boundary-p0/trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-  8) tests/p0/market-orders.spec.js:176:3 › P0 - MARKET order settlement @p0 › MARKET SELL with no holdings is rejected @p0 
-
-    Error: Expected 400, got 200. Body: {"id":504174,"candidate_id":"lc-qa-1","instrument_id":1,"side":"SELL","type":"MARKET","quantity":1,"price":45.72,"status":"FILLED","created_at":"2026-09-26T22:36:18.831Z"}
+    Error: Expected 400, got 200. Body: {"id":173155,"candidate_id":"ch1-matrix75-medium","instrument_id":1,"side":"SELL","type":"MARKET","quantity":1,"price":45.72,"status":"FILLED","created_at":"2026-09-29T22:25:40.457Z"}
 
     expect(received).toBe(expected) // Object.is equality
 
@@ -314,7 +98,7 @@ Running 70 tests using 1 worker
       31 | }
       32 |
         at assertAnyBadRequest (/Users/lucho/Documents/Luis/Ch1/assertions/error.assertions.js:29:85)
-        at /Users/lucho/Documents/Luis/Ch1/tests/p0/market-orders.spec.js:185:5
+        at /Users/lucho/Documents/Luis/Ch1/tests/p0/market-orders.spec.js:190:5
 
     Error Context: test-results/p0-market-orders-P0---MARK-feeef--no-holdings-is-rejected-p0/error-context.md
 
@@ -326,9 +110,11 @@ Running 70 tests using 1 worker
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-  9) tests/p0/market-orders.spec.js:188:3 › P0 - MARKET order settlement @p0 › MARKET SELL more shares than owned is rejected (BVA: oversell) @p0 › Attempt to sell owned + 1 shares 
 
-    Error: Expected 400, got 200. Body: {"id":553633,"candidate_id":"lc-qa-1","instrument_id":1,"side":"SELL","type":"MARKET","quantity":2,"price":45.72,"status":"FILLED","created_at":"2026-09-26T22:36:20.134Z"}
+[14/75] tests/p0/market-orders.spec.js:193:3 › P0 - MARKET order settlement @p0 › MARKET SELL more shares than owned is rejected (BVA: oversell) @p0
+  4) tests/p0/market-orders.spec.js:193:3 › P0 - MARKET order settlement @p0 › MARKET SELL more shares than owned is rejected (BVA: oversell) @p0 › Attempt to sell owned + 1 shares 
+
+    Error: Expected 400, got 200. Body: {"id":33334,"candidate_id":"ch1-matrix75-medium","instrument_id":1,"side":"SELL","type":"MARKET","quantity":2,"price":45.72,"status":"FILLED","created_at":"2026-09-29T22:25:41.726Z"}
 
     expect(received).toBe(expected) // Object.is equality
 
@@ -345,8 +131,8 @@ Running 70 tests using 1 worker
       31 | }
       32 |
         at assertAnyBadRequest (/Users/lucho/Documents/Luis/Ch1/assertions/error.assertions.js:29:85)
-        at /Users/lucho/Documents/Luis/Ch1/tests/p0/market-orders.spec.js:205:7
-        at /Users/lucho/Documents/Luis/Ch1/tests/p0/market-orders.spec.js:202:5
+        at /Users/lucho/Documents/Luis/Ch1/tests/p0/market-orders.spec.js:210:7
+        at /Users/lucho/Documents/Luis/Ch1/tests/p0/market-orders.spec.js:207:5
 
     Error Context: test-results/p0-market-orders-P0---MARK-fbf8c-is-rejected-BVA-oversell-p0/error-context.md
 
@@ -358,35 +144,44 @@ Running 70 tests using 1 worker
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-  10) tests/p0/portfolio-consistency.spec.js:169:3 › P0 - Portfolio consistency @p0 › F-01: LIMIT BUY with price=0 should be rejected but is accepted @p0 
 
-    Error: F-01: price=0 should return 400 but returns 201
+[15/75] tests/p0/portfolio-consistency.spec.js:52:3 › P0 - Portfolio consistency @p0 › Portfolio is at initial state after reset @p0
+[16/75] tests/p0/portfolio-consistency.spec.js:64:3 › P0 - Portfolio consistency @p0 › Reset restores initial state after trades @p0
+[17/75] tests/p0/portfolio-consistency.spec.js:96:3 › P0 - Portfolio consistency @p0 › Portfolio holding contains correct inputs for client-side metric calculation @p0
+[18/75] tests/p0/portfolio-consistency.spec.js:133:3 › P0 - Portfolio consistency @p0 › Portfolio cash decreases correctly after multiple sequential BUY orders @p0
+[19/75] tests/p0/portfolio-consistency.spec.js:169:3 › P0 - Portfolio consistency @p0 › F-01: LIMIT BUY with price<=0 should be rejected and must not inflate cash @p0
+  5) tests/p0/portfolio-consistency.spec.js:169:3 › P0 - Portfolio consistency @p0 › F-01: LIMIT BUY with price<=0 should be rejected and must not inflate cash @p0 
 
-    expect(received).toBe(expected) // Object.is equality
+    Error: F-01: a non-positive LIMIT price must not inflate available cash above the initial 1,000,000
 
-    Expected: 400
-    Received: 200
+    expect(received).toBeLessThanOrEqual(expected)
 
-      183 |     await attachResponse('order-response', order.body);
-      184 |
-    > 185 |     expect(order.status, 'F-01: price=0 should return 400 but returns 201').toBe(400);
-          |                                                                             ^
-      186 |   });
-      187 | });
-      188 |
-        at /Users/lucho/Documents/Luis/Ch1/tests/p0/portfolio-consistency.spec.js:185:77
+    Expected: <= 1000000
+    Received:    1000001
 
-    Error Context: test-results/p0-portfolio-consistency-P-b786a-rejected-but-is-accepted-p0/error-context.md
+      186 |       portfolio.body.cash,
+      187 |       'F-01: a non-positive LIMIT price must not inflate available cash above the initial 1,000,000'
+    > 188 |     ).toBeLessThanOrEqual(1_000_000);
+          |       ^
+      189 |
+      190 |     expect(order.status, 'F-01: price<=0 should return 400').toBe(400);
+      191 |   });
+        at /Users/lucho/Documents/Luis/Ch1/tests/p0/portfolio-consistency.spec.js:188:7
 
-    attachment #10: trace (application/zip) ────────────────────────────────────────────────────────
-    test-results/p0-portfolio-consistency-P-b786a-rejected-but-is-accepted-p0/trace.zip
+    Error Context: test-results/p0-portfolio-consistency-P-519e2-nd-must-not-inflate-cash-p0/error-context.md
+
+    attachment #11: trace (application/zip) ────────────────────────────────────────────────────────
+    test-results/p0-portfolio-consistency-P-519e2-nd-must-not-inflate-cash-p0/trace.zip
     Usage:
 
-        npx playwright show-trace test-results/p0-portfolio-consistency-P-b786a-rejected-but-is-accepted-p0/trace.zip
+        npx playwright show-trace test-results/p0-portfolio-consistency-P-519e2-nd-must-not-inflate-cash-p0/trace.zip
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-  11) tests/p1/contract.spec.js:65:3 › P1 - API contract (schema validation) @p1 › POST /orders (MARKET BUY) returns 201 and matches order schema @p1 
+
+[20/75] tests/p1/contract.spec.js:47:3 › P1 - API contract (schema validation) @p1 › GET /instruments returns 200 and matches instruments schema @p1
+[21/75] tests/p1/contract.spec.js:65:3 › P1 - API contract (schema validation) @p1 › POST /orders (MARKET BUY) returns 201 and matches order schema @p1
+  6) tests/p1/contract.spec.js:65:3 › P1 - API contract (schema validation) @p1 › POST /orders (MARKET BUY) returns 201 and matches order schema @p1 
 
     Error: POST /orders (MARKET BUY) should return 201
 
@@ -414,7 +209,9 @@ Running 70 tests using 1 worker
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-  12) tests/p1/contract.spec.js:80:3 › P1 - API contract (schema validation) @p1 › POST /orders (LIMIT BUY) returns 201 and matches order schema @p1 
+
+[22/75] tests/p1/contract.spec.js:80:3 › P1 - API contract (schema validation) @p1 › POST /orders (LIMIT BUY) returns 201 and matches order schema @p1
+  7) tests/p1/contract.spec.js:80:3 › P1 - API contract (schema validation) @p1 › POST /orders (LIMIT BUY) returns 201 and matches order schema @p1 
 
     Error: POST /orders (LIMIT BUY) should return 201
 
@@ -442,38 +239,24 @@ Running 70 tests using 1 worker
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-  13) tests/p1/isolation.spec.js:65:3 › P1 - State isolation and reset idempotence @p1 › POST /reset after trades restores portfolio to initial state @p1 › Trade: buy shares to modify state 
 
-    Error: Setup buy should succeed
+[23/75] tests/p1/contract.spec.js:97:3 › P1 - API contract (schema validation) @p1 › GET /orders returns 200 and each item matches order schema @p1
+[24/75] tests/p1/contract.spec.js:124:3 › P1 - API contract (schema validation) @p1 › GET /portfolio returns 200 and matches portfolio schema @p1
+[25/75] tests/p1/contract.spec.js:139:3 › P1 - API contract (schema validation) @p1 › GET /portfolio with holdings matches portfolio schema including holding fields @p1
+[26/75] tests/p1/contract.spec.js:160:3 › P1 - API contract (schema validation) @p1 › POST /orders with invalid payload returns 400 and matches error schema @p1
+[27/75] tests/p1/contract.spec.js:178:3 › P1 - API contract (schema validation) @p1 › POST /reset returns 200 @p1
+[28/75] tests/p1/isolation.spec.js:39:3 › P1 - State isolation and reset idempotence @p1 › POST /reset is idempotent — two consecutive resets yield the same initial state @p1
+[29/75] tests/p1/isolation.spec.js:66:3 › P1 - State isolation and reset idempotence @p1 › POST /reset after trades restores portfolio to initial state @p1
+[30/75] tests/p1/isolation.spec.js:106:3 › P1 - State isolation and reset idempotence @p1 › GET /orders returns empty list after reset @p1
+[31/75] tests/p1/order-validation.spec.js:72:7 › P1 - Order input validation @p1 › Invalid quantity (EP + BVA) › rejects order: quantity is zero (BVA: just below minimum) @p1
+[32/75] tests/p1/order-validation.spec.js:72:7 › P1 - Order input validation @p1 › Invalid quantity (EP + BVA) › rejects order: quantity is -1 (BVA: one below zero) @p1
+[33/75] tests/p1/order-validation.spec.js:72:7 › P1 - Order input validation @p1 › Invalid quantity (EP + BVA) › rejects order: quantity is deeply negative @p1
+[34/75] tests/p1/order-validation.spec.js:72:7 › P1 - Order input validation @p1 › Invalid quantity (EP + BVA) › rejects order: quantity is null @p1
+[35/75] tests/p1/order-validation.spec.js:72:7 › P1 - Order input validation @p1 › Invalid quantity (EP + BVA) › rejects order: quantity is a string @p1
+[36/75] tests/p1/order-validation.spec.js:72:7 › P1 - Order input validation @p1 › Invalid quantity (EP + BVA) › rejects order: quantity is a float @p1
+  8) tests/p1/order-validation.spec.js:72:7 › P1 - Order input validation @p1 › Invalid quantity (EP + BVA) › rejects order: quantity is a float @p1 
 
-    expect(received).toBe(expected) // Object.is equality
-
-    Expected: 201
-    Received: 200
-
-      79 |       const order = await ordersApi.create(buildMarketBuyOrder({ quantity: 5 }));
-      80 |       await attachResponse('buy-order', order.body);
-    > 81 |       expect(order.status, 'Setup buy should succeed').toBe(201);
-         |                                                        ^
-      82 |     });
-      83 |
-      84 |     await test.step('Confirm state is modified after trade', async () => {
-        at /Users/lucho/Documents/Luis/Ch1/tests/p1/isolation.spec.js:81:56
-        at /Users/lucho/Documents/Luis/Ch1/tests/p1/isolation.spec.js:78:5
-
-    Error Context: test-results/p1-isolation-P1---State-is-f3568-rtfolio-to-initial-state-p1/error-context.md
-
-    attachment #10: trace (application/zip) ────────────────────────────────────────────────────────
-    test-results/p1-isolation-P1---State-is-f3568-rtfolio-to-initial-state-p1/trace.zip
-    Usage:
-
-        npx playwright show-trace test-results/p1-isolation-P1---State-is-f3568-rtfolio-to-initial-state-p1/trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-  14) tests/p1/order-validation.spec.js:72:7 › P1 - Order input validation @p1 › Invalid quantity (EP + BVA) › rejects order: quantity is a float @p1 
-
-    Error: Expected 400, got 200. Body: {"id":360225,"candidate_id":"lc-qa-1","instrument_id":1,"side":"BUY","type":"MARKET","quantity":1,"price":45.72,"status":"FILLED","created_at":"2026-09-26T22:36:36.295Z"}
+    Error: Expected 400, got 200. Body: {"id":891547,"candidate_id":"ch1-matrix75-medium","instrument_id":1,"side":"BUY","type":"MARKET","quantity":1,"price":45.72,"status":"FILLED","created_at":"2026-09-29T22:25:59.075Z"}
 
     expect(received).toBe(expected) // Object.is equality
 
@@ -502,9 +285,15 @@ Running 70 tests using 1 worker
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-  15) tests/p1/order-validation.spec.js:92:7 › P1 - Order input validation @p1 › Invalid side (EP) › rejects order: side is lowercase (case-sensitive check) @p1 
 
-    Error: Expected 400, got 200. Body: {"id":30321,"candidate_id":"lc-qa-1","instrument_id":1,"side":"BUY","type":"MARKET","quantity":1,"price":45.72,"status":"FILLED","created_at":"2026-09-26T22:36:39.373Z"}
+[37/75] tests/p1/order-validation.spec.js:72:7 › P1 - Order input validation @p1 › Invalid quantity (EP + BVA) › rejects order: quantity field is missing @p1
+[38/75] tests/p1/order-validation.spec.js:92:7 › P1 - Order input validation @p1 › Invalid side (EP) › rejects order: side is an unknown string @p1
+[39/75] tests/p1/order-validation.spec.js:92:7 › P1 - Order input validation @p1 › Invalid side (EP) › rejects order: side is empty string @p1
+[40/75] tests/p1/order-validation.spec.js:92:7 › P1 - Order input validation @p1 › Invalid side (EP) › rejects order: side is null @p1
+[41/75] tests/p1/order-validation.spec.js:92:7 › P1 - Order input validation @p1 › Invalid side (EP) › rejects order: side is lowercase (case-sensitive check) @p1
+  9) tests/p1/order-validation.spec.js:92:7 › P1 - Order input validation @p1 › Invalid side (EP) › rejects order: side is lowercase (case-sensitive check) @p1 
+
+    Error: Expected 400, got 200. Body: {"id":456328,"candidate_id":"ch1-matrix75-medium","instrument_id":1,"side":"BUY","type":"MARKET","quantity":1,"price":45.72,"status":"FILLED","created_at":"2026-09-29T22:26:01.979Z"}
 
     expect(received).toBe(expected) // Object.is equality
 
@@ -533,9 +322,15 @@ Running 70 tests using 1 worker
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-  16) tests/p1/order-validation.spec.js:112:7 › P1 - Order input validation @p1 › Invalid type (EP) › rejects order: type is lowercase (case-sensitive check) @p1 
 
-    Error: Expected 400, got 200. Body: {"id":241525,"candidate_id":"lc-qa-1","instrument_id":1,"side":"BUY","type":"MARKET","quantity":1,"price":45.72,"status":"FILLED","created_at":"2026-09-26T22:36:42.901Z"}
+[42/75] tests/p1/order-validation.spec.js:92:7 › P1 - Order input validation @p1 › Invalid side (EP) › rejects order: side field is missing @p1
+[43/75] tests/p1/order-validation.spec.js:112:7 › P1 - Order input validation @p1 › Invalid type (EP) › rejects order: type is an unknown string @p1
+[44/75] tests/p1/order-validation.spec.js:112:7 › P1 - Order input validation @p1 › Invalid type (EP) › rejects order: type is empty string @p1
+[45/75] tests/p1/order-validation.spec.js:112:7 › P1 - Order input validation @p1 › Invalid type (EP) › rejects order: type is null @p1
+[46/75] tests/p1/order-validation.spec.js:112:7 › P1 - Order input validation @p1 › Invalid type (EP) › rejects order: type is lowercase (case-sensitive check) @p1
+  10) tests/p1/order-validation.spec.js:112:7 › P1 - Order input validation @p1 › Invalid type (EP) › rejects order: type is lowercase (case-sensitive check) @p1 
+
+    Error: Expected 400, got 200. Body: {"id":988724,"candidate_id":"ch1-matrix75-medium","instrument_id":1,"side":"BUY","type":"MARKET","quantity":1,"price":45.72,"status":"FILLED","created_at":"2026-09-29T22:26:05.185Z"}
 
     expect(received).toBe(expected) // Object.is equality
 
@@ -564,9 +359,20 @@ Running 70 tests using 1 worker
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-  17) tests/p1/order-validation.spec.js:172:7 › P1 - Order input validation @p1 › LIMIT order with invalid price (BVA + F-01) › rejects order: LIMIT BUY with price = 0 (F-01: accepted in off tier, should be rejected) @p1 
 
-    Error: Expected 400, got 200. Body: {"id":686832,"candidate_id":"lc-qa-1","instrument_id":1,"side":"BUY","type":"LIMIT","quantity":1,"price":0,"status":"PENDING","created_at":"2026-09-26T22:36:48.319Z"}
+[47/75] tests/p1/order-validation.spec.js:112:7 › P1 - Order input validation @p1 › Invalid type (EP) › rejects order: type field is missing @p1
+[48/75] tests/p1/order-validation.spec.js:132:7 › P1 - Order input validation @p1 › Invalid instrument_id (EP + BVA) › rejects order: instrument_id is zero (BVA: boundary below valid range) @p1
+[49/75] tests/p1/order-validation.spec.js:132:7 › P1 - Order input validation @p1 › Invalid instrument_id (EP + BVA) › rejects order: instrument_id is negative (BVA: one below zero) @p1
+[50/75] tests/p1/order-validation.spec.js:132:7 › P1 - Order input validation @p1 › Invalid instrument_id (EP + BVA) › rejects order: instrument_id is null @p1
+[51/75] tests/p1/order-validation.spec.js:132:7 › P1 - Order input validation @p1 › Invalid instrument_id (EP + BVA) › rejects order: instrument_id is a ticker string instead of integer @p1
+[52/75] tests/p1/order-validation.spec.js:132:7 › P1 - Order input validation @p1 › Invalid instrument_id (EP + BVA) › rejects order: instrument_id does not exist in catalog @p1
+[53/75] tests/p1/order-validation.spec.js:132:7 › P1 - Order input validation @p1 › Invalid instrument_id (EP + BVA) › rejects order: instrument_id field is missing @p1
+[54/75] tests/p1/order-validation.spec.js:152:7 › P1 - Order input validation @p1 › LIMIT order without price (EP) › rejects order: LIMIT BUY order with price field missing @p1
+[55/75] tests/p1/order-validation.spec.js:152:7 › P1 - Order input validation @p1 › LIMIT order without price (EP) › rejects order: LIMIT SELL order with price field missing @p1
+[56/75] tests/p1/order-validation.spec.js:172:7 › P1 - Order input validation @p1 › LIMIT order with invalid price (BVA + F-01) › rejects order: LIMIT BUY with price = 0 (F-01: accepted in off tier, should be rejected) @p1
+  11) tests/p1/order-validation.spec.js:172:7 › P1 - Order input validation @p1 › LIMIT order with invalid price (BVA + F-01) › rejects order: LIMIT BUY with price = 0 (F-01: accepted in off tier, should be rejected) @p1 
+
+    Error: Expected 400, got 200. Body: {"id":972869,"candidate_id":"ch1-matrix75-medium","instrument_id":1,"side":"BUY","type":"LIMIT","quantity":1,"price":0,"status":"PENDING","created_at":"2026-09-29T22:26:10.647Z"}
 
     expect(received).toBe(expected) // Object.is equality
 
@@ -595,9 +401,11 @@ Running 70 tests using 1 worker
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-  18) tests/p1/order-validation.spec.js:172:7 › P1 - Order input validation @p1 › LIMIT order with invalid price (BVA + F-01) › rejects order: LIMIT BUY with price = -1 (negative price) @p1 
 
-    Error: Expected 400, got 200. Body: {"id":358105,"candidate_id":"lc-qa-1","instrument_id":1,"side":"BUY","type":"LIMIT","quantity":1,"price":-1,"status":"PENDING","created_at":"2026-09-26T22:36:49.230Z"}
+[57/75] tests/p1/order-validation.spec.js:172:7 › P1 - Order input validation @p1 › LIMIT order with invalid price (BVA + F-01) › rejects order: LIMIT BUY with price = -1 (negative price) @p1
+  12) tests/p1/order-validation.spec.js:172:7 › P1 - Order input validation @p1 › LIMIT order with invalid price (BVA + F-01) › rejects order: LIMIT BUY with price = -1 (negative price) @p1 
+
+    Error: Expected 400, got 200. Body: {"id":472409,"candidate_id":"ch1-matrix75-medium","instrument_id":1,"side":"BUY","type":"LIMIT","quantity":1,"price":-1,"status":"PENDING","created_at":"2026-09-29T22:26:11.633Z"}
 
     expect(received).toBe(expected) // Object.is equality
 
@@ -626,9 +434,11 @@ Running 70 tests using 1 worker
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-  19) tests/p1/order-validation.spec.js:172:7 › P1 - Order input validation @p1 › LIMIT order with invalid price (BVA + F-01) › rejects order: LIMIT BUY with price = null @p1 
 
-    Error: Expected 400, got 200. Body: {"id":450035,"candidate_id":"lc-qa-1","instrument_id":1,"side":"BUY","type":"LIMIT","quantity":1,"price":0,"status":"PENDING","created_at":"2026-09-26T22:36:50.152Z"}
+[58/75] tests/p1/order-validation.spec.js:172:7 › P1 - Order input validation @p1 › LIMIT order with invalid price (BVA + F-01) › rejects order: LIMIT BUY with price = null @p1
+  13) tests/p1/order-validation.spec.js:172:7 › P1 - Order input validation @p1 › LIMIT order with invalid price (BVA + F-01) › rejects order: LIMIT BUY with price = null @p1 
+
+    Error: Expected 400, got 200. Body: {"id":274735,"candidate_id":"ch1-matrix75-medium","instrument_id":1,"side":"BUY","type":"LIMIT","quantity":1,"price":0,"status":"PENDING","created_at":"2026-09-29T22:26:12.482Z"}
 
     expect(received).toBe(expected) // Object.is equality
 
@@ -657,9 +467,11 @@ Running 70 tests using 1 worker
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-  20) tests/p1/order-validation.spec.js:172:7 › P1 - Order input validation @p1 › LIMIT order with invalid price (BVA + F-01) › rejects order: LIMIT SELL with price = 0 @p1 
 
-    Error: Expected 400, got 200. Body: {"id":165293,"candidate_id":"lc-qa-1","instrument_id":1,"side":"SELL","type":"LIMIT","quantity":1,"price":0,"status":"PENDING","created_at":"2026-09-26T22:36:51.057Z"}
+[59/75] tests/p1/order-validation.spec.js:172:7 › P1 - Order input validation @p1 › LIMIT order with invalid price (BVA + F-01) › rejects order: LIMIT SELL with price = 0 @p1
+  14) tests/p1/order-validation.spec.js:172:7 › P1 - Order input validation @p1 › LIMIT order with invalid price (BVA + F-01) › rejects order: LIMIT SELL with price = 0 @p1 
+
+    Error: Expected 400, got 200. Body: {"id":191790,"candidate_id":"ch1-matrix75-medium","instrument_id":1,"side":"SELL","type":"LIMIT","quantity":1,"price":0,"status":"PENDING","created_at":"2026-09-29T22:26:13.403Z"}
 
     expect(received).toBe(expected) // Object.is equality
 
@@ -688,9 +500,11 @@ Running 70 tests using 1 worker
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-  21) tests/p1/order-validation.spec.js:172:7 › P1 - Order input validation @p1 › LIMIT order with invalid price (BVA + F-01) › rejects order: LIMIT SELL with price = -1 (negative price) @p1 
 
-    Error: Expected 400, got 200. Body: {"id":538555,"candidate_id":"lc-qa-1","instrument_id":1,"side":"SELL","type":"LIMIT","quantity":1,"price":-1,"status":"PENDING","created_at":"2026-09-26T22:36:51.959Z"}
+[60/75] tests/p1/order-validation.spec.js:172:7 › P1 - Order input validation @p1 › LIMIT order with invalid price (BVA + F-01) › rejects order: LIMIT SELL with price = -1 (negative price) @p1
+  15) tests/p1/order-validation.spec.js:172:7 › P1 - Order input validation @p1 › LIMIT order with invalid price (BVA + F-01) › rejects order: LIMIT SELL with price = -1 (negative price) @p1 
+
+    Error: Expected 400, got 200. Body: {"id":411105,"candidate_id":"ch1-matrix75-medium","instrument_id":1,"side":"SELL","type":"LIMIT","quantity":1,"price":-1,"status":"PENDING","created_at":"2026-09-29T22:26:14.286Z"}
 
     expect(received).toBe(expected) // Object.is equality
 
@@ -719,7 +533,12 @@ Running 70 tests using 1 worker
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-  22) tests/p2/catalog.spec.js:102:3 › P2 - Instrument catalog @p2 › All instruments have a positive last_price @p2 
+
+[61/75] tests/p2/catalog.spec.js:52:3 › P2 - Instrument catalog @p2 › GET /instruments returns 200 with a non-empty list @p2
+[62/75] tests/p2/catalog.spec.js:68:3 › P2 - Instrument catalog @p2 › Catalog matches instruments schema @p2
+[63/75] tests/p2/catalog.spec.js:79:3 › P2 - Instrument catalog @p2 › Default test instrument (id=1, DYCA) exists in catalog @p2
+[64/75] tests/p2/catalog.spec.js:103:3 › P2 - Instrument catalog @p2 › All instruments have a positive last_price @p2
+  16) tests/p2/catalog.spec.js:103:3 › P2 - Instrument catalog @p2 › All instruments have a positive last_price @p2 
 
     Error: Found 1 instrument(s) with last_price <= 0: ["MIRG"]
 
@@ -729,14 +548,14 @@ Running 70 tests using 1 worker
     Received length: 1
     Received array:  [{"close_price": 37.74, "id": 5, "last_price": 0, "name": "Mirgor", "ticker": "MIRG", "type": "ACCIONES"}]
 
-      113 |       invalid,
-      114 |       `Found ${invalid.length} instrument(s) with last_price <= 0: ${JSON.stringify(invalid.map((i) => i.ticker))}`
-    > 115 |     ).toHaveLength(0);
+      114 |       invalid,
+      115 |       `Found ${invalid.length} instrument(s) with last_price <= 0: ${JSON.stringify(invalid.map((i) => i.ticker))}`
+    > 116 |     ).toHaveLength(0);
           |       ^
-      116 |   });
-      117 |
-      118 |   test('All instruments have a non-negative close_price @p2', async () => {
-        at /Users/lucho/Documents/Luis/Ch1/tests/p2/catalog.spec.js:115:7
+      117 |   });
+      118 |
+      119 |   test('All instruments have a non-negative close_price @p2', async () => {
+        at /Users/lucho/Documents/Luis/Ch1/tests/p2/catalog.spec.js:116:7
 
     Error Context: test-results/p2-catalog-P2---Instrument-abb37-ve-a-positive-last-price-p2/error-context.md
 
@@ -748,7 +567,13 @@ Running 70 tests using 1 worker
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-  23) tests/p3/search.spec.js:64:3 › P3 - Instrument search @p3 › Search is case-insensitive — lowercase ticker returns same result @p3 
+
+[65/75] tests/p2/catalog.spec.js:119:3 › P2 - Instrument catalog @p2 › All instruments have a non-negative close_price @p2
+[66/75] tests/p2/catalog.spec.js:135:3 › P2 - Instrument catalog @p2 › Daily direction partitions sum to catalog size @p2
+[67/75] tests/p2/catalog.spec.js:166:3 › P2 - Instrument catalog @p2 › All instruments have a non-empty ticker and name @p2
+[68/75] tests/p3/search.spec.js:44:3 › P3 - Instrument search @p3 › Search by exact ticker (DYCA) returns matching result @p3
+[69/75] tests/p3/search.spec.js:64:3 › P3 - Instrument search @p3 › Search is case-insensitive — lowercase ticker returns same result @p3
+  17) tests/p3/search.spec.js:64:3 › P3 - Instrument search @p3 › Search is case-insensitive — lowercase ticker returns same result @p3 
 
     Error: Case-insensitive search should return at least one result
 
@@ -776,20 +601,21 @@ Running 70 tests using 1 worker
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-  23 failed
-    tests/p0/limit-orders.spec.js:55:3 › P0 - LIMIT order lifecycle @p0 › LIMIT BUY immediate response is PENDING (BR-ORD-006) @p0 
-    tests/p0/limit-orders.spec.js:72:3 › P0 - LIMIT order lifecycle @p0 › LIMIT SELL creates PENDING order and satisfies its invariant (oracle) @p0 
-    tests/p0/limit-orders.spec.js:139:3 › P0 - LIMIT order lifecycle @p0 › LIMIT BUY reaches a consistent state and satisfies its invariant (oracle) @p0 
+
+[70/75] tests/p3/search.spec.js:82:3 › P3 - Instrument search @p3 › Search by partial ticker returns relevant results @p3
+[71/75] tests/p3/search.spec.js:110:3 › P3 - Instrument search @p3 › Search with no match returns empty list @p3
+[72/75] tests/p3/search.spec.js:127:3 › P3 - Instrument search @p3 › Search results match instruments schema @p3
+[73/75] tests/smoke/api-health.spec.js:29:3 › API smoke @smoke › GET /instruments returns the instrument catalog
+[74/75] tests/smoke/api-health.spec.js:59:3 › API smoke @smoke › GET /portfolio returns initial state for candidate
+[75/75] tests/smoke/api-health.spec.js:83:3 › API smoke @smoke › GET /orders returns empty list after reset
+  17 failed
     tests/p0/limit-orders.spec.js:208:3 › P0 - LIMIT order lifecycle @p0 › LIMIT SELL is rejected with no holdings @p0 
-    tests/p0/market-orders.spec.js:54:3 › P0 - MARKET order settlement @p0 › MARKET BUY fills at last_price and debits cash @p0 
-    tests/p0/market-orders.spec.js:88:3 › P0 - MARKET order settlement @p0 › MARKET SELL fills at last_price and credits cash @p0 
-    tests/p0/market-orders.spec.js:130:3 › P0 - MARKET order settlement @p0 › MARKET BUY at maximum affordable quantity succeeds (BVA: upper boundary) @p0 
-    tests/p0/market-orders.spec.js:176:3 › P0 - MARKET order settlement @p0 › MARKET SELL with no holdings is rejected @p0 
-    tests/p0/market-orders.spec.js:188:3 › P0 - MARKET order settlement @p0 › MARKET SELL more shares than owned is rejected (BVA: oversell) @p0 
-    tests/p0/portfolio-consistency.spec.js:169:3 › P0 - Portfolio consistency @p0 › F-01: LIMIT BUY with price=0 should be rejected but is accepted @p0 
+    tests/p0/limit-orders.spec.js:242:3 › P0 - LIMIT order lifecycle @p0 › PENDING LIMIT SELL reservation blocks a subsequent MARKET SELL of the same shares @p0 
+    tests/p0/market-orders.spec.js:181:3 › P0 - MARKET order settlement @p0 › MARKET SELL with no holdings is rejected @p0 
+    tests/p0/market-orders.spec.js:193:3 › P0 - MARKET order settlement @p0 › MARKET SELL more shares than owned is rejected (BVA: oversell) @p0 
+    tests/p0/portfolio-consistency.spec.js:169:3 › P0 - Portfolio consistency @p0 › F-01: LIMIT BUY with price<=0 should be rejected and must not inflate cash @p0 
     tests/p1/contract.spec.js:65:3 › P1 - API contract (schema validation) @p1 › POST /orders (MARKET BUY) returns 201 and matches order schema @p1 
     tests/p1/contract.spec.js:80:3 › P1 - API contract (schema validation) @p1 › POST /orders (LIMIT BUY) returns 201 and matches order schema @p1 
-    tests/p1/isolation.spec.js:65:3 › P1 - State isolation and reset idempotence @p1 › POST /reset after trades restores portfolio to initial state @p1 
     tests/p1/order-validation.spec.js:72:7 › P1 - Order input validation @p1 › Invalid quantity (EP + BVA) › rejects order: quantity is a float @p1 
     tests/p1/order-validation.spec.js:92:7 › P1 - Order input validation @p1 › Invalid side (EP) › rejects order: side is lowercase (case-sensitive check) @p1 
     tests/p1/order-validation.spec.js:112:7 › P1 - Order input validation @p1 › Invalid type (EP) › rejects order: type is lowercase (case-sensitive check) @p1 
@@ -798,6 +624,6 @@ Running 70 tests using 1 worker
     tests/p1/order-validation.spec.js:172:7 › P1 - Order input validation @p1 › LIMIT order with invalid price (BVA + F-01) › rejects order: LIMIT BUY with price = null @p1 
     tests/p1/order-validation.spec.js:172:7 › P1 - Order input validation @p1 › LIMIT order with invalid price (BVA + F-01) › rejects order: LIMIT SELL with price = 0 @p1 
     tests/p1/order-validation.spec.js:172:7 › P1 - Order input validation @p1 › LIMIT order with invalid price (BVA + F-01) › rejects order: LIMIT SELL with price = -1 (negative price) @p1 
-    tests/p2/catalog.spec.js:102:3 › P2 - Instrument catalog @p2 › All instruments have a positive last_price @p2 
+    tests/p2/catalog.spec.js:103:3 › P2 - Instrument catalog @p2 › All instruments have a positive last_price @p2 
     tests/p3/search.spec.js:64:3 › P3 - Instrument search @p3 › Search is case-insensitive — lowercase ticker returns same result @p3 
-  47 passed (52.6s)
+  58 passed (57.0s)

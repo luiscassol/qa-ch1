@@ -203,7 +203,7 @@ Header: `X-Enable-Bugs: easy`.
 | **Esperado** | `201 Created` al crear la orden. |
 | **Actual** | `200 OK`. Body de orden válido. |
 
-En la matriz de 70 tests esto **cascadió**: varios P0 fallaban en el `expect(201)` y no evaluaban cash/holdings. La suite actual acepta `200|201` en assertions de negocio; el `201` estricto queda en `tests/p1/contract.spec.js`.
+En la matriz de 70 tests esto **cascadió**: varios P0 fallaban en el `expect(201)` y no evaluaban cash/holdings. La suite actual acepta `200|201` en assertions de negocio; el `201` estricto queda en `tests/p1/contract.spec.js`. La matriz de 75 en [`test-results.md`](test-results.md) solo marca esos dos contract en `medium`/`hard`.
 
 ### Tests
 
