@@ -109,8 +109,8 @@ Los 17 de medium, más:
 
 ## 4. Distribución de fallos por área de riesgo
 
-Este eje es **P0/P1/…** (prioridad del test). Las columnas son el **tier** (inyección).  
-**Hallazgos** lleva a la ficha en [`findings.md`](findings.md). Un área puede tener más de un F-xx.
+Este eje es **P0/P1/…** (prioridad del test). Las columnas **off…hard** son **cuántos tests fallaron** en esa área, no cuántos F-xx hay.  
+**Hallazgos** es el defecto (o los defectos) que explican esos rojos. Un F-xx puede tumbar varios tests: p. ej. contract = [F-07](findings.md#f-07) y **2** failed porque hay dos specs que exigen `201`.
 
 | Área de riesgo | Hallazgos | off | easy | medium | hard |
 |----------------|-----------|-----|------|--------|------|
