@@ -1,0 +1,13 @@
+appId: com.cocos.trading
+name: Reset from the Orders tab restores initial cash
+---
+- launchApp:
+    stopApp: true
+- tapOn: Órdenes
+- tapOn: Reiniciar cuenta
+- tapOn: Reiniciar
+- tapOn: Portafolio
+- assertVisible: Efectivo
+- assertVisible:
+    text: ".*1.000.000.*"
+- takeScreenshot: portfolio-after-reset

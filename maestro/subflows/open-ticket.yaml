@@ -1,0 +1,30 @@
+appId: com.cocos.trading
+---
+# Shared: open DYCA ticket.
+# Do not use /Operar/ regex: it matches a large parent and Maestro taps the
+# chart (the cyan ring in recordings). LogBox, if present, is dismissed first.
+- tapOn: Mercados
+- scrollUntilVisible:
+    element: DYCA
+    direction: DOWN
+    timeout: 10000
+- tapOn: DYCA
+- runFlow:
+    when:
+      visible: ".*debugger.*"
+    commands:
+      - tapOn:
+          point: 93%, 92%
+      - waitForAnimationToEnd
+- tapOn: "Operar ahora"
+- waitForAnimationToEnd
+- runFlow:
+    when:
+      notVisible: "Cantidad por"
+    commands:
+      - tapOn:
+          point: 50%, 86%
+      - waitForAnimationToEnd
+- extendedWaitUntil:
+    visible: "Cantidad por"
+    timeout: 8000

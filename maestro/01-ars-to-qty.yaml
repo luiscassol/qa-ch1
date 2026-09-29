@@ -1,0 +1,16 @@
+appId: com.cocos.trading
+name: ARS amount converts to share quantity (client-side floor)
+---
+# The API never receives pesos. This is the client Math.floor(amount / last_price).
+# DYCA last_price 45.72 → floor(1000 / 45.72) = 21.
+- launchApp:
+    stopApp: true
+- runFlow: subflows/open-ticket.yaml
+- tapOn: Pesos
+- tapOn: Monto en pesos
+- eraseText
+- inputText: "1000"
+- hideKeyboard
+- assertVisible: Acciones a enviar
+- assertVisible: "21"
+- takeScreenshot: ars-to-qty
