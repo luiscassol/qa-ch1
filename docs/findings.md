@@ -9,7 +9,7 @@ Este archivo es el **reporte de defectos**. No se regenera al correr la suite: s
 
 **Severity** = impacto técnico o de negocio. **Priority** no la asignamos: la decide el equipo. Acá solo se justifica el impacto.
 
-**Nota de alcance de la matriz:** `npm test` hoy son **75** tests (API-01…75). Los conteos de `test-results.md` son de una corrida de **70** (histórica). Los IDs F-01…F-10 no cambian. **F-11…F-19** son de la **app**. **F-20** se vio en la app y es `API-75`.
+**Alcance:** `npm test` son **75** tests (API-01…75). Los conteos de [`test-results.md`](test-results.md) son de esa suite. Los IDs F-01…F-10 no cambian. **F-11…F-19** son de la **app**. **F-20** se vio en la app y es `API-75`.
 
 ---
 
@@ -217,7 +217,7 @@ Header: `X-Enable-Bugs: easy`.
 | **Esperado** | `201 Created` al crear la orden. |
 | **Actual** | `200 OK`. Body de orden válido. |
 
-En la matriz de 70 tests esto **cascadió**: varios P0 fallaban en el `expect(201)` y no evaluaban cash/holdings. La suite actual acepta `200|201` en assertions de negocio; el `201` estricto queda en `tests/p1/contract.spec.js`. La matriz de 75 en [`test-results.md`](test-results.md) solo marca esos dos contract en `medium`/`hard`.
+En una matriz anterior (70 tests) esto **cascadió**: varios P0 fallaban en el `expect(201)` y no evaluaban cash/holdings. La suite actual acepta `200|201` en assertions de negocio; el `201` estricto queda en `tests/p1/contract.spec.js`. La matriz de 75 en [`test-results.md`](test-results.md) solo marca esos dos contract en `medium`/`hard`.
 
 ### Tests
 
