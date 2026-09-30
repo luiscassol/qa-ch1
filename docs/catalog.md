@@ -7,7 +7,7 @@
 - **Hallazgo:** F-xx de [`findings.md`](findings.md) cuando el caso está pensado para ese defecto (vacío si no).
 - Los títulos de API están en inglés: son el `test()` de Playwright. **No se renombraron** los specs.
 
-Los IDs (`API-01`…75, `UI-M-01`…) son de este documento. **`npm test` corre 75 tests** (45 con título fijo + 30 de `tests/data/invalid-orders.json`). Si se agrega un test, se suma una fila; no se reescribe el historial de git de `tests/`.
+Los IDs (`API-01`…75, `UI-M-01`…) son de este documento. **`npm test` corre 75 tests** (45 con título fijo + 30 de `tests/data/invalid-orders.json`). Si se agrega un test, se suma una fila; no se reescribe el historial de git de `tests/`. El spec nuevo usa el mismo molde que el resto (fixture, factory, `attachResponse`, `businessRule` + `technique`, oracle). El `201` estricto solo en contract. Los defectos de baseline se dejan fallar (no `test.fail()`).
 
 ---
 

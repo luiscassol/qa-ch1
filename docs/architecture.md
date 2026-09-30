@@ -16,7 +16,3 @@ tests/  →  fixtures (clientes)  →  api/*  →  HTTP
 - **Aislamiento (esta dummy):** `workers: 1` + `POST /reset` en `beforeEach`. En CI, `CANDIDATE_ID=ci-<run_id>` (o el input del dispatch). `/reset` es parte del producto (el botón Reiniciar de la app lo llama); la suite lo usa y lo testea.
 - **Aislamiento si no existiera `/reset`:** cada test (o cada job) nace un `X-Candidate-Id` nuevo — cuenta virgen a 1.000.000 — y se aserta por **delta** (cash/holdings después vs antes), nunca contra el millón absoluto. El botón Reiniciar de la UI seguiría siendo el único reset, y se probaría aparte (Maestro / UI-M). Acá no reescribimos 75 tests a deltas: el endpoint existe y conviene ejercitarlo.
 - **UI:** YAML en `maestro/`. No entra a `npm test` ni al job de PR más que como repo.
-
-## Un spec nuevo
-
-Para no armar otra forma de testear: mismo fixture, factory, `attachResponse`, annotations `businessRule` + `technique`, oracle independiente, `201` estricto solo en contract. Los defectos de baseline se dejan fallar (no `test.fail()`): el rojo es el hallazgo.

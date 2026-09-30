@@ -20,7 +20,7 @@ Suite de entrega: **75** Playwright (`npm test` y GitHub Actions). UI: **3** smo
 
 ## Estrategia QA
 
-**Riesgo.** Si una MARKET liquida mal o una LIMIT reserva mal, el usuario pierde dinero (cash, holdings, resolución de órdenes). En la app también hay riesgo de cliente: cantidad mal armada desde pesos, ticket que no envía, pantallas que mienten. Search y catálogo importan menos que la plata, pero se cubren.
+**Riesgo.** Si una MARKET liquida mal o una LIMIT reserva mal, el usuario pierde dinero (cash, holdings, resolución de órdenes). En la app también hay riesgo de cliente: cantidad mal armada desde pesos, ticket que no envía, pantallas con errores. Search y catálogo importan menos que la plata, pero se cubren.
 
 **Estrategia.** API primero: Playwright es la suite de entrega (`npm test` y GitHub Actions). Ahí está la profundidad (settlement, suficiencia, reservas, portfolio, contrato) porque es barato de repetir y es donde vive la regla. No se duplica eso en el emulador.
 
