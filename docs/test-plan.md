@@ -6,7 +6,11 @@ Qué se cubrió, qué no, y por qué. El criterio está acá. Los casos ejecutab
 
 La app es un cliente de trading (Expo) contra una API dummy multi-tenant. El challenge pide evaluar calidad y automatizar: plan, suite, hallazgos, README. No pide features nuevas.
 
-**Decisión:** el dinero (cash, holdings, reservas, settlement) se prueba en la **API**. La UI se usa para lo que la API no ve (pantalla y ARS→acciones). No hay granja de devices.
+**Decisión.** El dinero (cash, holdings, reservas, settlement) se prueba en la **API**. La UI se usa para lo que la API no ve (pantalla y ARS→acciones). No hay granja de devices.
+
+Se priorizó profundidad en la capa API (75 tests) por sobre amplitud en UI: ahí está el riesgo de negocio (integridad de cash, holdings y resolución de órdenes). En este challenge, la exploración de la app mostró que las reglas de dinero las manda al API; en el cliente quedan sobre todo la conversión monto→cantidad y que el tap deje la orden en pantalla. Para eso Maestro (opt-in). No se montó infraestructura E2E pesada para revalidar en el emulador lo que ya cubre Playwright (BVA, oversell, oracle de LIMIT). El resto de pantallas se cubrió a mano. En un producto con regresión mobile grande, Appium sería la herramienta.
+
+El recorte de smokes, locators y exploración: [`ui-assessment.md`](ui-assessment.md). Cómo está armada la suite: [`architecture.md`](architecture.md).
 
 | | |
 |--|--|

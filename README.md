@@ -24,13 +24,13 @@ Suite de entrega: **75** Playwright (`npm test` y GitHub Actions). UI: **3** smo
 
 **Estrategia.** API primero: Playwright es la suite de entrega (`npm test` y GitHub Actions). Ahí está la profundidad (settlement, suficiencia, reservas, portfolio, contrato) porque es barato de repetir y es donde vive la regla. No se duplica eso en el emulador.
 
-Después, E2E (Maestro, opt-in): tres smokes por lo que la API no ve — conversión monto→cantidad y que el tap deje la orden en pantalla. No son una granja ni un segundo BVA.
+Después, E2E (Maestro, opt-in): smokes por lo que la API no ve — conversión monto→cantidad y que el tap deje la orden en pantalla. No son una granja ni un segundo BVA.
 
 También se exploró la app a mano (Android, `off`): search, mercados, ticket, reset, ARS, horizontal. Los 20 casos están en [`docs/manual-cases.md`](docs/manual-cases.md).
 
 `off` no significa “cero defectos”: si el camino base está mal, el test falla y el hallazgo se documenta.
 
-Detalle: [`docs/test-plan.md`](docs/test-plan.md). Decisión API vs UI: [`docs/ui-assessment.md`](docs/ui-assessment.md), [`docs/architecture.md`](docs/architecture.md). Trazabilidad: [`docs/traceability.md`](docs/traceability.md).
+Detalle: alcance y por qué API primero — [`docs/test-plan.md`](docs/test-plan.md). Recorte UI (Maestro, E2E, manual) — [`docs/ui-assessment.md`](docs/ui-assessment.md). Cómo está armada la suite — [`docs/architecture.md`](docs/architecture.md). Trazabilidad — [`docs/traceability.md`](docs/traceability.md).
 
 ## Cómo leer el entregable
 
