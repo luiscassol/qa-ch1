@@ -193,3 +193,5 @@ Restricciones que no se arreglan con más tests.
 Este archivo es el criterio (qué se cubre y por qué). El inventario caso por caso — ID, riesgo y prioridad — está en [`catalog.md`](catalog.md).
 
 Allure agrupa por la prioridad del spec (`@p0`…), que es como se corre la suite. Los IDs `API-01`…75 y `UI-M-01`…20 viven en ese markdown, no en el título del `test()`. No se renombraron los specs para no duplicar dos taxonomías (prioridad de ejecución vs índice de entrega).
+
+Siguiente: recorte de UI (Maestro, E2E, qué quedó a mano) — [`ui-assessment.md`](ui-assessment.md).

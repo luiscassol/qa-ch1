@@ -30,12 +30,17 @@ También se exploró la app a mano (Android, `off`): search, mercados, ticket, r
 
 `off` no significa “cero defectos”: si el camino base está mal, el test falla y el hallazgo se documenta.
 
-Detalle: alcance y por qué API primero — [`docs/test-plan.md`](docs/test-plan.md). Recorte UI (Maestro, E2E, manual) — [`docs/ui-assessment.md`](docs/ui-assessment.md). Cómo está armada la suite — [`docs/architecture.md`](docs/architecture.md). Trazabilidad — [`docs/traceability.md`](docs/traceability.md).
+Eso es el recorte. El argumento largo, por archivo:
+
+- Alcance, riesgo y por qué API primero: [`docs/test-plan.md`](docs/test-plan.md)
+- Recorte de UI (Maestro, qué es un E2E, qué quedó a mano): [`docs/ui-assessment.md`](docs/ui-assessment.md)
+- Cómo está armada la suite (capas, reset, workers): [`docs/architecture.md`](docs/architecture.md)
+- Qué spec cubre qué regla: [`docs/traceability.md`](docs/traceability.md)
 
 ## Cómo leer el entregable
 
 1. **Correr** — local: [Instalación](#instalación) y [Ejecución](#ejecución) (`npm run test:smoke`, después `npm test`). Sin instalar: [GitHub Actions](#github-actions) → *API tests* → *Run workflow*.
-2. **Resultado de esta corrida** — HTML: `npm run test:report`. Allure: `npm run test:allure` / `test:allure:open`. En Actions, el Summary del run tiene el link de Allure (GitHub Pages); el artifact `playwright-report` queda de backup.
+2. **Resultado de esta corrida** — HTML: `npm run test:report`. Allure: `npm run test:allure:serve`. En Actions, el Summary del run tiene el link de Allure (GitHub Pages); el artifact `playwright-report` queda de backup.
 3. **Resultado documentado** — matriz API por tier y UI Android/`off`: [`docs/test-results.md`](docs/test-results.md).
 4. **Plan** — Resumen, Riesgo y Escenarios: [`docs/test-plan.md`](docs/test-plan.md).
 5. **Casos** — índice [`docs/catalog.md`](docs/catalog.md). API = el `test()`. UI manual = [`docs/manual-cases.md`](docs/manual-cases.md) (no es el resultado).
@@ -92,10 +97,8 @@ npm run test:p0      # Reglas de negocio críticas
 # Ver reporte HTML (después de cualquier corrida)
 npm run test:report
 
-# Allure: generar HTML estático en allure-report/ (después de npm test)
-npm run test:allure
-npm run test:allure:open
-# o servir sin dejar la carpeta: npm run test:allure:serve
+# Allure (después de cualquier corrida): genera el HTML y lo abre
+npm run test:allure:serve
 
 # UI (opt-in: emulador Android + app Cocos + Maestro CLI)
 npm run test:ui

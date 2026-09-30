@@ -22,3 +22,5 @@ Otros mapas (no son trazabilidad de BRs):
 
 - Defecto ↔ test: [`docs/findings.md`](findings.md)
 - Qué pasó por tier: [`docs/test-results.md`](test-results.md)
+
+Siguiente: inventario caso por caso (ID, riesgo, prioridad) — [`catalog.md`](catalog.md).

@@ -66,3 +66,7 @@ npm run test:ui
 ```
 
 GitHub Actions corre solo la API. Maestro no entra al job.
+
+Los 20 scripts (precondición / pasos / esperado): [`manual-cases.md`](manual-cases.md).
+
+Siguiente: cómo está armada la suite (capas, reset, oracle) — [`architecture.md`](architecture.md).
