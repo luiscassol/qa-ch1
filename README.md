@@ -92,9 +92,11 @@ npm run test:report
 # Allure (después de cualquier corrida): genera el HTML y lo abre
 npm run test:allure:serve
 
-# UI (opt-in: emulador Android + app Cocos + Maestro CLI)
+# UI (opt-in). npm install no trae Maestro ni el emulador — requisitos: sección UI
 npm run test:ui
 ```
+
+Dependencias de Maestro y la app: [UI](#ui).
 
 ### GitHub Actions
 
@@ -152,15 +154,17 @@ Repro HTTP de findings de **API** (F-01…F-10, F-20). No reemplaza Playwright n
 
 ### UI
 
-**Maestro** (3 smokes, opt-in). `npm test` no abre el emulador.
+Smokes Maestro (opt-in). `npm test` no abre el emulador. Este repo **no** instala la app.
 
-1. App [cocoscap/app-qa](https://github.com/cocoscap/app-qa) corriendo en Android (`com.cocos.trading`).
-2. Instalar [Maestro](https://maestro.mobile.dev).
-3. `npm run test:ui`
+1. **App** — clone [cocoscap/app-qa](https://github.com/cocoscap/app-qa) y seguí **su** README (emulador Android, Metro, package `com.cocos.trading`). Acá no se duplican esos pasos.
+2. **Maestro CLI** — [maestro.mobile.dev](https://maestro.mobile.dev) (`curl -Ls "https://get.maestro.mobile.dev" | bash`). No viene con `npm install` de esta suite.
+3. **Correr** — app en primer plano: `npm run test:ui`
+
+Mismo `CANDIDATE_ID` que `EXPO_PUBLIC_CANDIDATE_ID` de la app. No en paralelo con Playwright sobre ese tenant.
 
 **Manual.** Scripts: [`docs/manual-cases.md`](docs/manual-cases.md). Resultado de esa corrida: [`docs/test-results.md`](docs/test-results.md#ui). Por qué no hay más E2E: [`docs/ui-assessment.md`](docs/ui-assessment.md).
 
-Detalle Maestro: [`maestro/README.md`](maestro/README.md).
+Flujos y locators: [`maestro/README.md`](maestro/README.md).
 
 ### Aislamiento
 
