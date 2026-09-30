@@ -1,11 +1,14 @@
 # Resultados de tests — matriz multi-tier
 
-**Suite:** matriz histórica de **70** tests · suite actual **75** (`npm test`) · 1 worker · API: `https://dummy-api-topaz.vercel.app`  
-**Candidate:** el `CANDIDATE_ID` de esa corrida (no reutilizar el tenant de Playwright y el emulador a la vez)  
-**Header:** `X-Enable-Bugs: <tier>` — controla el nivel de inyección de bugs  
-**Framework:** Playwright Test (CommonJS) + Allure reporter
+**Suite:** **75** tests (`npm test`) · 1 worker · API: `https://dummy-api-topaz.vercel.app`  
+**Candidate:** `ch1-matrix75-<tier>` (no reutilizar el tenant de Playwright y el emulador a la vez)  
+**Header:** `X-Enable-Bugs: <tier>`  
+**Framework:** Playwright Test (CommonJS) + Allure reporter  
+**Output crudo:** `docs/tier-results/results-{off,easy,medium,hard}.txt`
 
-Los **títulos de tests** se dejan en inglés: son el texto del reporter `list` de Playwright. Campos, status HTTP y comandos también quedan como en la API / la corrida.
+Los **títulos de tests** se dejan en inglés: son el texto del reporter `list` de Playwright.
+
+La matriz de las secciones 1–7 es **solo API**. El resultado de Maestro y de los 20 UI-M (Android, `off`) está en [§ UI](#ui). Scripts: [`manual-cases.md`](manual-cases.md).
 
 ---
 
@@ -13,15 +16,12 @@ Los **títulos de tests** se dejan en inglés: son el texto del reporter `list` 
 
 | Tier | X-Enable-Bugs | Passed | Failed | Fallos nuevos vs el tier anterior | Pass rate |
 |------|---------------|--------|--------|-----------------------------------|-----------|
-| off  | `off`         | 64     | 6      | — (baseline)                      | 91.4%     |
-| easy | `easy`        | 57     | 13     | +7                                | 81.4%     |
-| medium | `medium`    | 47     | 23     | +10                               | 67.1%     |
-| hard | `hard`        | 44     | 26     | +3                                | 62.9%     |
+| off  | `off`         | 69     | 6      | — (baseline)                      | 92.0%     |
+| easy | `easy`        | 61     | 14     | +8                                | 81.3%     |
+| medium | `medium`    | 58     | 17     | +3                                | 77.3%     |
+| hard | `hard`        | 52     | 23     | +6                                | 69.3%     |
 
-> **Nota:** la corrida `off` se capturó en una sesión anterior; no quedó el output crudo.
-> `easy`, `medium` y `hard` están en `docs/tier-results/`.
-
-Esta matriz es de una corrida de **70 tests**. Hoy `npm test` son **75** (incluye `API-75` / F-20). Los IDs F-01…F-10 no cambian.
+Una matriz anterior de **70** tests quedó reemplazada por esta corrida de 75. Las assertions de negocio aceptan `200|201`; el `201` estricto queda en contract, así que F-07 ya no cascada sobre P0.
 
 ---
 
@@ -32,16 +32,18 @@ Cada ID aparece primero en el tier que lo expone.
 
 | Bug ID | Descripción | off | easy | medium | hard | Severity |
 |--------|-------------|-----|------|--------|------|----------|
-| F-01 | Orden LIMIT con `price ≤ 0` o `price = null` aceptada (BUY y SELL) | ✗ | ✗ | ✗ | ✗ | Critical |
-| F-02 | `side` en minúsculas (p. ej. `"buy"`) normalizado y aceptado | ✗ | ✗ | ✗ | ✗ | Critical |
-| F-03 | `type` en minúsculas (p. ej. `"market"`) normalizado y aceptado | ✗ | ✗ | ✗ | ✗ | Critical |
-| F-04 | SELL aceptado sin holdings (MARKET y LIMIT) | ✓ | ✗ | ✗ | ✗ | Critical |
-| F-05 | `MIRG` (id=5) tiene `last_price = 0` en el catálogo | ✓ | ✗ | ✗ | ✗ | Normal |
-| F-06 | `GET /search` pasa a ser case-sensitive — ticker en minúsculas → lista vacía | ✓ | ✗ | ✗ | ✗ | Normal |
-| F-07 | `POST /orders` devuelve HTTP 200 en lugar de 201 al crear la orden | ✓ | ✓ | ✗ | ✗ | Critical |
-| F-08 | `quantity` decimal (p. ej. `1.5`) aceptada — se trunca a `1` y queda FILLED | ✓ | ✓ | ✗ | ✗ | Normal |
-| F-09 | El holding no trae `avg_cost_price` — regresión de schema | ✓ | ✓ | ✓ | ✗ | Critical |
-| F-10 | MARKET se ejecuta a un precio ≠ `last_price` — el cash se debita a otro precio | ✓ | ✓ | ✓ | ✗ | Blocker |
+| [F-01](findings.md#f-01) | Orden LIMIT con `price ≤ 0` o `price = null` aceptada (BUY y SELL) | ✗ | ✗ | ✗ | ✗ | Critical |
+| [F-02](findings.md#f-02) | `side` en minúsculas (p. ej. `"buy"`) normalizado y aceptado | ✗ | ✗ | ✗ | ✗ | Critical |
+| [F-03](findings.md#f-03) | `type` en minúsculas (p. ej. `"market"`) normalizado y aceptado | ✗ | ✗ | ✗ | ✗ | Critical |
+| [F-04](findings.md#f-04) | SELL aceptado sin holdings (MARKET y LIMIT) | ✓ | ✗ | ✗ | ✗ | Critical |
+| [F-05](findings.md#f-05) | `MIRG` (id=5) tiene `last_price = 0` en el catálogo | ✓ | ✗ | ✗ | ✗ | Normal |
+| [F-06](findings.md#f-06) | `GET /search` pasa a ser case-sensitive — ticker en minúsculas → lista vacía | ✓ | ✗ | ✗ | ✗ | Normal |
+| [F-07](findings.md#f-07) | `POST /orders` devuelve HTTP 200 en lugar de 201 al crear la orden | ✓ | ✓ | ✗ | ✗ | Critical |
+| [F-08](findings.md#f-08) | `quantity` decimal (p. ej. `1.5`) aceptada — se trunca a `1` y queda FILLED | ✓ | ✓ | ✗ | ✗ | Normal |
+| [F-09](findings.md#f-09) | El holding no trae `avg_cost_price` — regresión de schema | ✓ | ✓ | ✓ | ✗ | Critical |
+| [F-10](findings.md#f-10) | MARKET se ejecuta a un precio ≠ `last_price` — el cash se debita a otro precio | ✓ | ✓ | ✓ | ✗ | Blocker |
+
+F-11…F-20 son de **app / UI** (F-20 también tiene spec API). No entran en esta tabla de tiers de API; el veredicto UI-M está en [§ UI](#ui).
 
 ---
 
@@ -51,80 +53,78 @@ Títulos = nombre del test en Playwright.
 
 ### 3.1 Tier: off (baseline, `X-Enable-Bugs: off`)
 
-**Resultado: 64 passed / 6 failed**
+**Resultado: 69 passed / 6 failed**
 
 | # | Test | File | Bug |
 |---|------|------|-----|
-| 1 | F-01: LIMIT BUY with price=0 should be rejected but is accepted | p0/portfolio-consistency | F-01 |
-| 2 | rejects order: LIMIT BUY with price = 0 | p1/order-validation | F-01 |
-| 3 | rejects order: LIMIT BUY with price = -1 | p1/order-validation | F-01 |
-| 4 | rejects order: LIMIT BUY with price = null | p1/order-validation | F-01 |
-| 5 | rejects order: side is lowercase (case-sensitive check) | p1/order-validation | F-02 |
-| 6 | rejects order: type is lowercase (case-sensitive check) | p1/order-validation | F-03 |
+| 1 | F-01: LIMIT BUY with price<=0 should be rejected and must not inflate cash | p0/portfolio-consistency | [F-01](findings.md#f-01) |
+| 2 | rejects order: side is lowercase (case-sensitive check) | p1/order-validation | [F-02](findings.md#f-02) |
+| 3 | rejects order: type is lowercase (case-sensitive check) | p1/order-validation | [F-03](findings.md#f-03) |
+| 4 | rejects order: LIMIT BUY with price = 0 | p1/order-validation | [F-01](findings.md#f-01) |
+| 5 | rejects order: LIMIT BUY with price = -1 | p1/order-validation | [F-01](findings.md#f-01) |
+| 6 | rejects order: LIMIT BUY with price = null | p1/order-validation | [F-01](findings.md#f-01) |
 
 ### 3.2 Tier: easy (`X-Enable-Bugs: easy`)
 
-**Resultado: 57 passed / 13 failed** (+7 vs off)
+**Resultado: 61 passed / 14 failed** (+8 vs off)
 
 | # | Test | File | Bug |
 |---|------|------|-----|
-| 1–6 | (los 6 de off) | — | F-01, F-02, F-03 |
-| 7 | LIMIT SELL is rejected with no holdings | p0/limit-orders | F-04 |
-| 8 | MARKET SELL with no holdings is rejected | p0/market-orders | F-04 |
-| 9 | MARKET SELL more shares than owned is rejected (BVA: oversell) | p0/market-orders | F-04 |
-| 10 | rejects order: LIMIT SELL with price = 0 | p1/order-validation | F-01 |
-| 11 | rejects order: LIMIT SELL with price = -1 | p1/order-validation | F-01 |
-| 12 | All instruments have a positive last_price | p2/catalog | F-05 |
-| 13 | Search is case-insensitive — lowercase ticker returns same result | p3/search | F-06 |
+| 1–6 | (los 6 de off) | — | [F-01](findings.md#f-01), [F-02](findings.md#f-02), [F-03](findings.md#f-03) |
+| 7 | LIMIT SELL is rejected with no holdings | p0/limit-orders | [F-04](findings.md#f-04) |
+| 8 | PENDING LIMIT SELL reservation blocks a subsequent MARKET SELL of the same shares | p0/limit-orders | [F-04](findings.md#f-04) |
+| 9 | MARKET SELL with no holdings is rejected | p0/market-orders | [F-04](findings.md#f-04) |
+| 10 | MARKET SELL more shares than owned is rejected (BVA: oversell) | p0/market-orders | [F-04](findings.md#f-04) |
+| 11 | rejects order: LIMIT SELL with price = 0 | p1/order-validation | [F-01](findings.md#f-01) |
+| 12 | rejects order: LIMIT SELL with price = -1 | p1/order-validation | [F-01](findings.md#f-01) |
+| 13 | All instruments have a positive last_price | p2/catalog | [F-05](findings.md#f-05) |
+| 14 | Search is case-insensitive — lowercase ticker returns same result | p3/search | [F-06](findings.md#f-06) |
 
 ### 3.3 Tier: medium (`X-Enable-Bugs: medium`)
 
-**Resultado: 47 passed / 23 failed** (+10 vs easy)
+**Resultado: 58 passed / 17 failed** (+3 vs easy)
 
-Los 13 de easy, más:
+Los 14 de easy, más:
 
 | # | Test | File | Bug / causa |
 |---|------|------|-------------|
-| 14 | LIMIT BUY immediate response is PENDING (BR-ORD-006) | p0/limit-orders | F-07 |
-| 15 | LIMIT SELL creates PENDING order and satisfies its invariant | p0/limit-orders | F-07 |
-| 16 | LIMIT BUY reaches a consistent state and satisfies its invariant | p0/limit-orders | F-07 |
-| 17 | MARKET BUY fills at last_price and debits cash | p0/market-orders | F-07 |
-| 18 | MARKET SELL fills at last_price and credits cash | p0/market-orders | F-07 |
-| 19 | MARKET BUY at maximum affordable quantity (BVA: upper boundary) | p0/market-orders | F-07 |
-| 20 | POST /orders (MARKET BUY) returns 201 and matches order schema | p1/contract | F-07 |
-| 21 | POST /orders (LIMIT BUY) returns 201 and matches order schema | p1/contract | F-07 |
-| 22 | POST /reset after trades restores portfolio to initial state | p1/isolation | F-07 (cascada) |
-| 23 | rejects order: quantity is a float | p1/order-validation | F-08 |
+| 15 | POST /orders (MARKET BUY) returns 201 and matches order schema | p1/contract | [F-07](findings.md#f-07) |
+| 16 | POST /orders (LIMIT BUY) returns 201 and matches order schema | p1/contract | [F-07](findings.md#f-07) |
+| 17 | rejects order: quantity is a float | p1/order-validation | [F-08](findings.md#f-08) |
 
 ### 3.4 Tier: hard (`X-Enable-Bugs: hard`)
 
-**Resultado: 44 passed / 26 failed** (+3 vs medium)
+**Resultado: 52 passed / 23 failed** (+6 vs medium)
 
-Los 23 de medium, más:
+Los 17 de medium, más:
 
 | # | Test | File | Bug / causa |
 |---|------|------|-------------|
-| 24 | Reset restores initial state after trades | p0/portfolio-consistency | F-10 (BUY rechazado en silencio, cash = 1M) |
-| 25 | Portfolio holding contains correct inputs for client-side metric calculation | p0/portfolio-consistency | F-09 (`avg_cost_price` undefined) |
-| 26 | Portfolio cash decreases correctly after multiple sequential BUY orders | p0/portfolio-consistency | F-10 (ejecutado a precio ≠ `last_price`) |
+| 18 | F-20: REJECTED LIMIT SELL must not reduce holdings | p0/limit-orders | [F-20](findings.md#f-20) / [F-10](findings.md#f-10) |
+| 19 | MARKET BUY fills at last_price and debits cash | p0/market-orders | [F-10](findings.md#f-10) |
+| 20 | MARKET SELL fills at last_price and credits cash | p0/market-orders | [F-10](findings.md#f-10) |
+| 21 | MARKET BUY at maximum affordable quantity succeeds (BVA: upper boundary) | p0/market-orders | [F-10](findings.md#f-10) |
+| 22 | Portfolio holding contains correct inputs for client-side metric calculation | p0/portfolio-consistency | [F-09](findings.md#f-09) |
+| 23 | Portfolio cash decreases correctly after multiple sequential BUY orders | p0/portfolio-consistency | [F-10](findings.md#f-10) |
 
 ---
 
 ## 4. Distribución de fallos por área de riesgo
 
-Este eje es **P0/P1/…** (prioridad del test). Las columnas son el **tier** (inyección). No son lo mismo: un P0 puede estar verde en `off` y rojo en `easy`.
+Este eje es **P0/P1/…** (prioridad del test). Las columnas **off…hard** son **cuántos tests fallaron** en esa área, no cuántos F-xx hay.  
+**Hallazgos** es el defecto (o los defectos) que explican esos rojos. Un F-xx puede tumbar varios tests: p. ej. contract = [F-07](findings.md#f-07) y **2** failed porque hay dos specs que exigen `201`.
 
-| Área de riesgo | off | easy | medium | hard |
-|----------------|-----|------|--------|------|
-| P0 — LIMIT lifecycle | 0 | 1 | 4 | 4 |
-| P0 — MARKET settlement | 0 | 2 | 3 | 3 |
-| P0 — Portfolio consistency | 1 | 1 | 1 | 4 |
-| P1 — Input validation | 5 | 7 | 8 | 8 |
-| P1 — API contract | 0 | 0 | 2 | 2 |
-| P1 — State isolation | 0 | 0 | 1 | 1 |
-| P2 — Catalog | 0 | 1 | 1 | 1 |
-| P3 — Search | 0 | 1 | 1 | 1 |
-| Smoke | 0 | 0 | 0 | 0 |
+| Área de riesgo | Hallazgos | off | easy | medium | hard |
+|----------------|-----------|-----|------|--------|------|
+| P0 — LIMIT lifecycle | [F-04](findings.md#f-04), [F-20](findings.md#f-20) | 0 | 2 | 2 | 3 |
+| P0 — MARKET settlement | [F-04](findings.md#f-04), [F-10](findings.md#f-10) | 0 | 2 | 2 | 5 |
+| P0 — Portfolio consistency | [F-01](findings.md#f-01), [F-09](findings.md#f-09), [F-10](findings.md#f-10) | 1 | 1 | 1 | 3 |
+| P1 — Input validation | [F-01](findings.md#f-01), [F-02](findings.md#f-02), [F-03](findings.md#f-03), [F-08](findings.md#f-08) | 5 | 7 | 8 | 8 |
+| P1 — API contract | [F-07](findings.md#f-07) | 0 | 0 | 2 | 2 |
+| P1 — State isolation | — | 0 | 0 | 0 | 0 |
+| P2 — Catalog | [F-05](findings.md#f-05) | 0 | 1 | 1 | 1 |
+| P3 — Search | [F-06](findings.md#f-06) | 0 | 1 | 1 | 1 |
+| Smoke | — | 0 | 0 | 0 | 0 |
 
 Los **smoke tests** pasan en todos los tiers — el criterio de entrada se cumple.
 
@@ -136,7 +136,7 @@ Los **smoke tests** pasan en todos los tiers — el criterio de entrada se cumpl
 - **Esperado:** `400 Bad Request` si `price = 0`, `price < 0` o `price = null`
 - **Actual:** `200`/`201`, orden creada con `status: PENDING`
 - En easy+: también afecta SELL (no solo BUY)
-- **Tests afectados:** 6 (5 de validación + 1 sentinel P0)
+- **Tests afectados en off:** 4 (3 de validación BUY + 1 sentinel P0). En easy+: +2 SELL `price` inválido
 
 ### F-02 — `side` en minúsculas normalizado (todos los tiers)
 - **Esperado:** `400 Bad Request` para `"buy"` o `"sell"`
@@ -149,6 +149,7 @@ Los **smoke tests** pasan en todos los tiers — el criterio de entrada se cumpl
 ### F-04 — SELL sin holdings aceptado (easy+)
 - **Esperado:** `400 Bad Request`
 - **Actual:** orden creada / FILLED sin tenencia
+- También tumba la reserva LIMIT SELL → MARKET SELL (API-16): el segundo SELL entra
 
 ### F-05 — MIRG con `last_price = 0` (easy+)
 - **Esperado:** todos los instrumentos con `last_price > 0`
@@ -161,32 +162,28 @@ Los **smoke tests** pasan en todos los tiers — el criterio de entrada se cumpl
 ### F-07 — `POST /orders` devuelve 200 en lugar de 201 (medium+)
 - **Esperado:** HTTP `201 Created` al crear la orden
 - **Actual:** HTTP `200 OK`
-- **Cascada (en esta corrida de 70 tests):** 9 tests fallaron porque el setup exigía `201`
+- **Esta corrida:** solo fallan los dos contract que exigen `201`
 
 ### F-08 — `quantity` decimal truncada en silencio (medium+)
 - **Esperado:** `400 Bad Request` para `quantity: 1.5`
 - **Actual:** aceptada, `quantity` queda en `1`, orden FILLED
-- **Riesgo:** el cliente pide 1.5 y se confirma 1
 
 ### F-09 — falta `avg_cost_price` en el holding (hard+)
 - **Esperado:** `holding.avg_cost_price` es un number positivo
 - **Actual:** `undefined`
-- **Riesgo:** el cliente que calcula market value / gain con ese campo falla
+- En esta corrida falló el P0 de holding; el contract de holdings con posición no está en la lista de failed
 
 ### F-10 — MARKET a un precio ≠ `last_price` (hard+)
 - **Esperado:** MARKET ejecuta a `last_price`
 - **Actual:** ejecución a un precio mayor (en la práctica, `close_price`)
-- **Síntomas:**
-  - BVA upper-boundary BUY rechazado con `{"error":"Insufficient cash"}` aunque `floor(cash / last_price)` debería entrar
-  - Multi-BUY: esperado `999862.84`, recibido `999849.79` (debitó de más)
-  - BUY qty=5 rechazado en silencio → cash sigue en 1.000.000
+- MARKET BUY/SELL, BVA de cash máximo y multi-BUY no cierran el oracle. F-20 puede fallar en `hard` si el setup MARKET ya liquidó mal
 
 ---
 
 ## 6. Cómo reproducir
 
 ```bash
-# Baseline (sin inyección)
+# Un tier (el del challenge: tu CANDIDATE_ID en .env)
 BUGS_TIER=off npx playwright test --reporter=list
 
 BUGS_TIER=easy   npx playwright test --reporter=list
@@ -195,7 +192,7 @@ BUGS_TIER=hard   npx playwright test --reporter=list
 ```
 
 `BUGS_TIER` pisa el valor del `.env` en esa corrida.  
-Dentro del mismo tier el resultado es determinístico (`workers=1`, sequential).
+`workers=1`, sequential. Esta matriz usó tenants `ch1-matrix75-<tier>` para no pisar el `.env` ni el emulador.
 
 ---
 
@@ -214,3 +211,52 @@ Dentro del mismo tier el resultado es determinístico (`workers=1`, sequential).
 | p1/order-validation.spec.js | P1 | EP + BVA | critical |
 | p2/catalog.spec.js | P2 | EP | normal |
 | p3/search.spec.js | P3 | EP | minor |
+
+---
+
+<a id="ui"></a>
+
+## 8. UI — Android, `BUGS_TIER=off`
+
+No es la matriz de tiers de API. Una corrida en emulador; no entra a GitHub Actions.
+
+**Scripts:** [`manual-cases.md`](manual-cases.md). **Decisión / notas:** [`ui-assessment.md`](ui-assessment.md). Capturas: [`evidencia/`](evidencia/).
+
+### 8.1 Maestro (opt-in)
+
+`npm run test:ui`. Los tres smokes en verde en esa corrida local.
+
+| ID | Qué | Resultado |
+|----|-----|-----------|
+| UI-01 | ARS → qty (21 acciones con $1000 DYCA) | pasó |
+| UI-02 | MARKET visible en Portafolio y Órdenes | pasó |
+| UI-03 | Reiniciar restaura cash | pasó |
+
+### 8.2 Manuales UI-M-01…20
+
+**10 passed / 10 failed.** El falló cuenta el criterio del caso, no “se pudo operar”. UI-M-03: el dashboard cierra; el modal *Posición no encontrada* se cuenta en UI-M-17 ([F-18](findings.md#f-18)).
+
+| ID | Resultado | Hallazgo | Nota |
+|----|-----------|----------|------|
+| [UI-M-01](manual-cases.md#ui-m-01) | pasó |  | 21 acciones; estimado coherente |
+| [UI-M-02](manual-cases.md#ui-m-02) | pasó |  | orden en Órdenes; gain 0 en `off` |
+| [UI-M-03](manual-cases.md#ui-m-03) | pasó |  | $1.000.000, 0 posiciones, valor $0. Puede aparecer F-18 antes |
+| [UI-M-04](manual-cases.md#ui-m-04) | pasó |  | aviso; no hay orden nueva |
+| [UI-M-05](manual-cases.md#ui-m-05) | pasó |  | el form no envía |
+| [UI-M-06](manual-cases.md#ui-m-06) | pasó |  | *Rechazada* (no PENDING) |
+| [UI-M-07](manual-cases.md#ui-m-07) | pasó |  | una sola orden |
+| [UI-M-08](manual-cases.md#ui-m-08) | pasó |  | no mezcla el número |
+| [UI-M-09](manual-cases.md#ui-m-09) | pasó |  | no deja enviar |
+| [UI-M-10](manual-cases.md#ui-m-10) | falló | [F-14](findings.md#f-14) | qty/pesos persisten al cambiar lado |
+| [UI-M-11](manual-cases.md#ui-m-11) | falló | [F-15](findings.md#f-15) | ARS se compra; venta desde Buscar |
+| [UI-M-12](manual-cases.md#ui-m-12) | falló | [F-16](findings.md#f-16) | el ticket de venta no muestra tenencia |
+| [UI-M-13](manual-cases.md#ui-m-13) | falló | [F-12](findings.md#f-12) | empresa no matchea |
+| [UI-M-14](manual-cases.md#ui-m-14) | falló | [F-11](findings.md#f-11) | 24+1 ≠ 26 |
+| [UI-M-15](manual-cases.md#ui-m-15) | falló | [F-13](findings.md#f-13) | tabs tapan el último / search horizontal |
+| [UI-M-16](manual-cases.md#ui-m-16) | falló | [F-17](findings.md#f-17) | en horizontal no se carga qty |
+| [UI-M-17](manual-cases.md#ui-m-17) | falló | [F-18](findings.md#f-18) | modal *Posición no encontrada* |
+| [UI-M-18](manual-cases.md#ui-m-18) | falló | [F-19](findings.md#f-19) | *Rechazada* sin motivo ni ficha |
+| [UI-M-19](manual-cases.md#ui-m-19) | falló | [F-20](findings.md#f-20) | 9 acciones / 411,48; cash sin acreditar. API-75 |
+| [UI-M-20](manual-cases.md#ui-m-20) | pasó |  | Cancelar no resetea |
+
+Observaciones que no son UI-M (red no ejercitable, *Enviar otra orden*, filtros): [`ui-assessment.md`](ui-assessment.md).

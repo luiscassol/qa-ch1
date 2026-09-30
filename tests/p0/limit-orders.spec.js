@@ -226,8 +226,10 @@ test.describe('P0 - LIMIT order lifecycle @p0', () => {
       { type: 'technique', description: 'State transition: LIMIT PENDING reservation → MARKET BUY must see reduced available cash' },
     );
 
-    // Reserve almost all cash. Do not GET /orders in between — a read can resolve the LIMIT.
-    const reservationPrice = 999_000;
+    // Reserve enough that remaining cash < last_price (one MARKET share cannot settle).
+    // 999_000 left 1_000 ARS — still enough for one DYCA (~45.72), so the MARKET was accepted.
+    // Do not GET /orders in between — a read can resolve the LIMIT.
+    const reservationPrice = Number((1_000_000 - lastPrice + 0.01).toFixed(2));
     const limitOrder = await ordersApi.create(buildLimitBuyOrder({ quantity: 1, price: reservationPrice }));
     await attachResponse('limit-reservation', limitOrder.body);
     assertLimitOrderPending(limitOrder, { side: 'BUY', quantity: 1 });

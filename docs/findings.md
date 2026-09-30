@@ -41,6 +41,8 @@ Este archivo es el **reporte de defectos**. No se regenera al correr la suite: s
 
 ---
 
+<a id="f-01"></a>
+
 ## F-01 — LIMIT acepta `price ≤ 0` o `null`
 
 **Tiers:** off, easy, medium, hard (baseline; el equipo confirmó que `off` puede tener bugs).  
@@ -78,6 +80,8 @@ No se usa `test.fail()`: el fallo es el defecto.
 
 ---
 
+<a id="f-02"></a>
+
 ## F-02 — `side` en minúsculas aceptado
 
 **Tiers:** todos.  
@@ -103,6 +107,8 @@ No se usa `test.fail()`: el fallo es el defecto.
 
 ---
 
+<a id="f-03"></a>
+
 ## F-03 — `type` en minúsculas aceptado
 
 **Tiers:** todos.  
@@ -121,6 +127,8 @@ No se usa `test.fail()`: el fallo es el defecto.
 - [`API-48`](catalog.md) — *type is lowercase*
 
 ---
+
+<a id="f-04"></a>
 
 ## F-04 — SELL sin tenencia aceptado
 
@@ -152,6 +160,8 @@ Header: `X-Enable-Bugs: easy`.
 
 ---
 
+<a id="f-05"></a>
+
 ## F-05 — MIRG con `last_price = 0`
 
 **Tiers:** easy, medium, hard.  
@@ -170,6 +180,8 @@ Header: `X-Enable-Bugs: easy`.
 - [`API-66`](catalog.md) — *All instruments have a positive last_price*
 
 ---
+
+<a id="f-06"></a>
 
 ## F-06 — Search case-sensitive
 
@@ -190,6 +202,8 @@ Header: `X-Enable-Bugs: easy`.
 
 ---
 
+<a id="f-07"></a>
+
 ## F-07 — `POST /orders` devuelve 200 en lugar de 201
 
 **Tiers:** medium, hard.  
@@ -203,13 +217,15 @@ Header: `X-Enable-Bugs: easy`.
 | **Esperado** | `201 Created` al crear la orden. |
 | **Actual** | `200 OK`. Body de orden válido. |
 
-En la matriz de 70 tests esto **cascadió**: varios P0 fallaban en el `expect(201)` y no evaluaban cash/holdings. La suite actual acepta `200|201` en assertions de negocio; el `201` estricto queda en `tests/p1/contract.spec.js`.
+En la matriz de 70 tests esto **cascadió**: varios P0 fallaban en el `expect(201)` y no evaluaban cash/holdings. La suite actual acepta `200|201` en assertions de negocio; el `201` estricto queda en `tests/p1/contract.spec.js`. La matriz de 75 en [`test-results.md`](test-results.md) solo marca esos dos contract en `medium`/`hard`.
 
 ### Tests
 
 - [`API-26`](catalog.md), [`API-27`](catalog.md) — POST MARKET y POST LIMIT deben ser `201`
 
 ---
+
+<a id="f-08"></a>
 
 ## F-08 — `quantity` decimal aceptada y truncada
 
@@ -238,6 +254,8 @@ En la matriz de 70 tests esto **cascadió**: varios P0 fallaban en el `expect(20
 
 ---
 
+<a id="f-09"></a>
+
 ## F-09 — `avg_cost_price` ausente en el holding
 
 **Tiers:** hard.  
@@ -259,6 +277,8 @@ Un contract sobre `holdings: []` **no detecta** esto (AJV no evalúa `items.requ
 - [`API-30`](catalog.md) — `GET /portfolio` con holdings
 
 ---
+
+<a id="f-10"></a>
 
 ## F-10 — MARKET se ejecuta a un precio ≠ `last_price`
 
@@ -289,6 +309,8 @@ Comparar `order.price` con `GET /instruments` → `last_price` y `close_price`.
 
 ---
 
+<a id="f-11"></a>
+
 ## F-11 — Strip de Mercados: 24+1 ≠ 26
 
 **Tiers:** app, `off` (no es inyección de API).  
@@ -312,6 +334,8 @@ Mercados (tab). Leer el strip: Total / suben / bajan.
 - [`UI-M-14`](catalog.md)
 
 ---
+
+<a id="f-12"></a>
 
 ## F-12 — Search no encuentra por nombre de empresa
 
@@ -337,6 +361,8 @@ Buscar → query = nombre de empresa (no ticker). Contrastar con el ticker del m
 
 ---
 
+<a id="f-13"></a>
+
 ## F-13 — La barra de tabs tapa contenido
 
 **Tiers:** app, `off`.  
@@ -361,6 +387,8 @@ Portafolio u Órdenes con varias filas → scroll al final. Rotar a horizontal �
 
 ---
 
+<a id="f-14"></a>
+
 ## F-14 — Comprar ↔ Vender persiste cantidad y pesos
 
 **Tiers:** app, `off`.  
@@ -384,6 +412,8 @@ Mercados → instrumento → Operar → Comprar, cargar qty o pesos → tocar Ve
 - [`UI-M-10`](catalog.md)
 
 ---
+
+<a id="f-15"></a>
 
 ## F-15 — Se puede operar ARS como acción
 
@@ -411,6 +441,8 @@ Evidencia: [`evidencia/f-15-compra-ars-market.png`](evidencia/f-15-compra-ars-ma
 
 ---
 
+<a id="f-16"></a>
+
 ## F-16 — El ticket de venta no muestra la tenencia
 
 **Tiers:** app, `off`.  
@@ -435,6 +467,8 @@ Tener DYCA en cartera. Mercados → DYCA → Operar → Vender. El ticket no mue
 
 ---
 
+<a id="f-17"></a>
+
 ## F-17 — En horizontal no se puede cargar la cantidad
 
 **Tiers:** app, `off`.  
@@ -458,6 +492,8 @@ Rotar a horizontal → Mercados → instrumento → Operar ahora → intentar ca
 - [`UI-M-16`](catalog.md)
 
 ---
+
+<a id="f-18"></a>
 
 ## F-18 — “Posición no encontrada” tras vender o reiniciar
 
@@ -485,6 +521,8 @@ Vender toda una posición (p. ej. DYCA) → ir a Órdenes (la orden está) → P
 
 ---
 
+<a id="f-19"></a>
+
 ## F-19 — Orden límite rechazada sin motivo ni detalle
 
 **Tiers:** app, `off`.  
@@ -510,6 +548,8 @@ LIMIT BUY lejos del mercado → Órdenes → fila *Rechazada* → tap.
 - [`UI-M-18`](catalog.md)
 
 ---
+
+<a id="f-20"></a>
 
 ## F-20 — LIMIT SELL rechazada descuenta acciones sin acreditar cash
 
@@ -622,4 +662,5 @@ Repro HTTP: JSON del finding, `curl`, o la carpeta **Findings** de [`postman/coc
 | ¿Cuál es el contrato (conocido vs inferido)? | `docs/api-contract.md` |
 | ¿Plan / arquitectura / trazabilidad / catálogo? | `docs/test-plan.md`, `docs/architecture.md`, `docs/traceability.md`, `docs/catalog.md` |
 | ¿Qué se automatiza en la UI y qué no? | `docs/ui-assessment.md` + `maestro/` |
+| ¿Cuáles son los TCs manuales de UI? | `docs/manual-cases.md` (script). Resultado: `docs/test-results.md` § UI |
 | ¿Pasó esta corrida? | Allure (`npx allure serve allure-results`) o `npm run test:report` — locales, no commiteados |
