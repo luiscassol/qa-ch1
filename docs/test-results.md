@@ -8,6 +8,8 @@
 
 Los **títulos de tests** se dejan en inglés: son el texto del reporter `list` de Playwright.
 
+La matriz de las secciones 1–7 es **solo API**. El resultado de Maestro y de los 20 UI-M (Android, `off`) está en [§ UI](#ui). Scripts: [`manual-cases.md`](manual-cases.md).
+
 ---
 
 ## 1. Resumen ejecutivo
@@ -41,7 +43,7 @@ Cada ID aparece primero en el tier que lo expone.
 | [F-09](findings.md#f-09) | El holding no trae `avg_cost_price` — regresión de schema | ✓ | ✓ | ✓ | ✗ | Critical |
 | [F-10](findings.md#f-10) | MARKET se ejecuta a un precio ≠ `last_price` — el cash se debita a otro precio | ✓ | ✓ | ✓ | ✗ | Blocker |
 
-F-11…F-20 son de **app / UI** (F-20 también tiene spec API). No entran en esta tabla de tiers de API.
+F-11…F-20 son de **app / UI** (F-20 también tiene spec API). No entran en esta tabla de tiers de API; el veredicto UI-M está en [§ UI](#ui).
 
 ---
 
@@ -209,3 +211,52 @@ BUGS_TIER=hard   npx playwright test --reporter=list
 | p1/order-validation.spec.js | P1 | EP + BVA | critical |
 | p2/catalog.spec.js | P2 | EP | normal |
 | p3/search.spec.js | P3 | EP | minor |
+
+---
+
+<a id="ui"></a>
+
+## 8. UI — Android, `BUGS_TIER=off`
+
+No es la matriz de tiers de API. Una corrida en emulador; no entra a GitHub Actions.
+
+**Scripts:** [`manual-cases.md`](manual-cases.md). **Decisión / notas:** [`ui-assessment.md`](ui-assessment.md). Capturas: [`evidencia/`](evidencia/).
+
+### 8.1 Maestro (opt-in)
+
+`npm run test:ui`. Los tres smokes en verde en esa corrida local.
+
+| ID | Qué | Resultado |
+|----|-----|-----------|
+| UI-01 | ARS → qty (21 acciones con $1000 DYCA) | pasó |
+| UI-02 | MARKET visible en Portafolio y Órdenes | pasó |
+| UI-03 | Reiniciar restaura cash | pasó |
+
+### 8.2 Manuales UI-M-01…20
+
+**10 passed / 10 failed.** El falló cuenta el criterio del caso, no “se pudo operar”. UI-M-03: el dashboard cierra; el modal *Posición no encontrada* se cuenta en UI-M-17 ([F-18](findings.md#f-18)).
+
+| ID | Resultado | Hallazgo | Nota |
+|----|-----------|----------|------|
+| [UI-M-01](manual-cases.md#ui-m-01) | pasó |  | 21 acciones; estimado coherente |
+| [UI-M-02](manual-cases.md#ui-m-02) | pasó |  | orden en Órdenes; gain 0 en `off` |
+| [UI-M-03](manual-cases.md#ui-m-03) | pasó |  | $1.000.000, 0 posiciones, valor $0. Puede aparecer F-18 antes |
+| [UI-M-04](manual-cases.md#ui-m-04) | pasó |  | aviso; no hay orden nueva |
+| [UI-M-05](manual-cases.md#ui-m-05) | pasó |  | el form no envía |
+| [UI-M-06](manual-cases.md#ui-m-06) | pasó |  | *Rechazada* (no PENDING) |
+| [UI-M-07](manual-cases.md#ui-m-07) | pasó |  | una sola orden |
+| [UI-M-08](manual-cases.md#ui-m-08) | pasó |  | no mezcla el número |
+| [UI-M-09](manual-cases.md#ui-m-09) | pasó |  | no deja enviar |
+| [UI-M-10](manual-cases.md#ui-m-10) | falló | [F-14](findings.md#f-14) | qty/pesos persisten al cambiar lado |
+| [UI-M-11](manual-cases.md#ui-m-11) | falló | [F-15](findings.md#f-15) | ARS se compra; venta desde Buscar |
+| [UI-M-12](manual-cases.md#ui-m-12) | falló | [F-16](findings.md#f-16) | el ticket de venta no muestra tenencia |
+| [UI-M-13](manual-cases.md#ui-m-13) | falló | [F-12](findings.md#f-12) | empresa no matchea |
+| [UI-M-14](manual-cases.md#ui-m-14) | falló | [F-11](findings.md#f-11) | 24+1 ≠ 26 |
+| [UI-M-15](manual-cases.md#ui-m-15) | falló | [F-13](findings.md#f-13) | tabs tapan el último / search horizontal |
+| [UI-M-16](manual-cases.md#ui-m-16) | falló | [F-17](findings.md#f-17) | en horizontal no se carga qty |
+| [UI-M-17](manual-cases.md#ui-m-17) | falló | [F-18](findings.md#f-18) | modal *Posición no encontrada* |
+| [UI-M-18](manual-cases.md#ui-m-18) | falló | [F-19](findings.md#f-19) | *Rechazada* sin motivo ni ficha |
+| [UI-M-19](manual-cases.md#ui-m-19) | falló | [F-20](findings.md#f-20) | 9 acciones / 411,48; cash sin acreditar. API-75 |
+| [UI-M-20](manual-cases.md#ui-m-20) | pasó |  | Cancelar no resetea |
+
+Observaciones que no son UI-M (red no ejercitable, *Enviar otra orden*, filtros): [`ui-assessment.md`](ui-assessment.md).

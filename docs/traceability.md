@@ -16,7 +16,7 @@ Esta página es el índice por área: qué archivo abrir. La fila de Allure / el
 | Catálogo | `tests/p2/catalog.spec.js` | BR-CAT-001…004 |
 | Search | `tests/p3/search.spec.js` | búsqueda |
 | UI smoke | `maestro/*.yaml` | orden visible en Portafolio/Órdenes; ARS→qty. Sin BRs de API |
-| UI manual | [`ui-assessment.md`](ui-assessment.md) | UI-M-01…20; defectos F-11…F-20 |
+| UI manual | [`manual-cases.md`](manual-cases.md) | UI-M-01…20 (script). Resultado: [`test-results.md`](test-results.md#ui). Defectos F-11…F-20 |
 
 Otros mapas (no son trazabilidad de BRs):
 

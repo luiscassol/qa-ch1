@@ -151,29 +151,29 @@ No forman parte de `npm test` ni de GitHub Actions. Riesgo **R5**.
 
 ## UI manual (exploratorio)
 
-Pasos y resultado observado: [`ui-assessment.md`](ui-assessment.md). Android, `off`. **Hallazgo** solo si el caso está pensado para ese defecto.
+Scripts (precondición / pasos / esperado): [`manual-cases.md`](manual-cases.md). Resultado de la corrida: [`test-results.md`](test-results.md#ui). Android, `off`. **Hallazgo** solo si el caso está pensado para ese defecto.
 
-Los UI-M-04…09 **pasaron** (no son bugs). UI-M-01…03 siguen siendo smokes visuales; UI-M-03 puede mostrar antes el modal de [F-18](findings.md). API-75 es el mismo invariante que UI-M-19 en Playwright.
+UI-M-01…09 y UI-M-20 pasaron en esa corrida. UI-M-03 puede mostrar antes el modal de [F-18](findings.md) (contado en UI-M-17). API-75 es el mismo invariante que UI-M-19 en Playwright.
 
 | ID | Qué verifica | Riesgo | Prioridad | Hallazgo | Dónde |
 |----|----------------|--------|-----------|----------|--------|
-| UI-M-01 | Preview pesos → 21 acciones (DYCA $1000); estimado coherente | R5 | Manual |  | ui-assessment |
-| UI-M-02 | MARKET con saldo → orden en Órdenes; gain 0 en `off` | R5 | Manual |  | mismo |
-| UI-M-03 | Reiniciar → $1.000.000, 0 posiciones, valor total $0 (valor = tenencias) | R5, R6 | Manual |  | mismo |
-| UI-M-04 | MARKET sin saldo suficiente: aviso *No pudimos enviar la orden*; no hay orden nueva | R5 | Manual |  | mismo |
-| UI-M-05 | Cantidad no entera: el form no deja enviar (ni ≤0 ni coma en LIMIT precio) | R5 | Manual |  | mismo |
-| UI-M-06 | LIMIT BUY lejos del mercado: queda *Rechazada* en Órdenes (no PENDING) | R2, R5 | Manual |  | mismo |
-| UI-M-07 | Doble tap en *Enviar orden*: una sola orden | R5 | Manual |  | mismo |
-| UI-M-08 | Pesos ↔ Acciones a mitad de carga: no mezcla el número | R5 | Manual |  | mismo |
-| UI-M-09 | LIMIT sin precio / precio 0: no deja enviar | R5 | Manual |  | mismo |
-| UI-M-10 | Comprar ↔ Vender: persisten qty/pesos | R5 | Manual | [F-14](findings.md) | mismo |
-| UI-M-11 | Instrumento ARS/MONEDA: comprar (cash debitado) y vender desde Buscar | R1, R5 | Manual | [F-15](findings.md) | mismo |
-| UI-M-12 | Venta desde Mercados: el ticket no muestra tenencia | R5 | Manual | [F-16](findings.md) | mismo |
-| UI-M-13 | Search: ticker/parcial OK; nombre de empresa no (label *Ticker o empresa*) | R7 | Manual | [F-12](findings.md) | mismo |
-| UI-M-14 | Strip Mercados: 24 suben + 1 baja ≠ Total 26 | R7 | Manual | [F-11](findings.md) | mismo |
-| UI-M-15 | Última fila tapada por tabs (Portafolio y Órdenes); Buscar en horizontal | R5 | Manual | [F-13](findings.md) | mismo |
-| UI-M-16 | Horizontal: no se puede cargar cantidad en el ticket | R5 | Manual | [F-17](findings.md) | mismo |
-| UI-M-17 | Tras vender todo o Reiniciar: modal *Posición no encontrada* | R5 | Manual | [F-18](findings.md) | mismo |
-| UI-M-18 | LIMIT *Rechazada*: sin motivo; tap no abre ficha | R5 | Manual | [F-19](findings.md) | mismo |
-| UI-M-19 | LIMIT SELL *Rechazada*: qty/cash iguales que post-BUY | R2, R4 | Manual | [F-20](findings.md) | mismo |
-| UI-M-20 | Reiniciar → Cancelar: no resetea cash ni posiciones | R6 | Manual |  | mismo |
+| UI-M-01 | Preview pesos → 21 acciones (DYCA $1000); estimado coherente | R5 | Manual |  | [manual-cases](manual-cases.md#ui-m-01) |
+| UI-M-02 | MARKET con saldo → orden en Órdenes; gain 0 en `off` | R5 | Manual |  | [manual-cases](manual-cases.md#ui-m-02) |
+| UI-M-03 | Reiniciar → $1.000.000, 0 posiciones, valor total $0 (valor = tenencias) | R5, R6 | Manual |  | [manual-cases](manual-cases.md#ui-m-03) |
+| UI-M-04 | MARKET sin saldo suficiente: aviso *No pudimos enviar la orden*; no hay orden nueva | R5 | Manual |  | [manual-cases](manual-cases.md#ui-m-04) |
+| UI-M-05 | Cantidad no entera: el form no deja enviar (ni ≤0 ni coma en LIMIT precio) | R5 | Manual |  | [manual-cases](manual-cases.md#ui-m-05) |
+| UI-M-06 | LIMIT BUY lejos del mercado: queda *Rechazada* en Órdenes (no PENDING) | R2, R5 | Manual |  | [manual-cases](manual-cases.md#ui-m-06) |
+| UI-M-07 | Doble tap en *Enviar orden*: una sola orden | R5 | Manual |  | [manual-cases](manual-cases.md#ui-m-07) |
+| UI-M-08 | Pesos ↔ Acciones a mitad de carga: no mezcla el número | R5 | Manual |  | [manual-cases](manual-cases.md#ui-m-08) |
+| UI-M-09 | LIMIT sin precio / precio 0: no deja enviar | R5 | Manual |  | [manual-cases](manual-cases.md#ui-m-09) |
+| UI-M-10 | Comprar ↔ Vender: persisten qty/pesos | R5 | Manual | [F-14](findings.md) | [manual-cases](manual-cases.md#ui-m-10) |
+| UI-M-11 | Instrumento ARS/MONEDA: comprar (cash debitado) y vender desde Buscar | R1, R5 | Manual | [F-15](findings.md) | [manual-cases](manual-cases.md#ui-m-11) |
+| UI-M-12 | Venta desde Mercados: el ticket no muestra tenencia | R5 | Manual | [F-16](findings.md) | [manual-cases](manual-cases.md#ui-m-12) |
+| UI-M-13 | Search: ticker/parcial OK; nombre de empresa no (label *Ticker o empresa*) | R7 | Manual | [F-12](findings.md) | [manual-cases](manual-cases.md#ui-m-13) |
+| UI-M-14 | Strip Mercados: 24 suben + 1 baja ≠ Total 26 | R7 | Manual | [F-11](findings.md) | [manual-cases](manual-cases.md#ui-m-14) |
+| UI-M-15 | Última fila tapada por tabs (Portafolio y Órdenes); Buscar en horizontal | R5 | Manual | [F-13](findings.md) | [manual-cases](manual-cases.md#ui-m-15) |
+| UI-M-16 | Horizontal: no se puede cargar cantidad en el ticket | R5 | Manual | [F-17](findings.md) | [manual-cases](manual-cases.md#ui-m-16) |
+| UI-M-17 | Tras vender todo o Reiniciar: modal *Posición no encontrada* | R5 | Manual | [F-18](findings.md) | [manual-cases](manual-cases.md#ui-m-17) |
+| UI-M-18 | LIMIT *Rechazada*: sin motivo; tap no abre ficha | R5 | Manual | [F-19](findings.md) | [manual-cases](manual-cases.md#ui-m-18) |
+| UI-M-19 | LIMIT SELL *Rechazada*: qty/cash iguales que post-BUY | R2, R4 | Manual | [F-20](findings.md) | [manual-cases](manual-cases.md#ui-m-19) |
+| UI-M-20 | Reiniciar → Cancelar: no resetea cash ni posiciones | R6 | Manual |  | [manual-cases](manual-cases.md#ui-m-20) |

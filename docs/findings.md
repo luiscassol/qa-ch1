@@ -662,4 +662,5 @@ Repro HTTP: JSON del finding, `curl`, o la carpeta **Findings** de [`postman/coc
 | ¿Cuál es el contrato (conocido vs inferido)? | `docs/api-contract.md` |
 | ¿Plan / arquitectura / trazabilidad / catálogo? | `docs/test-plan.md`, `docs/architecture.md`, `docs/traceability.md`, `docs/catalog.md` |
 | ¿Qué se automatiza en la UI y qué no? | `docs/ui-assessment.md` + `maestro/` |
+| ¿Cuáles son los TCs manuales de UI? | `docs/manual-cases.md` (script). Resultado: `docs/test-results.md` § UI |
 | ¿Pasó esta corrida? | Allure (`npx allure serve allure-results`) o `npm run test:report` — locales, no commiteados |

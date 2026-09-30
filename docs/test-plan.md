@@ -1,6 +1,6 @@
 # Plan de pruebas
 
-Qué se cubrió, qué no, y por qué. El criterio está acá; los casos ejecutables son los `test()` y Allure. Los defectos están en [`findings.md`](findings.md).
+Qué se cubrió, qué no, y por qué. El criterio está acá. Los casos ejecutables de API son los `test()` (Allure). Los de UI manual: [`manual-cases.md`](manual-cases.md). El **resultado** de las corridas (API por tier y UI Android/`off`) está en [`test-results.md`](test-results.md). Los defectos: [`findings.md`](findings.md).
 
 ## Resumen
 
@@ -11,7 +11,7 @@ La app es un cliente de trading (Expo) contra una API dummy multi-tenant. El cha
 | | |
 |--|--|
 | Suite API | **75** tests Playwright (`npm test` y GitHub Actions; catálogo API-01…75) |
-| UI | 3 smokes Maestro + 20 manuales (UI-M) en [`catalog.md`](catalog.md) |
+| UI | 3 smokes Maestro + 20 manuales. Test cases: [`manual-cases.md`](manual-cases.md). Resultado: [`test-results.md`](test-results.md#ui) |
 | Defectos | F-01–F-10 (API) + F-11–F-20 (app; F-20 también spec API) en [`findings.md`](findings.md) |
 | Tiers | `off` … `hard` — misma suite; matriz en [`test-results.md`](test-results.md) |
 
@@ -89,7 +89,7 @@ Cada viñeta es una clase (p. ej. “MARKET BUY liquida cash”). Los casos conc
 - ARS → qty (`Math.floor`; la API no recibe pesos).
 - *Enviar orden* → visible en Portafolio y Órdenes.
 - Reiniciar desde la app → efectivo inicial.
-- Manual: UI-M-01…20 en [`ui-assessment.md`](ui-assessment.md) / [`catalog.md`](catalog.md). Defectos de app: [F-11…F-20](findings.md).
+- Manual: test cases UI-M-01…20 en [`manual-cases.md`](manual-cases.md). Resultado de esa corrida: [`test-results.md`](test-results.md#ui). Índice: [`catalog.md`](catalog.md). Defectos de app: [F-11…F-20](findings.md).
 
 **Producto (exploratorio)**
 
@@ -162,7 +162,7 @@ Qué tiene que ser verdad **antes de ejecutar** y para dar el testing **por cerr
 | Hallazgos | [`findings.md`](findings.md) |
 | README (ejecución y decisiones) | [`README.md`](../README.md) |
 | Contrato (opcional) | [`api-contract.md`](api-contract.md), Postman = repro |
-| UI | [`ui-assessment.md`](ui-assessment.md), `maestro/` |
+| UI | [`manual-cases.md`](manual-cases.md), [`ui-assessment.md`](ui-assessment.md), `maestro/` |
 
 Corrida de ahora: Allure / HTML local, o artifact de Actions. Matriz histórica por tier: [`test-results.md`](test-results.md).
 

@@ -4,16 +4,21 @@ Suite de automatización de API para el [Cocos QA Challenge](https://github.com/
 
 ## Qué incluye
 
-| | |
-|--|--|
-| Suite de entrega | **75** tests Playwright de API (`npm test` y GitHub Actions) |
-| UI (Maestro) | **3** smokes, opt-in, no CI |
-| UI (manual) | **20** escenarios (UI-M-01…20) — [`docs/ui-assessment.md`](docs/ui-assessment.md) |
-| Defectos | **F-01–F-10** (API) + **F-11–F-20** (app; F-20 también API) — [`docs/findings.md`](docs/findings.md) |
-| `off` (baseline) | **69 passed / 6 failed** de 75 — [`docs/test-results.md`](docs/test-results.md) |
-| Tiers | misma suite en `easy` / `medium` / `hard` — [`docs/test-results.md`](docs/test-results.md) |
+El **plan** (qué y por qué) no es el **caso** (cómo replicarlo) ni el **resultado** (qué pasó en una corrida).
 
-El dinero (cash, reservas, settlement) se prueba en la API. La UI cubre lo que la API no ve (orden en pantalla, ARS→acciones). Plan: [`docs/test-plan.md`](docs/test-plan.md). Catálogo: [`docs/catalog.md`](docs/catalog.md).
+| | Qué es | Dónde |
+|--|--------|--------|
+| Plan | Alcance, riesgo, por qué API vs UI | [`docs/test-plan.md`](docs/test-plan.md) |
+| Casos API | Los 75 `test()` | `tests/` · índice [`docs/catalog.md`](docs/catalog.md) |
+| Casos UI | 20 scripts (precondición / pasos / esperado) | [`docs/manual-cases.md`](docs/manual-cases.md) |
+| Resultado API | `off` **69/6** de 75; misma suite en easy/medium/hard | [`docs/test-results.md`](docs/test-results.md) |
+| Resultado UI | Maestro 3/3; UI-M **10/10** (Android, `off`) | [`docs/test-results.md`](docs/test-results.md#ui) |
+| Defectos | F-01–F-10 (API) + F-11–F-20 (app; F-20 también API) | [`docs/findings.md`](docs/findings.md) |
+| Decisión UI | Por qué Maestro, qué es un E2E, notas | [`docs/ui-assessment.md`](docs/ui-assessment.md) |
+
+Suite de entrega: **75** Playwright (`npm test` y GitHub Actions). Maestro: **3** smokes, opt-in, no CI.
+
+El dinero (cash, reservas, settlement) se prueba en la API. La UI cubre lo que la API no ve (orden en pantalla, ARS→acciones).
 
 ## Estrategia QA
 
@@ -21,15 +26,14 @@ API-first: settlement, suficiencia, reservas y portfolio viven en Playwright. La
 
 ## Cómo leer el entregable
 
-Orden para recorrer el repo (correr, ver la corrida, después los docs):
-
 1. **Correr** — local: [Instalación](#instalación) y [Ejecución](#ejecución) (`npm run test:smoke`, después `npm test`). Sin instalar: [GitHub Actions](#github-actions) → *API tests* → *Run workflow*.
-2. **Esta corrida** — HTML: `npm run test:report`. Allure: `npm run test:allure` / `test:allure:open`. En Actions, el Summary del run tiene el link de Allure (GitHub Pages); el artifact `playwright-report` queda de backup.
-3. **Plan** — empezar por Resumen, Riesgo y Escenarios: [`docs/test-plan.md`](docs/test-plan.md). Catálogo caso → riesgo → prioridad: [`docs/catalog.md`](docs/catalog.md).
-4. **Hallazgos** — repro, esperado vs actual, severidad, evidencia: [`docs/findings.md`](docs/findings.md).
-5. **Por tier** — qué falló en `off`…`hard`: [`docs/test-results.md`](docs/test-results.md).
-6. **Decisión UI** — qué hay en Maestro y qué no: [`docs/ui-assessment.md`](docs/ui-assessment.md).
-7. **BR → spec** — [`docs/traceability.md`](docs/traceability.md). Contrato (conocido vs inferido): [`docs/api-contract.md`](docs/api-contract.md).
+2. **Resultado de esta corrida** — HTML: `npm run test:report`. Allure: `npm run test:allure` / `test:allure:open`. En Actions, el Summary del run tiene el link de Allure (GitHub Pages); el artifact `playwright-report` queda de backup.
+3. **Resultado documentado** — matriz API por tier y UI Android/`off`: [`docs/test-results.md`](docs/test-results.md).
+4. **Plan** — Resumen, Riesgo y Escenarios: [`docs/test-plan.md`](docs/test-plan.md).
+5. **Casos** — índice [`docs/catalog.md`](docs/catalog.md). API = el `test()`. UI manual = [`docs/manual-cases.md`](docs/manual-cases.md) (no es el resultado).
+6. **Hallazgos** — repro, esperado vs actual, severidad: [`docs/findings.md`](docs/findings.md).
+7. **Decisión UI** — qué se automatiza y qué no: [`docs/ui-assessment.md`](docs/ui-assessment.md).
+8. **BR → spec** — [`docs/traceability.md`](docs/traceability.md). Contrato: [`docs/api-contract.md`](docs/api-contract.md).
 
 Postman es repro a mano, no la suite. Tenant, aislamiento y CI: más abajo.
 
@@ -98,7 +102,7 @@ factories/    Factory de payloads de órdenes con valores válidos por defecto
 fixtures/     Fixture de Playwright que inyecta todos los clientes en los tests
 tests/        Specs organizados por dominio
 utils/        Oracle de cálculos, helpers de montos, utilidad de polling
-docs/         Test plan, architecture, contrato, findings, trazabilidad, UI assessment
+docs/         Plan, catálogo, casos UI, resultados, findings, contrato, UI assessment
 postman/      Colección de Postman para exploración manual y reproducción de findings
 maestro/      Smokes de UI (opt-in; no forman parte de `npm test`)
 ```
@@ -124,15 +128,17 @@ Exploración y repro manual (no reemplaza Playwright):
 2. Importar [`postman/cocos-api.postman_environment.json`](postman/cocos-api.postman_environment.json) y completar `candidateId`
 3. Contrato conocido vs inferido: [`docs/api-contract.md`](docs/api-contract.md)
 
-## UI (Maestro)
+## UI
 
-Opt-in. `npm test` no abre el emulador.
+**Maestro** (3 smokes, opt-in). `npm test` no abre el emulador.
 
 1. App [cocoscap/app-qa](https://github.com/cocoscap/app-qa) corriendo en Android (`com.cocos.trading`).
 2. Instalar [Maestro](https://maestro.mobile.dev).
 3. `npm run test:ui`
 
-Detalle: [`maestro/README.md`](maestro/README.md) y [`docs/ui-assessment.md`](docs/ui-assessment.md).
+**Manual.** Scripts: [`docs/manual-cases.md`](docs/manual-cases.md). Resultado de esa corrida: [`docs/test-results.md`](docs/test-results.md#ui). Por qué no hay más E2E: [`docs/ui-assessment.md`](docs/ui-assessment.md).
+
+Detalle Maestro: [`maestro/README.md`](maestro/README.md).
 
 ## Aislamiento
 
@@ -165,8 +171,8 @@ Una vez (después de la primera corrida que cree `gh-pages`): **Settings → Pag
 - Cada test hace `POST /reset`. Un worker. Un `CANDIDATE_ID` por corrida. Si el entorno no tuviera `/reset`: tenant virgen por test y aserciones por delta ([`docs/architecture.md`](docs/architecture.md)).
 - LIMIT: se valida el estado que quedó (no un fill a N segundos). Portfolio: el esperado se calcula en `utils/calculations.js`, no se copia del JSON de la API.
 - **P0–P3** dice qué tan crítico es el escenario (P0 = cash y órdenes; P3 = search). **`BUGS_TIER`** (`off` … `hard`) es un flag de la API que inyecta más defectos. El mismo test P0 se corre en los cuatro modos. `off` es el modo para escribir aserciones, no “cero fallos”: si algo está mal en el camino base, la suite queda roja y el caso va a [`docs/findings.md`](docs/findings.md).
-- Cada test anota qué regla cubre (`businessRule`) y con qué técnica. Allure y [`docs/traceability.md`](docs/traceability.md) son el índice. No hay TestRail/Qase: el caso es el `test()` del spec.
-- La app se cubre con **tres** smokes Maestro (orden en pantalla, ARS→acciones, reset). Se corren con `npm run test:ui` si hay emulador; no van en `npm test` ni en GitHub Actions. El dinero y las reglas siguen en Playwright.
+- Cada test de API anota qué regla cubre (`businessRule`) y con qué técnica. Allure y [`docs/traceability.md`](docs/traceability.md) son el índice. No hay TMS (p. ej. TestRail): el caso de API es el `test()`; el de UI manual es [`docs/manual-cases.md`](docs/manual-cases.md). El veredicto de una corrida no vive en el script: está en [`docs/test-results.md`](docs/test-results.md).
+- La app se cubre con **tres** smokes Maestro (orden en pantalla, ARS→acciones, reset) más los 20 UI-M. Maestro: `npm run test:ui` si hay emulador; no va en `npm test` ni en GitHub Actions. El dinero y las reglas siguen en Playwright.
 
 ## Findings
 
