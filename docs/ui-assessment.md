@@ -17,9 +17,7 @@ Hay dos suites. Cada una responde una pregunta distinta.
 | **Dónde** | `tests/` (`npm test`) | `maestro/` (`npm run test:ui`) |
 | **CI** | Sí | No |
 
-La suite de entrega es Playwright: ahí está el dinero. Maestro suma lo que la API no ve: que la pantalla muestre la orden, y el `Math.floor` de ARS→qty (la API recibe acciones, no pesos). No se vuelven a correr en el emulador los P0/P1 (BVA de cash, oversell, oracle de LIMIT).
-
-Appium cubriría el mismo árbol de accesibilidad con más infra. Para tres smokes, Maestro es proporcional. En un producto con regresión mobile grande, Appium sería la herramienta.
+Se priorizó profundidad en la capa API (75 tests) por sobre amplitud en UI: ahí está el riesgo de negocio (integridad de cash, holdings y resolución de órdenes). Maestro cubre el tramo que vive en el cliente y la API no ve —conversión monto→cantidad, y que el tap deje la orden en pantalla— sin montar infraestructura E2E pesada (Appium) para revalidar un comportamiento que, en última instancia, delega en esa misma API. No se re-ejecutan en el emulador los P0/P1 (BVA, oversell, oracle de LIMIT). En un producto con regresión mobile grande, Appium sería la herramienta.
 
 No se modificó `app-qa` (0 `testID` nuevos). Locators: texto y `accessibilityLabel`.
 
