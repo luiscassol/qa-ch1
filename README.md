@@ -1,6 +1,6 @@
-# Cocos QA Challenge — Suite de Tests de API
+# Cocos QA Challenge — Suite de tests
 
-Suite de automatización de API para el [Cocos QA Challenge](https://github.com/cocoscap/app-qa).
+Suite de QA para el [Cocos QA Challenge](https://github.com/cocoscap/app-qa): API automatizada (Playwright), E2E opt-in (Maestro) y casos manuales de la app.
 
 ## Qué incluye
 

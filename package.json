@@ -1,7 +1,7 @@
 {
   "name": "qa-ch1",
   "version": "1.0.0",
-  "description": "API test suite for the Cocos QA Challenge",
+  "description": "QA suite for the Cocos QA Challenge: Playwright API tests, Maestro E2E smokes, and manual UI cases",
   "main": "index.js",
   "scripts": {
     "test": "playwright test",
