@@ -663,4 +663,4 @@ Repro HTTP: JSON del finding, `curl`, o la carpeta **Findings** de [`postman/coc
 | ¿Plan / arquitectura / trazabilidad / catálogo? | `docs/test-plan.md`, `docs/architecture.md`, `docs/traceability.md`, `docs/catalog.md` |
 | ¿Qué se automatiza en la UI y qué no? | `docs/ui-assessment.md` + `maestro/` |
 | ¿Cuáles son los TCs manuales de UI? | `docs/manual-cases.md` (script). Resultado: `docs/test-results.md` § UI |
-| ¿Pasó esta corrida? | Allure (`npx allure serve allure-results`) o `npm run test:report` — locales, no commiteados |
+| ¿Pasó esta corrida? | Allure publicado: [https://luiscassol.github.io/qa-ch1/](https://luiscassol.github.io/qa-ch1/) (cada Actions lo pisa). Local (regenerar): `npm run test:allure:serve` o `npm run test:report` |

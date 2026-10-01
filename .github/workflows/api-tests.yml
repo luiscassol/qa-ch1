@@ -87,5 +87,5 @@ jobs:
             echo ""
             echo "The same URL is printed in this step log. On the run **Summary** tab it appears as a markdown link."
             echo ""
-            echo "If the URL 404s: Settings → Pages → Deploy from a branch → \`gh-pages\` / (root)."
+            echo "Pages already serves the \`gh-pages\` branch of this public repo. A 404 is usually a publish still in flight, not a Settings step."
           } >> "$GITHUB_STEP_SUMMARY"

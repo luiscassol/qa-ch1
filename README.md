@@ -12,7 +12,7 @@ El **plan** (qué y por qué) no es el **caso** (cómo replicarlo) ni el **resul
 | Casos API | Los 75 `test()` | `tests/` · índice [`docs/catalog.md`](docs/catalog.md) |
 | Casos UI | 20 scripts (precondición / pasos / esperado) | [`docs/manual-cases.md`](docs/manual-cases.md) |
 | Resultado API | `off` **69/6** de 75; misma suite en easy/medium/hard | [`docs/test-results.md`](docs/test-results.md) |
-| Resultado UI | Maestro 3/3; UI-M **10/10** (Android, `off`) | [`docs/test-results.md`](docs/test-results.md#ui) |
+| Resultado UI | Maestro: 3 pasaron de 3. Manuales: 10 pasaron y 10 fallaron **de 20** (Android, `off`) | [`docs/test-results.md`](docs/test-results.md#ui) |
 | Defectos | F-01–F-10 (API) + F-11–F-20 (app; F-20 también API) | [`docs/findings.md`](docs/findings.md) |
 | Decisión UI | Por qué Maestro, qué es un E2E, notas | [`docs/ui-assessment.md`](docs/ui-assessment.md) |
 
