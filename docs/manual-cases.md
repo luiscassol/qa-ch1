@@ -176,3 +176,5 @@ Los 75 de Playwright no se reescriben acá: el `test()` es el caso.
 **Precondición:** cuenta con movimiento (no limpia).  
 **Pasos:** Órdenes → Reiniciar → Cancelar.  
 **Esperado:** cash y posiciones iguales que antes.
+
+Siguiente: cómo está armada la suite (capas, reset, oracle) — [`architecture.md`](architecture.md).

@@ -134,4 +134,4 @@ Error de negocio **conocido** (mensajes que el cliente traduce): `Insufficient c
 - Performance, auth más allá de los dos headers, paginación.
 - Garantía de que LIMIT se resuelva en N segundos.
 
-Para defectos y repro: [`docs/findings.md`](findings.md). Para la matriz por tier: [`docs/test-results.md`](test-results.md).
+Siguiente: qué spec cubre qué regla — [`traceability.md`](traceability.md).

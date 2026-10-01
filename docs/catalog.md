@@ -1,13 +1,13 @@
 # Catálogo de casos
 
-Índice de los casos **automatizados** y de los **manuales de UI** ya documentados. No reemplaza Allure (passed/failed de una corrida) ni [`findings.md`](findings.md) (qué bug es).
+Índice de los casos **automatizados** y de los **manuales de UI** ya documentados. No reemplaza Allure (passed/failed de ahora), ni [`test-results.md`](test-results.md) (matriz por tier), ni [`findings.md`](findings.md) (qué bug es).
 
 - **Riesgo:** R1–R7 de [`test-plan.md`](test-plan.md) (qué pierde el usuario). Puede haber más de uno.
 - **Prioridad:** P0–P3 de la suite API (`@p0`… / Allure). Smoke de API = criterio de entrada. UI Maestro = opt-in (no entra a `npm test`).
 - **Hallazgo:** F-xx de [`findings.md`](findings.md) cuando el caso está pensado para ese defecto (vacío si no).
 - Los títulos de API están en inglés: son el `test()` de Playwright. **No se renombraron** los specs.
 
-Los IDs (`API-01`…75, `UI-M-01`…) son de este documento. **`npm test` corre 75 tests** (45 con título fijo + 30 de `tests/data/invalid-orders.json`). Si se agrega un test, se suma una fila; no se reescribe el historial de git de `tests/`.
+Los IDs (`API-01`…75, `UI-M-01`…) son de este documento. **`npm test` corre 75 tests** (45 con título fijo + 30 de `tests/data/invalid-orders.json`). Si se agrega un test, se suma una fila; no se reescribe el historial de git de `tests/`. El spec nuevo usa el mismo molde que el resto (fixture, factory, `attachResponse`, `businessRule` + `technique`, oracle). El `201` estricto solo en contract. Los defectos de baseline se dejan fallar (no `test.fail()`).
 
 ---
 
@@ -177,3 +177,5 @@ UI-M-01…09 y UI-M-20 pasaron en esa corrida. UI-M-03 puede mostrar antes el mo
 | UI-M-18 | LIMIT *Rechazada*: sin motivo; tap no abre ficha | R5 | Manual | [F-19](findings.md) | [manual-cases](manual-cases.md#ui-m-18) |
 | UI-M-19 | LIMIT SELL *Rechazada*: qty/cash iguales que post-BUY | R2, R4 | Manual | [F-20](findings.md) | [manual-cases](manual-cases.md#ui-m-19) |
 | UI-M-20 | Reiniciar → Cancelar: no resetea cash ni posiciones | R6 | Manual |  | [manual-cases](manual-cases.md#ui-m-20) |
+
+Siguiente: qué pasó por tier (y UI Android/`off`) — [`test-results.md`](test-results.md).

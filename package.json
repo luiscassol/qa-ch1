@@ -17,7 +17,7 @@
     "test:allure:open": "npx allure open allure-report",
     "test:allure:serve": "npx allure generate allure-results --output allure-report --open",
     "test:ui": "maestro test maestro/01-ars-to-qty.yaml maestro/02-buy-wiring.yaml maestro/03-reset.yaml",
-    "test:postman": "newman run postman/cocos-api.postman_collection.json --environment postman/cocos-api.environment.json"
+    "test:postman": "newman run postman/cocos-api.postman_collection.json --environment postman/cocos-api.postman_environment.json"
   },
   "devDependencies": {
     "@playwright/test": "^1.48.0",

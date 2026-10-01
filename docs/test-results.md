@@ -8,7 +8,7 @@
 
 Los **títulos de tests** se dejan en inglés: son el texto del reporter `list` de Playwright.
 
-La matriz de las secciones 1–7 es **solo API**. El resultado de Maestro y de los 20 UI-M (Android, `off`) está en [§ UI](#ui). Scripts: [`manual-cases.md`](manual-cases.md).
+La matriz de las secciones 1–7 es **solo API**. El resultado de Maestro y de los 20 UI-M (Android, `off`) está en [§ UI](#ui). Scripts: [`manual-cases.md`](manual-cases.md). Repro y esperado vs actual de cada defecto: [`findings.md`](findings.md).
 
 ---
 
@@ -260,3 +260,5 @@ No es la matriz de tiers de API. Una corrida en emulador; no entra a GitHub Acti
 | [UI-M-20](manual-cases.md#ui-m-20) | pasó |  | Cancelar no resetea |
 
 Observaciones que no son UI-M (red no ejercitable, *Enviar otra orden*, filtros): [`ui-assessment.md`](ui-assessment.md).
+
+Siguiente: reporte de defectos (repro, esperado vs actual) — [`findings.md`](findings.md).

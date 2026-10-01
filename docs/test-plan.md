@@ -6,61 +6,67 @@ Qué se cubrió, qué no, y por qué. El criterio está acá. Los casos ejecutab
 
 La app es un cliente de trading (Expo) contra una API dummy multi-tenant. El challenge pide evaluar calidad y automatizar: plan, suite, hallazgos, README. No pide features nuevas.
 
-**Decisión:** el dinero (cash, holdings, reservas, settlement) se prueba en la **API**. La UI se usa para lo que la API no ve (pantalla y ARS→acciones). No hay granja de devices.
+**Decisión.** El dinero (cash, holdings, reservas, settlement) se prueba en la **API**. La UI se usa para lo que la API no ve (pantalla y ARS→acciones). No hay granja de devices.
+
+Se priorizó profundidad en la capa API (75 tests) por sobre amplitud en UI: ahí está el riesgo de negocio (integridad de cash, holdings y resolución de órdenes). En este challenge, la exploración de la app mostró que las reglas de dinero las manda al API; en el cliente quedan sobre todo la conversión monto→cantidad y que el tap deje la orden en pantalla. Para eso Maestro (opt-in). No se montó infraestructura E2E pesada para revalidar en el emulador lo que ya cubre Playwright (BVA, oversell, oracle de LIMIT). El resto de pantallas se cubrió a mano. En un producto con regresión mobile grande, Appium sería la herramienta.
+
+El recorte de smokes, locators y exploración: [`ui-assessment.md`](ui-assessment.md). Cómo está armada la suite: [`architecture.md`](architecture.md).
 
 | | |
 |--|--|
-| Suite API | **75** tests Playwright (`npm test` y GitHub Actions; catálogo API-01…75) |
+| Suite API | **75** tests Playwright (`npm test` y GitHub Actions; catálogo API-01…75). Resultado: [`test-results.md`](test-results.md) |
 | UI | 3 smokes Maestro + 20 manuales. Test cases: [`manual-cases.md`](manual-cases.md). Resultado: [`test-results.md`](test-results.md#ui) |
 | Defectos | F-01–F-10 (API) + F-11–F-20 (app; F-20 también spec API) en [`findings.md`](findings.md) |
 | Tiers | `off` … `hard` — misma suite; matriz en [`test-results.md`](test-results.md) |
 
 - **Dónde está el peso.** Si una MARKET liquida mal o una LIMIT reserva mal, el usuario pierde dinero. Eso se prueba en Playwright (P0). Search, catálogo y smokes de UI no mueven esa plata; van más abajo a propósito.
-- **Por qué no hay una suite grande de UI.** Mercados, portafolio, historial y reset no se ignoran: van por API o por los tres smokes / manual. Lo que no se hace es un E2E por cada cruce del **formulario de orden** (lado × tipo × pesos/acciones): repetiría las reglas de la API. Los smokes tocan esos controles y lo que la API no recibe (ARS→qty). LIMIT PENDING no se espera en pantalla: no hay SLA y el oracle ya está en la API.
+- **Por qué no hay una suite grande de UI.** Mercados, portafolio, historial y reset no se ignoran: van por API o por los smokes / manual. Lo que no se hace es un E2E por cada cruce del **formulario de orden** (lado × tipo × pesos/acciones): repetiría las reglas de la API. Los smokes tocan esos controles y lo que la API no recibe (ARS→qty). LIMIT PENDING no se espera en pantalla: no hay SLA y el oracle ya está en la API.
 - **Por qué un rojo en `off` no se esconde.** `off` es el modo para escribir aserciones, no un sello de “cero defectos”. El equipo lo confirmó. Si el camino base está mal, el test falla y el caso va a findings.
 
 ## Objetivo
 
-Reducir el riesgo financiero antes que cualquier otra cosa. Dejar una suite repetible (reset, un worker, tenant; LIMIT sin `sleep`). Que cada decisión de alcance se pueda seguir: riesgo → tipo de escenario → spec → hallazgo.
+Reducir el riesgo financiero antes que cualquier otra cosa. También que lo que se ve en la app coincida con lo operado: una orden en Órdenes tiene que haberse enviado; un “ejecutada” tiene que haber liquidado. La plata se ataca en la API; esa coherencia de pantalla, en Maestro y en los manuales. Dejar una suite repetible (reset, un worker, tenant; LIMIT sin `sleep`). Que cada decisión de alcance se pueda seguir: riesgo → tipo de escenario → spec → hallazgo.
 
 ## Alcance
 
 - API: instruments, search, portfolio, orders, reset.
 - Oracle de métricas de portfolio sobre inputs de API (`quantity`, `last_price`, `avg_cost_price`).
-- Tres smokes Maestro (opt-in).
+- Smokes Maestro (opt-in).
 - Exploratorio de UI (manual) y Postman para repro.
 
 ## Fuera de alcance
 
 | Queda afuera | Por qué |
 |--------------|---------|
-| Granja de devices / Appium | Tres smokes alcanzan el binding y el `floor` ARS. Appium sería para una regresión mobile grande. |
-| Performance y security en profundidad | Sin requisitos de carga; no hay login, solo `X-Candidate-Id`. No es un pentest. |
+| Granja de devices / Appium | Los smokes alcanzan el binding y el `floor` ARS. Appium sería para una regresión mobile grande. |
+| Carga / performance | Dummy sin SLA ni requisito de RPS. No hay load test. |
+| Autenticación (login, sesión, tokens) | La app no tiene login. El aislamiento es `X-Candidate-Id` (tenant), no un usuario autenticado. |
+| Security en profundidad | No es un pentest. Tener tenant/tier en headers no cubre inyección, authz ni superficie de ataque. |
 | Promedio ponderado de `avg_cost` | En `off` el fill es a `last_price` estático: no hay dos precios distintos. |
 | Tests que exijan `CANCELLED` | No está en la consigna ni en el Zod del cliente. |
 | Combinaciones del **formulario de orden** (lado × tipo × pesos/acciones) | Un E2E por cada cruce de ese form repetiría side/type/qty que ya cubre la API. Mercados, search, portafolio, historial y reset se cubren por API o por los smokes / manual. |
 
 ## Riesgo
 
-Qué pierde el usuario si falla, y dónde se cubre. Un escenario puede tocar más de una fila.
+Qué pierde el usuario si falla, y dónde se cubre. **R** no es **P**: R es el riesgo; P0–P3 es la prioridad del spec de API (`@p0`…). Un escenario puede tocar más de una fila.
 
-| | Qué puede fallar | Qué pierde el usuario | Dónde |
-|--|------------------|----------------------|--------|
-| R1 | MARKET liquida mal (precio, cash, qty) | Compra o vende mal | `tests/p0/market-orders.spec.js` |
-| R2 | LIMIT: reserva o liberación incorrecta | Gasta dos veces o cash bloqueado | `tests/p0/limit-orders.spec.js` |
-| R3 | Payload inválido aceptado | Orden sucia en el motor | `tests/p1/order-validation.spec.js` |
-| R4 | Portafolio no cuadra con las órdenes | Opera sobre números falsos | `tests/p0/portfolio-consistency.spec.js` |
-| R5 | El tap no deja la orden en pantalla, o ARS→qty mal | Ve otra cantidad o cree que no operó | `maestro/` |
-| R6 | Reset o tenant mezclado | Estado de otra corrida | `tests/p1/isolation.spec.js`, smoke |
-| R7 | Catálogo o search mienten | Elige mal el instrumento | `tests/p2/catalog.spec.js`, `tests/p3/search.spec.js` |
+| | Qué puede fallar | Qué pierde el usuario | Prioridad | Dónde |
+|--|------------------|----------------------|-----------|--------|
+| R1 | MARKET liquida mal (precio, cash, qty) | Compra o vende mal | P0 | `tests/p0/market-orders.spec.js` |
+| R2 | LIMIT: reserva o liberación incorrecta | Gasta dos veces o cash bloqueado | P0 | `tests/p0/limit-orders.spec.js` |
+| R3 | Payload inválido aceptado | Orden sucia en el motor | P1 | `tests/p1/order-validation.spec.js` |
+| R4 | Portafolio no cuadra con las órdenes | Opera sobre números falsos | P0 | `tests/p0/portfolio-consistency.spec.js` |
+| R5 | El tap no deja la orden en pantalla, o ARS→qty mal | Ve otra cantidad o cree que no operó | UI | `maestro/` |
+| R6 | Reset o tenant mezclado | Estado de otra corrida | P1 | `tests/p1/isolation.spec.js`, smoke |
+| R7 | Catálogo o search con errores | Elige mal el instrumento | P2 / P3 | `tests/p2/catalog.spec.js`, `tests/p3/search.spec.js` |
 
-**Profundidad:** P0 = R1, R2, R4 (plata). P1 = contrato, validación, aislamiento. P2/P3 = catálogo y search. Los **tiers** (`off`…`hard`) no son prioridad: son el modo de bugs de la API. El mismo P0 se corre en los cuatro.
+**Profundidad.** P0 = plata (R1, R2, R4). P1 = validación (R3), aislamiento (R6) y **contrato** (schema / 201; no es un R aparte). P2/P3 = R7. R5 no entra a P0–P3: es Maestro. Los **tiers** (`off`…`hard`) no son prioridad: son el modo de bugs de la API. El mismo P0 se corre en los cuatro.
 
 ## Escenarios
 
 Inventario de **tipos** de prueba que salieron de usar la API y la app: qué se le ocurre a alguien que operó el producto, no un código por fila.
 
-Cada viñeta es una clase (p. ej. “MARKET BUY liquida cash”). Los casos concretos son los `test()` de Playwright y los YAML de Maestro; Allure los muestra passed/failed. El índice spec → regla está en [`traceability.md`](traceability.md).
+Cada viñeta es una clase (p. ej. “MARKET BUY liquida cash”). Los casos concretos son los `test()` de Playwright y los YAML de Maestro. Allure es la corrida de ahora (passed/failed). La matriz documentada de API por tier: [`test-results.md`](test-results.md). El índice spec → regla está en [`traceability.md`](traceability.md).
 
 **API — plata**
 
@@ -97,10 +103,12 @@ Operar es desde **Mercados** (Portafolio no abre el ticket). Tras enviar: *Envia
 
 ## Estrategia
 
+Cómo se ataca lo de Riesgo y Escenarios: en qué capa, con qué aserto, y cómo se usa el modo de bugs de la dummy. El *qué* cubre está arriba; EP/BVA y el resto de diseño de casos, en Técnicas.
+
 - **P0–P3** = riesgo del test. **Tiers** = bugs inyectados. No son lo mismo.
 - **API (Playwright)** = ¿se cumple la regla? Cash, holdings, status, reservas. `npm test` y CI son solo esto.
 - **Oracle** = el valor esperado se calcula **fuera** de la respuesta bajo prueba (no se relee el mismo body y se da por bueno). Fórmulas en `utils/calculations.js`; en LIMIT, invariante del status estable.
-- **UI (Maestro)** = ¿el tap deja la orden en Portafolio y Órdenes? ¿Cuántas acciones arma el cliente con pesos? Tres smokes; no re-ejecutan BVA/LIMIT.
+- **UI (Maestro)** = ¿el tap deja la orden en Portafolio y Órdenes? ¿Cuántas acciones arma el cliente con pesos? Smokes; no re-ejecutan BVA/LIMIT.
 - `off` es el modo para **escribir** aserciones. El equipo aclaró que no implica “sin bugs”: los fallos de baseline van a findings. El job de Actions usa el exit de Playwright (puede quedar rojo).
 
 ## Tipos de prueba
@@ -134,7 +142,7 @@ No hay un informe aparte ni un score por eje. Se usa el vocabulario de la norma 
 - **Functional suitability** — ¿el producto hace lo de la consigna? Órdenes MARKET/LIMIT, cash, holdings, mensajes de negocio. Es el grueso de Playwright.
 - **Reliability** — ¿el comportamiento se puede repetir y el estado restaurar? Reset, `workers: 1`, tenant, oracle de LIMIT cuando no hay SLA.
 - **Usability** — no hay heurística formal ni suite de UX. Revisión exploratoria en emulador; defectos de app en F-11…F-20. Filtros ausentes y *Enviar otra orden* quedan como observación (no F-xx).
-- **No evaluado (sin requisitos ni mediciones):** performance (tiempo/carga), security en profundidad (hay headers de tenant/tier; no es pentest), compatibility / maintainability / portability como puntajes.
+- **No evaluado (sin requisitos ni mediciones):** performance (tiempo/carga), autenticación (no hay login), security en profundidad (no es pentest), compatibility / maintainability / portability como puntajes.
 
 ## Datos y aislamiento
 
@@ -159,12 +167,11 @@ Qué tiene que ser verdad **antes de ejecutar** y para dar el testing **por cerr
 | Plan | Este archivo |
 | Catálogo (caso → riesgo → prioridad) | [`catalog.md`](catalog.md) |
 | Suite + cómo correrla | `tests/`, README, `npm test` / Actions |
+| Resultado de corrida | Allure / HTML local, o artifact de Actions. Matriz por tier: [`test-results.md`](test-results.md) |
 | Hallazgos | [`findings.md`](findings.md) |
 | README (ejecución y decisiones) | [`README.md`](../README.md) |
 | Contrato (opcional) | [`api-contract.md`](api-contract.md), Postman = repro |
 | UI | [`manual-cases.md`](manual-cases.md), [`ui-assessment.md`](ui-assessment.md), `maestro/` |
-
-Corrida de ahora: Allure / HTML local, o artifact de Actions. Matriz histórica por tier: [`test-results.md`](test-results.md).
 
 ## Límites
 
@@ -183,4 +190,8 @@ Restricciones que no se arreglan con más tests.
 
 ## Catálogo de casos
 
-Tabla caso → riesgo (R1–R7) → prioridad (P0–P3 / smoke / UI): [`catalog.md`](catalog.md). Allure sigue agrupando por P0–P3; los specs no se renombran.
+Este archivo es el criterio (qué se cubre y por qué). El inventario caso por caso — ID, riesgo y prioridad — está en [`catalog.md`](catalog.md).
+
+Allure agrupa por la prioridad del spec (`@p0`…), que es como se corre la suite. Los IDs `API-01`…75 y `UI-M-01`…20 viven en ese markdown, no en el título del `test()`. No se renombraron los specs para no duplicar dos taxonomías (prioridad de ejecución vs índice de entrega).
+
+Siguiente: recorte de UI (Maestro, E2E, qué quedó a mano) — [`ui-assessment.md`](ui-assessment.md).
