@@ -1,10 +1,10 @@
-# Cocos QA Challenge — Suite de tests
+# Cocos QA Challenge
 
-Suite de QA para el [Cocos QA Challenge](https://github.com/cocoscap/app-qa): API automatizada (Playwright), E2E opt-in (Maestro) y casos manuales de la app.
+Evaluación de calidad de la app de trading Cocos ([app-qa](https://github.com/cocoscap/app-qa)): plan, automatización (API, E2E y manuales), resultados y hallazgos.
 
 ## Qué incluye
 
-El **plan** (qué y por qué) no es el **caso** (cómo replicarlo) ni el **resultado** (qué pasó en una corrida).
+El **plan** (qué y por qué), los **casos** (cómo replicarlo) y el **resultado** (qué pasó en una corrida) son tres cosas distintas. Las tres están acá:
 
 | | Qué es | Dónde |
 |--|--|--------|
@@ -20,7 +20,7 @@ Suite de entrega: **75** Playwright (`npm test` y GitHub Actions). UI: **3** smo
 
 ## Estrategia QA
 
-**En corto.** 75 tests de API cubren el riesgo de plata (cash, órdenes, portafolio). 3 smokes E2E y 20 casos manuales cubren la app. Hallazgos: F-01–F-10 en la API, F-11–F-20 en la app (detalle en [`docs/findings.md`](docs/findings.md)). Cómo correrlo y por qué API-first: más abajo y en el [plan](docs/test-plan.md).
+**En corto.** API-first: 75 tests Playwright cubren el riesgo de plata (cash, órdenes, portafolio); eso no se duplica en el emulador. 3 smokes E2E y 20 casos manuales cubren la app. Además del código: plan, catálogo, resultados por tier y 20 hallazgos (F-01–F-10 API, F-11–F-20 app — [`docs/findings.md`](docs/findings.md)). Cómo correrlo: más abajo. El recorte y el porqué (argumento largo): [plan](docs/test-plan.md).
 
 **Riesgo.** Si una MARKET liquida mal o una LIMIT reserva mal, el usuario pierde dinero (cash, holdings, resolución de órdenes). En la app también hay riesgo de cliente: cantidad mal armada desde pesos, ticket que no envía, pantallas con errores. Search y catálogo importan menos que la plata, pero se cubren.
 
@@ -32,12 +32,13 @@ También se exploró la app a mano (Android, `off`): search, mercados, ticket, r
 
 `off` no significa “cero defectos”: si el camino base está mal, el test falla y el hallazgo se documenta.
 
-El argumento largo empieza en [`docs/test-plan.md`](docs/test-plan.md); cada archivo indica el siguiente.
-
 ## Cómo leer el reporte
 
 1. **Correr** — local: [Instalación](#instalación) y [Ejecución](#ejecución) (`npm run test:smoke`, después `npm test`). Sin instalar: [GitHub Actions](#github-actions) → *API tests* → *Run workflow*.
-2. **Esta corrida** — HTML: `npm run test:report`. Allure: `npm run test:allure:serve`. En Actions, el Summary del run tiene el link de Allure (GitHub Pages); el artifact `playwright-report` queda de backup.
+2. **Esta corrida** — el resultado de lo último que corrió Playwright:
+   - HTML: `npm run test:report`
+   - Allure (local): `npm run test:allure:serve`
+   - Allure (Actions): GitHub Pages, link en el Summary del run. Artifacts `playwright-report` y `allure-report` = backup.
 3. **Matriz documentada** — API por tier y UI Android/`off`: [`docs/test-results.md`](docs/test-results.md). Defectos: [`docs/findings.md`](docs/findings.md).
 
 Postman es repro a mano, no la suite. Tenant, aislamiento y CI: más abajo.
@@ -182,8 +183,10 @@ En CI se usa `CANDIDATE_ID=ci-<run_id>` (no es tu `.env`).
 
 - **Oracle aparte.** Si el esperado se lee del mismo JSON que se está probando, un bug de fórmula (cash, avg_cost, market value) pasa. `utils/calculations.js` recalcula por fuera (mismas reglas que el cliente, sin importar el repo de la app). El test compara contra eso, no contra sí mismo.
 
-- **LIMIT sin `sleep`.** La dummy no da un SLA de fill: PENDING / FILLED / REJECTED no es un reloj. Un `sleep(N)` flakea o miente. Se leen dos veces `/orders`; si el status se estabilizó, se valida la invariante de *ese* estado (reserva, fill o rechazo).
+- **LIMIT sin `sleep`.** El equipo confirmó que no hay tiempo máximo de fill. La orden puede seguir PENDING, ejecutarse o rechazarse; a menudo lo dispara un GET. Esperar 2 segundos y asumir FILLED a veces acierta de casualidad y a veces no. Por eso se lee `/orders` dos veces: si el status no cambió, se valida lo que *ese* estado tiene que cumplir (reserva, fill o cash de nuevo disponible).
 
 - **Aislamiento.** Esta API tiene `POST /reset` (el mismo camino que Reiniciar en la app): conviene usarlo y testearlo. Un worker y un `CANDIDATE_ID` por corrida para no pisar tenants. Si no existiera `/reset`, no se asertaría contra el millón absoluto: tenant virgen por test y deltas ([`docs/architecture.md`](docs/architecture.md)). Acá no reescribimos 75 tests a deltas porque el endpoint existe.
 
 - **HTTP de creación ≠ aserto de dinero.** Un test de settlement pregunta si cash y holdings cerraron, no si el status es 201. El 201 es contrato: vive en `contract.spec.js`. En negocio, “orden aceptada” es 200 o 201 (la orden está creada). Así un defecto de status code no apaga la matriz de plata. Lo observado en los tiers está en [F-07](docs/findings.md#f-07).
+
+El argumento largo: [`docs/test-plan.md`](docs/test-plan.md). Al final de cada doc, **Siguiente**.
