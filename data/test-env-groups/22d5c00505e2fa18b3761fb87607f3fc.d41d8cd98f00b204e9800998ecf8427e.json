@@ -1,0 +1,1 @@
+{"id":"22d5c00505e2fa18b3761fb87607f3fc.d41d8cd98f00b204e9800998ecf8427e","fullName":"p1/order-validation.spec.js › P1 - Order input validation @p1 › Invalid instrument_id (EP + BVA) › rejects order: instrument_id field is missing @p1","name":"rejects order: instrument_id field is missing @p1","status":"passed","testResultsByEnv":{"default":"2469ff484e28d62f0b1ffc362ebc90ba"}}

@@ -1,0 +1,1 @@
+{"id":"a24c5cce4e6fc697beb7e067b4e6be1e.d41d8cd98f00b204e9800998ecf8427e","fullName":"p0/limit-orders.spec.js › P0 - LIMIT order lifecycle @p0 › LIMIT BUY is rejected when reservation cost exceeds available cash @p0","name":"LIMIT BUY is rejected when reservation cost exceeds available cash @p0","status":"passed","testResultsByEnv":{"default":"dcacd2bcaf6b644bd5c3ab3efd3d68e0"}}

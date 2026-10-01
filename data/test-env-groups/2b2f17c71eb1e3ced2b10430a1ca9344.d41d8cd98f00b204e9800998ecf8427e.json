@@ -1,0 +1,1 @@
+{"id":"2b2f17c71eb1e3ced2b10430a1ca9344.d41d8cd98f00b204e9800998ecf8427e","fullName":"p1/contract.spec.js › P1 - API contract (schema validation) @p1 › POST /orders (LIMIT BUY) returns 201 and matches order schema @p1","name":"POST /orders (LIMIT BUY) returns 201 and matches order schema @p1","status":"passed","testResultsByEnv":{"default":"51290414168f0b1ffe503a9b8e7fa6e7"}}

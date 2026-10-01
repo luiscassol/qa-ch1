@@ -1,0 +1,1 @@
+{"id":"257aa666831cf96e6e9b5897589826a9.d41d8cd98f00b204e9800998ecf8427e","fullName":"p1/order-validation.spec.js › P1 - Order input validation @p1 › LIMIT order with invalid price (BVA + F-01) › rejects order: LIMIT SELL with price = 0 @p1","name":"rejects order: LIMIT SELL with price = 0 @p1","status":"passed","testResultsByEnv":{"default":"22a7a194cf4fe2f15ce99159e0e50a91"}}

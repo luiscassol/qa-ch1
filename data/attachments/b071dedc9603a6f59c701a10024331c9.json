@@ -1,0 +1,10 @@
+[
+  {
+    "id": 1,
+    "ticker": "DYCA",
+    "name": "Dycasa S.A.",
+    "type": "ACCIONES",
+    "last_price": 45.72,
+    "close_price": 50.07
+  }
+]

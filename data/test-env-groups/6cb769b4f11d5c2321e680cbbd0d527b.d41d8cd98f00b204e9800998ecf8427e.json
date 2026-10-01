@@ -1,0 +1,1 @@
+{"id":"6cb769b4f11d5c2321e680cbbd0d527b.d41d8cd98f00b204e9800998ecf8427e","fullName":"p1/contract.spec.js › P1 - API contract (schema validation) @p1 › GET /instruments returns 200 and matches instruments schema @p1","name":"GET /instruments returns 200 and matches instruments schema @p1","status":"passed","testResultsByEnv":{"default":"e5d71bb04894b07a2a529c9c81f826f3"}}

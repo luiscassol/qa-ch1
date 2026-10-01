@@ -1,0 +1,1 @@
+{"id":"d751b123c9a74f923d1c903126cc68e1.d41d8cd98f00b204e9800998ecf8427e","fullName":"p1/contract.spec.js › P1 - API contract (schema validation) @p1 › POST /orders (MARKET BUY) returns 201 and matches order schema @p1","name":"POST /orders (MARKET BUY) returns 201 and matches order schema @p1","status":"passed","testResultsByEnv":{"default":"8300e97955222ac985a7d259c71e0de9"}}

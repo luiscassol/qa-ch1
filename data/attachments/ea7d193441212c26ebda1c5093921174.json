@@ -1,0 +1,13 @@
+{
+  "cash": 999862.84,
+  "holdings": [
+    {
+      "instrument_id": 1,
+      "ticker": "DYCA",
+      "quantity": 3,
+      "last_price": 45.72,
+      "close_price": 50.07,
+      "avg_cost_price": 45.72
+    }
+  ]
+}

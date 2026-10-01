@@ -1,0 +1,1 @@
+[{"name":"NODE_VERSION","values":["v22.23.3"]},{"name":"OS_TYPE","values":["Linux"]},{"name":"OS_RELEASE","values":["6.17.0-1022-azure"]},{"name":"OS_ARCH","values":["x64"]},{"name":"API_URL","values":["https://dummy-api-topaz.vercel.app"]},{"name":"BUGS_TIER","values":["off"]},{"name":"CANDIDATE_ID","values":["ci-36929684687"]}]
