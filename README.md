@@ -20,6 +20,8 @@ Suite de entrega: **75** Playwright (`npm test` y GitHub Actions). UI: **3** smo
 
 ## Estrategia QA
 
+**En corto.** 75 tests de API cubren el riesgo de plata (cash, órdenes, portafolio). 3 smokes E2E y 20 casos manuales cubren la app. Hallazgos: F-01–F-10 en la API, F-11–F-20 en la app (detalle en [`docs/findings.md`](docs/findings.md)). Cómo correrlo y por qué API-first: más abajo y en el [plan](docs/test-plan.md).
+
 **Riesgo.** Si una MARKET liquida mal o una LIMIT reserva mal, el usuario pierde dinero (cash, holdings, resolución de órdenes). En la app también hay riesgo de cliente: cantidad mal armada desde pesos, ticket que no envía, pantallas con errores. Search y catálogo importan menos que la plata, pero se cubren.
 
 **Estrategia.** API primero: Playwright es la suite de entrega (`npm test` y GitHub Actions). Ahí está la profundidad (settlement, suficiencia, reservas, portfolio, contrato) porque es barato de repetir y es donde vive la regla. No se duplica eso en el emulador.
@@ -113,7 +115,7 @@ Workflow **API tests**: `npm ci` + los 75 de Playwright. Sin Maestro y sin UI-M.
 
 **Allure (link, no zip):** cada corrida genera el HTML y lo publica en `gh-pages` (pisa el reporte anterior). En el Summary del run: **Allure report** → `https://luiscassol.github.io/qa-ch1/`. Artifacts de backup: `playwright-report` y `allure-report`.
 
-Una vez: **Settings → Pages → Deploy from a branch → `gh-pages` / (root)**. Repo **público** (en private free, Pages no hostea). Sin eso el URL 404.
+El reporte **ya está publicado** en esa URL (este repo es público; Pages sirve la branch `gh-pages`). No hay que entrar a Settings para verlo. Cada corrida de Actions pisa el HTML anterior.
 
 ## La suite
 
