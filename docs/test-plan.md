@@ -21,7 +21,7 @@ El recorte de smokes, locators y exploración: [`ui-assessment.md`](ui-assessmen
 
 - **Dónde está el peso.** Si una MARKET liquida mal o una LIMIT reserva mal, el usuario pierde dinero. Eso se prueba en Playwright (P0). Search, catálogo y smokes de UI no mueven esa plata; van más abajo a propósito.
 - **Por qué no hay una suite grande de UI.** Mercados, portafolio, historial y reset no se ignoran: van por API o por los smokes / manual. Lo que no se hace es un E2E por cada cruce del **formulario de orden** (lado × tipo × pesos/acciones): repetiría las reglas de la API. Los smokes tocan esos controles y lo que la API no recibe (ARS→qty). LIMIT PENDING no se espera en pantalla: no hay SLA y el oracle ya está en la API.
-- **Por qué un rojo en `off` no se esconde.** `off` es el modo para escribir aserciones, no un sello de “cero defectos”. El equipo lo confirmó. Si el camino base está mal, el test falla y el caso va a findings.
+- **Por qué un rojo en `off` no se esconde.** `off` es el modo para escribir aserciones, no un sello de “cero defectos”. Lo consultamos y nos confirmaron que no implica “sin bugs”. Si el camino base está mal, el test falla y el caso va a findings.
 
 ## Objetivo
 
@@ -103,13 +103,13 @@ Operar es desde **Mercados** (Portafolio no abre el ticket). Tras enviar: *Envia
 
 ## Estrategia
 
-Cómo se ataca lo de Riesgo y Escenarios: en qué capa, con qué aserto, y cómo se usa el modo de bugs de la dummy. El *qué* cubre está arriba; EP/BVA y el resto de diseño de casos, en Técnicas.
+La estrategia es **dónde** se aserta cada riesgo de la tabla de arriba, no un segundo inventario de casos. Las técnicas (EP, BVA, etc.) van en la sección siguiente.
 
-- **P0–P3** = riesgo del test. **Tiers** = bugs inyectados. No son lo mismo.
-- **API (Playwright)** = ¿se cumple la regla? Cash, holdings, status, reservas. `npm test` y CI son solo esto.
-- **Oracle** = el valor esperado se calcula **fuera** de la respuesta bajo prueba (no se relee el mismo body y se da por bueno). Fórmulas en `utils/calculations.js`; en LIMIT, invariante del status estable.
-- **UI (Maestro)** = ¿el tap deja la orden en Portafolio y Órdenes? ¿Cuántas acciones arma el cliente con pesos? Smokes; no re-ejecutan BVA/LIMIT.
-- `off` es el modo para **escribir** aserciones. El equipo aclaró que no implica “sin bugs”: los fallos de baseline van a findings. El job de Actions usa el exit de Playwright (puede quedar rojo).
+La plata (R1, R2, R4) se prueba en Playwright: cash, holdings, reservas, status de la orden. `npm test` y GitHub Actions son solo esa capa. El número esperado no se toma del mismo JSON que se está mirando: `utils/calculations.js` lo calcula aparte; en LIMIT, si el status no cambió entre dos lecturas de `/orders`, se valida lo que *ese* estado tiene que cumplir. Maestro no repite BVA ni el oracle: tres smokes para lo que la API no ve (ARS→qty y que el tap deje la orden en pantalla). El resto de la app va a mano.
+
+**P0–P3** es cuánto pesa el spec (`@p0` en `tests/p0/`, etc.). **Tiers** (`off`…`hard`) es el modo de bugs de la dummy (`X-Enable-Bugs`). El mismo P0 se corre en los cuatro; no “sube de prioridad” porque el tier sea hard.
+
+`off` es el modo para **escribir** las aserciones, no un certificado de cero defectos. Lo consultamos y nos confirmaron que puede haber bugs de baseline: el test falla y el caso va a findings. El job de Actions usa el exit de Playwright, así que en `off` el rojo es esperado.
 
 ## Tipos de prueba
 
@@ -117,7 +117,7 @@ Smoke, functional, negative, contract/schema, state transition, exploratory (UI 
 
 ## Técnicas
 
-La **prioridad** dice *cuánto* profundizar. La **técnica** dice *cómo* se arma el caso. No es “P0 = BVA siempre”: un P0 MARKET es happy path + BVA de cash; un P1 de `quantity` es EP/BVA; LIMIT usa oracle por estado.
+P0 o P1 es **qué tan grave es el riesgo** si el caso falla (y en qué carpeta vive el spec). La **técnica** es **cómo se eligió el dato o el aserto** de *ese* test. No van atadas: un MARKET P0 puede ser el camino feliz (comprar 1 acción) y otro P0 el borde de cash (la cantidad máxima que alcanza). Los `quantity` inválidos son P1 y se arman con particiones y bordes (EP/BVA). Las LIMIT no se “esperan 2 segundos”: se lee el status dos veces y se valida el estado que quedó.
 
 Cada spec anota `technique` y `businessRule` (Allure).
 
@@ -141,7 +141,7 @@ No hay un informe aparte ni un score por eje. Se usa el vocabulario de la norma 
 
 - **Functional suitability** — ¿el producto hace lo de la consigna? Órdenes MARKET/LIMIT, cash, holdings, mensajes de negocio. Es el grueso de Playwright.
 - **Reliability** — ¿el comportamiento se puede repetir y el estado restaurar? Reset, `workers: 1`, tenant, oracle de LIMIT cuando no hay SLA.
-- **Usability** — no hay heurística formal ni suite de UX. Revisión exploratoria en emulador; defectos de app en F-11…F-20. Filtros ausentes y *Enviar otra orden* quedan como observación (no F-xx).
+- **Usability** — ¿se puede operar la app sin una fricción que impida el flujo? No hay heurística formal ni suite de UX: se miró en emulador (Maestro + casos a mano). Los defectos de pantalla están en [`findings.md`](findings.md); acá no se puntúa el eje.
 - **No evaluado (sin requisitos ni mediciones):** performance (tiempo/carga), autenticación (no hay login), security en profundidad (no es pentest), compatibility / maintainability / portability como puntajes.
 
 ## Datos y aislamiento
@@ -178,7 +178,7 @@ Qué tiene que ser verdad **antes de ejecutar** y para dar el testing **por cerr
 Restricciones que no se arreglan con más tests.
 
 - **LIMIT sin SLA.** Fill o reject no determinístico, sin tiempo máximo. El oracle valida el estado que quedó.
-- **Ganancia/retorno en `off` tras un MARKET.** El cliente calcula; costo = `last_price` → gain y return = 0. Un MARKET no prueba PnL ≠ 0.
+- **Ganancia y retorno después de un MARKET en `off`.** La API no manda esas métricas: las calcula la app con `quantity`, `last_price` y `avg_cost`. En `off` el fill es a `last_price`, así que costo y mercado coinciden y gain/return quedan en 0. Eso es coherente, no un bug de pantalla. Con un solo precio no se puede demostrar que el PnL “se ve mal cuando debería ser distinto de cero”; el promedio ponderado tampoco se ejercita (hace falta dos compras a precios distintos).
 - **Maestro.** Opt-in, no CI. Locators frágiles (LogBox, sheet, tabs). Un rojo de UI no es un rojo de la API.
 - **Red caída.** En este emulador no se pudo activar modo avión; no hay caso de *Network Error*.
 
