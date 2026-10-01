@@ -234,7 +234,7 @@ No es la matriz de tiers de API. Una corrida en emulador; no entra a GitHub Acti
 
 ### 8.2 Manuales UI-M-01…20
 
-**10 passed / 10 failed.** El falló cuenta el criterio del caso, no “se pudo operar”. UI-M-03: el dashboard cierra; el modal *Posición no encontrada* se cuenta en UI-M-17 ([F-18](findings.md#f-18)).
+**10 pasaron / 10 fallaron de 20.** El “falló” cuenta el criterio del caso, no “se pudo operar”. UI-M-03: el dashboard cierra; el modal *Posición no encontrada* se cuenta en UI-M-17 ([F-18](findings.md#f-18)).
 
 | ID | Resultado | Hallazgo | Nota |
 |----|-----------|----------|------|

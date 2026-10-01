@@ -167,7 +167,7 @@ Qué tiene que ser verdad **antes de ejecutar** y para dar el testing **por cerr
 | Plan | Este archivo |
 | Catálogo (caso → riesgo → prioridad) | [`catalog.md`](catalog.md) |
 | Suite + cómo correrla | `tests/`, README, `npm test` / Actions |
-| Resultado de corrida | Allure / HTML local, o artifact de Actions. Matriz por tier: [`test-results.md`](test-results.md) |
+| Resultado de corrida | Allure publicado: [https://luiscassol.github.io/qa-ch1/](https://luiscassol.github.io/qa-ch1/) (cada Actions lo pisa). Local: `npm run test:allure:serve` / `npm run test:report`. Artifact de backup en el run. Matriz por tier: [`test-results.md`](test-results.md) |
 | Hallazgos | [`findings.md`](findings.md) |
 | README (ejecución y decisiones) | [`README.md`](../README.md) |
 | Contrato (opcional) | [`api-contract.md`](api-contract.md), Postman = repro |

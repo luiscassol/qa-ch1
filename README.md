@@ -1,6 +1,6 @@
-# Cocos QA Challenge — Suite de Tests de API
+# Cocos QA Challenge — Suite de tests
 
-Suite de automatización de API para el [Cocos QA Challenge](https://github.com/cocoscap/app-qa).
+Suite de QA para el [Cocos QA Challenge](https://github.com/cocoscap/app-qa): API automatizada (Playwright), E2E opt-in (Maestro) y casos manuales de la app.
 
 ## Qué incluye
 
@@ -12,13 +12,15 @@ El **plan** (qué y por qué) no es el **caso** (cómo replicarlo) ni el **resul
 | Casos API | Los 75 `test()` | `tests/` · índice [`docs/catalog.md`](docs/catalog.md) |
 | Casos UI | 20 scripts (precondición / pasos / esperado) | [`docs/manual-cases.md`](docs/manual-cases.md) |
 | Resultado API | `off` **69/6** de 75; misma suite en easy/medium/hard | [`docs/test-results.md`](docs/test-results.md) |
-| Resultado UI | Maestro 3/3; UI-M **10/10** (Android, `off`) | [`docs/test-results.md`](docs/test-results.md#ui) |
+| Resultado UI | Maestro: 3 pasaron de 3. Manuales: 10 pasaron y 10 fallaron **de 20** (Android, `off`) | [`docs/test-results.md`](docs/test-results.md#ui) |
 | Defectos | F-01–F-10 (API) + F-11–F-20 (app; F-20 también API) | [`docs/findings.md`](docs/findings.md) |
 | Decisión UI | Por qué Maestro, qué es un E2E, notas | [`docs/ui-assessment.md`](docs/ui-assessment.md) |
 
 Suite de entrega: **75** Playwright (`npm test` y GitHub Actions). UI: **3** smokes Maestro (opt-in, no CI) + **20** manuales ([`docs/manual-cases.md`](docs/manual-cases.md)).
 
 ## Estrategia QA
+
+**En corto.** 75 tests de API cubren el riesgo de plata (cash, órdenes, portafolio). 3 smokes E2E y 20 casos manuales cubren la app. Hallazgos: F-01–F-10 en la API, F-11–F-20 en la app (detalle en [`docs/findings.md`](docs/findings.md)). Cómo correrlo y por qué API-first: más abajo y en el [plan](docs/test-plan.md).
 
 **Riesgo.** Si una MARKET liquida mal o una LIMIT reserva mal, el usuario pierde dinero (cash, holdings, resolución de órdenes). En la app también hay riesgo de cliente: cantidad mal armada desde pesos, ticket que no envía, pantallas con errores. Search y catálogo importan menos que la plata, pero se cubren.
 
@@ -113,7 +115,7 @@ Workflow **API tests**: `npm ci` + los 75 de Playwright. Sin Maestro y sin UI-M.
 
 **Allure (link, no zip):** cada corrida genera el HTML y lo publica en `gh-pages` (pisa el reporte anterior). En el Summary del run: **Allure report** → `https://luiscassol.github.io/qa-ch1/`. Artifacts de backup: `playwright-report` y `allure-report`.
 
-Una vez: **Settings → Pages → Deploy from a branch → `gh-pages` / (root)**. Repo **público** (en private free, Pages no hostea). Sin eso el URL 404.
+El reporte **ya está publicado** en esa URL (este repo es público; Pages sirve la branch `gh-pages`). No hay que entrar a Settings para verlo. Cada corrida de Actions pisa el HTML anterior.
 
 ## La suite
 
